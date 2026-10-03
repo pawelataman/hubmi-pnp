@@ -38,8 +38,9 @@ Layout, top to bottom:
 4. Chip row with the groups "Typ" and "Koszt" and the two toggles "Szuka
    testerów" and "Ma film".
 5. Result bar: "5 innowacji z 12", a "Wyczyść filtry" link shown only when a
-   filter or search text is set, and the sort control on the right. The link
-   clears search and filters and keeps the chosen sort.
+   filter or search text is set and at least one tile is listed (the empty
+   state carries its own button), and the sort control on the right. Clearing
+   resets search and filters and keeps the chosen sort.
 6. Tile grid: three columns at the 1440px layout, two columns in narrower
    containers. Breakpoints use container queries, as the rest of the app does.
 
