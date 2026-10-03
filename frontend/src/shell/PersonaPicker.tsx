@@ -1,4 +1,11 @@
-import type { ReactElement } from 'react';
+import {
+  useEffect,
+  useRef,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactElement,
+  type RefObject,
+} from 'react';
 
 import { PERSONA_IDS, PERSONAS } from '../api/personas';
 import type { Persona, PersonaId, PersonaRole } from '../api/types';
@@ -17,6 +24,44 @@ export function PersonaPicker({
   onDone,
 }: PersonaPickerProps): ReactElement {
   const { signIn } = useSession();
+  const dialogRef: RefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement | null>(null);
+
+  useEffect((): void => {
+    dialogRef.current?.querySelector<HTMLElement>('button')?.focus();
+  }, []);
+
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+      onDone(false);
+      return;
+    }
+    if (event.key !== 'Tab' || dialogRef.current === null) {
+      return;
+    }
+    const focusable: HTMLElement[] = Array.from(
+      dialogRef.current.querySelectorAll<HTMLElement>('button'),
+    );
+    const first: HTMLElement | undefined = focusable[0];
+    const last: HTMLElement | undefined = focusable[focusable.length - 1];
+    if (first === undefined || last === undefined) {
+      return;
+    }
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function onBackdropClick(event: MouseEvent<HTMLDivElement>): void {
+    if (event.target === event.currentTarget) {
+      onDone(false);
+    }
+  }
   const choices: readonly Persona[] = PERSONA_IDS.map(
     (id: PersonaId): Persona => PERSONAS[id],
   ).filter(
@@ -25,8 +70,13 @@ export function PersonaPicker({
   );
 
   return (
-    <div className={styles['backdrop']}>
+    <div
+      className={styles['backdrop']}
+      onKeyDown={onKeyDown}
+      onClick={onBackdropClick}
+    >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Wybierz osobę"

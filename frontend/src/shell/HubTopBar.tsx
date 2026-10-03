@@ -1,4 +1,10 @@
-import { useState, type ReactElement } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ReactElement,
+  type RefObject,
+} from 'react';
 import { Link, useLocation } from 'react-router';
 
 import {
@@ -23,15 +29,56 @@ export function HubTopBar(): ReactElement {
   const { cycle } = useTextSize();
   const { stub } = useToast();
   const { unread } = useNotifications();
-  const [panel, setPanel] = useState<Panel>('none');
+  // A panel is open only on the page it was opened on, so navigating closes it.
+  const [opened, setOpened] = useState<{ panel: Panel; on: string }>({
+    panel: 'none',
+    on: pathname,
+  });
+  const panel: Panel = opened.on === pathname ? opened.panel : 'none';
+  const bellAnchor: RefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement | null>(null);
+  const menuAnchor: RefObject<HTMLDivElement | null> =
+    useRef<HTMLDivElement | null>(null);
+
+  function show(next: Panel): void {
+    setOpened({ panel: next, on: pathname });
+  }
 
   function toggle(next: Panel): void {
-    setPanel((current: Panel): Panel => (current === next ? 'none' : next));
+    show(panel === next ? 'none' : next);
   }
 
   function close(): void {
-    setPanel('none');
+    show('none');
   }
+
+  useEffect((): (() => void) | undefined => {
+    if (panel !== 'bell' && panel !== 'menu') {
+      return undefined;
+    }
+    const anchor: RefObject<HTMLDivElement | null> =
+      panel === 'bell' ? bellAnchor : menuAnchor;
+    function onKey(event: globalThis.KeyboardEvent): void {
+      if (event.key === 'Escape') {
+        setOpened({ panel: 'none', on: pathname });
+        anchor.current?.querySelector<HTMLElement>('button')?.focus();
+      }
+    }
+    function onPointer(event: MouseEvent): void {
+      if (
+        event.target instanceof Node &&
+        anchor.current?.contains(event.target) !== true
+      ) {
+        setOpened({ panel: 'none', on: pathname });
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('mousedown', onPointer);
+    return (): void => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('mousedown', onPointer);
+    };
+  }, [panel, pathname]);
 
   return (
     <header className={styles['bar']}>
@@ -79,7 +126,7 @@ export function HubTopBar(): ReactElement {
           </Button>
         ) : (
           <>
-            <div className={styles['anchor']}>
+            <div ref={bellAnchor} className={styles['anchor']}>
               <button
                 type="button"
                 className={styles['bell']}
@@ -107,7 +154,7 @@ export function HubTopBar(): ReactElement {
             <Link to="/moje-sprawy" className={styles['cases']}>
               Moje sprawy
             </Link>
-            <div className={styles['anchor']}>
+            <div ref={menuAnchor} className={styles['anchor']}>
               <button
                 type="button"
                 className={styles['avatar']}
@@ -137,7 +184,7 @@ export function HubTopBar(): ReactElement {
                     role="menuitem"
                     className={styles['menuItem']}
                     onClick={(): void => {
-                      setPanel('picker');
+                      show('picker');
                     }}
                   >
                     Zmień osobę

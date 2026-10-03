@@ -132,4 +132,52 @@ describe('shell', (): void => {
     await user.click(screen.getByRole('button', { name: 'Anuluj' }));
     expect(router.state.location.pathname).toBe('/');
   });
+
+  it('closes the persona picker with Escape and focuses it on open', async (): Promise<void> => {
+    const { user } = renderApp('/nabory');
+    await user.click(screen.getByRole('button', { name: 'Zaloguj się' }));
+    const picker: HTMLElement = screen.getByRole('dialog', {
+      name: 'Wybierz osobę',
+    });
+    expect(picker).toContainElement(document.activeElement as HTMLElement);
+    await user.keyboard('{Escape}');
+    expect(
+      screen.queryByRole('dialog', { name: 'Wybierz osobę' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('closes the notifications popover with Escape and restores focus', async (): Promise<void> => {
+    const { user } = renderApp('/nabory', { persona: 'maria' });
+    const bell: HTMLElement = await screen.findByRole('button', {
+      name: 'Powiadomienia, 3 nieprzeczytane',
+    });
+    await user.click(bell);
+    expect(
+      screen.getByRole('dialog', { name: 'Powiadomienia' }),
+    ).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(
+      screen.queryByRole('dialog', { name: 'Powiadomienia' }),
+    ).not.toBeInTheDocument();
+    expect(bell).toHaveFocus();
+  });
+
+  it('closes the notifications popover on a click outside', async (): Promise<void> => {
+    const { user } = renderApp('/nabory', { persona: 'maria' });
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Powiadomienia, 3 nieprzeczytane',
+      }),
+    );
+    await user.click(screen.getByRole('heading', { level: 1 }));
+    expect(
+      screen.queryByRole('dialog', { name: 'Powiadomienia' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('returns to the start page when Escape dismisses the guard picker', async (): Promise<void> => {
+    const { user, router } = renderApp('/rops/kolejka');
+    await user.keyboard('{Escape}');
+    expect(router.state.location.pathname).toBe('/');
+  });
 });

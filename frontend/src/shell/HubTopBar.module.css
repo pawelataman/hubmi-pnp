@@ -39,6 +39,7 @@
   display: flex;
   gap: 0.125rem;
   height: 100%;
+  min-width: 0;
 }
 
 .navLink {
@@ -205,4 +206,54 @@
 .menuItem:hover {
   background: var(--c-surface);
   color: var(--c-ink);
+}
+
+@media (width <= 87.5rem) {
+  .bar {
+    gap: 0.75rem;
+    padding: 0 1.5rem;
+  }
+
+  .nav {
+    min-width: 0;
+    gap: 0;
+  }
+
+  .navLink {
+    padding: 0 0.375rem;
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    line-height: 1.1;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+@media (width <= 75rem) {
+  .bar {
+    gap: 0.5rem;
+    padding: 0 1rem;
+  }
+
+  .name {
+    font-size: 1.25rem;
+  }
+
+  .navLink {
+    padding: 0 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .tools {
+    gap: 0.375rem;
+  }
+
+  .textSize {
+    min-width: 2.75rem;
+  }
+
+  .cases {
+    padding: 0 0.25rem;
+    font-size: 1rem;
+  }
 }

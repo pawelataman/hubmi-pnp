@@ -6,7 +6,7 @@ import styles from './AiNotice.module.css';
 export function AiNotice(): ReactElement {
   const { stub } = useToast();
   return (
-    <div role="note" className={styles['notice']}>
+    <div role="note" aria-live="polite" className={styles['notice']}>
       <span className={styles['tag']}>AI</span>
       <span>
         Wyniki przygotowuje system AI na podstawie bazy przetestowanych
