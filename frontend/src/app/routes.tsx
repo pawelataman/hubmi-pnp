@@ -6,6 +6,9 @@ import { AuthorThreadScreen } from '../features/cases/AuthorThreadScreen';
 import { CasesScreen } from '../features/cases/CasesScreen';
 import { IdeaScreen } from '../features/idea/IdeaScreen';
 import { InnovationScreen } from '../features/innovation/InnovationScreen';
+import { CuratorThreadScreen } from '../features/rops/CuratorThreadScreen';
+import { QueueScreen } from '../features/rops/QueueScreen';
+import { TrendsScreen } from '../features/rops/TrendsScreen';
 import { PreviewScreen } from '../features/matchmaking/PreviewScreen';
 import { ProblemCardScreen } from '../features/matchmaking/ProblemCardScreen';
 import { ResultsScreen } from '../features/matchmaking/ResultsScreen';
@@ -73,6 +76,9 @@ export const routes: RouteObject[] = [
         ),
         children: [
           { index: true, element: <Navigate to="/rops/kolejka" replace /> },
+          { path: 'kolejka', element: <QueueScreen /> },
+          { path: 'kolejka/:id', element: <CuratorThreadScreen /> },
+          { path: 'trendy', element: <TrendsScreen /> },
           { path: '*', element: <DemoStub /> },
         ],
       },
