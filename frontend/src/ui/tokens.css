@@ -1,0 +1,32 @@
+:root {
+  --c-primary: #2462ad;
+  --c-primary-dark: #0f4a91;
+  --c-primary-line: #2e63a8;
+  --c-primary-tint: #e8f0f9;
+  --c-primary-tint-2: #f3f7fc;
+  --c-blue-300: #88c1e9;
+  --c-blue-200: #b9e0f7;
+  --c-blue-bar: #c5d6ea;
+  --c-blue-edge: #b9cde4;
+  --c-success: #1e7a3c;
+  --c-success-tint: #e6f2ea;
+  --c-danger: #c8000e;
+  --c-highlight: #fff4d6;
+  --c-ink: #292929;
+  --c-ink-2: #333333;
+  --c-muted: #4d504d;
+  --c-line-strong: #8a8a8a;
+  --c-grey-400: #bdbdbd;
+  --c-line: #e6e6e6;
+  --c-skeleton: #ececec;
+  --c-divider: #efefef;
+  --c-grey-100: #f3f3f3;
+  --c-surface: #f6f6f6;
+  --c-white: #ffffff;
+  --c-shadow: rgb(36 31 27 / 18%);
+
+  --font-sans: 'Red Hat Display', system-ui, sans-serif;
+  --font-mono: 'Red Hat Mono', ui-monospace, monospace;
+  --radius: 0.25rem;
+  --target: 2.75rem;
+}
