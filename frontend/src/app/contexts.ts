@@ -3,6 +3,7 @@ import { createContext, useContext, type Context } from 'react';
 import type { ProfileDraft } from '../api/examples';
 import type { HubApi } from '../api/HubApi';
 import type {
+  ExpertProfile,
   Notification,
   MatchmakingAudience,
   NeedsProfile,
@@ -31,6 +32,9 @@ export function useApi(): HubApi {
 export interface SessionValue {
   readonly persona: Persona | null;
   readonly needsProfile: NeedsProfile | null;
+  readonly expertProfile: ExpertProfile | null;
+  readonly expertProfileError: string | null;
+  readonly saveExpertProfile: (profile: ExpertProfile) => void;
   readonly profileError: string | null;
   readonly saveNeedsProfile: (profile: NeedsProfile) => void;
   readonly signIn: (id: PersonaId) => void;

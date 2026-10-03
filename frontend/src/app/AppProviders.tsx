@@ -20,8 +20,15 @@ import {
   writeNeedsProfile,
   type StoredNeedsProfile,
 } from '../api/needsProfile';
+import { readExpertProfile, writeExpertProfile } from '../api/expertProfile';
+import type { StoredProfile } from '../api/profileStorage';
 import { getPersona, PERSONA_IDS } from '../api/personas';
-import type { NeedsProfile, Notification, PersonaId } from '../api/types';
+import type {
+  ExpertProfile,
+  NeedsProfile,
+  Notification,
+  PersonaId,
+} from '../api/types';
 import {
   AdaptationContext,
   ApiContext,
@@ -88,16 +95,28 @@ function readTextSize(): number {
 function SessionProvider({ children }: ChildrenProps): ReactElement {
   const [storedProfile, setStoredProfile] =
     useState<StoredNeedsProfile>(readNeedsProfile);
+  const [storedExpert, setStoredExpert] =
+    useState<StoredProfile<ExpertProfile>>(readExpertProfile);
   const [id, setId] = useState<PersonaId | null>((): PersonaId | null => {
     const storedId: PersonaId | null = readPersona();
-    return storedId === 'beneficiary' && storedProfile.profile === null
+    return (storedId === 'beneficiary' && storedProfile.profile === null) ||
+      (storedId === 'expert' && storedExpert.profile === null)
       ? null
       : storedId;
   });
   const value: SessionValue = useMemo(
     (): SessionValue => ({
-      persona: id === null ? null : getPersona(id, storedProfile.profile),
+      persona:
+        id === null
+          ? null
+          : getPersona(id, storedProfile.profile, storedExpert.profile),
       needsProfile: storedProfile.profile,
+      expertProfile: storedExpert.profile,
+      expertProfileError: storedExpert.error,
+      saveExpertProfile: (profile: ExpertProfile): void => {
+        writeExpertProfile(profile);
+        setStoredExpert({ profile, error: null });
+      },
       profileError: storedProfile.error,
       saveNeedsProfile: (profile: NeedsProfile): void => {
         writeNeedsProfile(profile);
@@ -112,7 +131,7 @@ function SessionProvider({ children }: ChildrenProps): ReactElement {
         setId(null);
       },
     }),
-    [id, storedProfile],
+    [id, storedProfile, storedExpert],
   );
   return <SessionContext value={value}>{children}</SessionContext>;
 }

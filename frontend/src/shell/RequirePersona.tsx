@@ -19,7 +19,7 @@ export function RequirePersona({
   const { persona } = useSession();
   const navigate: NavigateFunction = useNavigate();
   const allowed: boolean =
-    persona !== null && (role === 'user' || persona.role === 'curator');
+    persona !== null && (role === 'user' || persona.role === role);
 
   if (allowed) {
     return <>{children}</>;

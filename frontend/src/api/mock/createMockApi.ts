@@ -1,6 +1,11 @@
 import { EXAMPLE_DESCRIPTION } from '../examples';
 import type { HubApi } from '../HubApi';
 import type {
+  ExpertComment,
+  ExpertCommentDraft,
+  ExpertInnovationMatch,
+  ExpertProfile,
+  ExpertSearchRequest,
   CaseSummary,
   CaseThread,
   DraftSection,
@@ -23,6 +28,8 @@ import type {
   Trends,
 } from '../types';
 import { exampleDraft, exampleFacts } from './data/adaptation';
+import { findExpertInnovations } from './data/expertMatchmaking';
+import { addExpertComment, listExpertComments } from './expertComments';
 import { innovations } from './data/innovations';
 import {
   findIndividualMatches,
@@ -127,6 +134,43 @@ export function createMockApi(options: MockApiOptions = {}): HubApi {
     ): Promise<LocalStats> {
       await pause(signal);
       return exampleLocalStats;
+    },
+
+    async findExpertInnovations(
+      request: ExpertSearchRequest,
+      signal?: AbortSignal,
+    ): Promise<readonly ExpertInnovationMatch[]> {
+      await pause(signal);
+      return findExpertInnovations(request);
+    },
+
+    async listExpertComments(
+      innovationId: string,
+      signal?: AbortSignal,
+    ): Promise<readonly ExpertComment[]> {
+      await pause(signal);
+      if (innovations[innovationId] === undefined) {
+        throw new Error('Nie znaleziono innowacji.');
+      }
+      return listExpertComments(innovationId);
+    },
+
+    async addExpertComment(
+      innovationId: string,
+      profile: ExpertProfile,
+      draft: ExpertCommentDraft,
+      signal?: AbortSignal,
+    ): Promise<ExpertComment> {
+      await pause(signal);
+      if (innovations[innovationId] === undefined) {
+        throw new Error('Nie znaleziono innowacji.');
+      }
+      return addExpertComment(
+        innovationId,
+        profile,
+        draft,
+        options.now?.() ?? new Date(),
+      );
     },
 
     async getInnovation(id: string, signal?: AbortSignal): Promise<Innovation> {

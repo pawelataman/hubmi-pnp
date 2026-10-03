@@ -89,8 +89,8 @@ Podgląd buildu: `npm run preview --prefix frontend`.
 ### Onboarding osoby potrzebującej (POC)
 
 Przycisk **Załóż konto** otwiera `/onboarding`. Pole **Typ osoby** przełącza
-formularz: osoba potrzebująca ma działający onboarding, a dostawca innowacji,
-instytucja i ekspert otrzymują komunikat „Formularz w przygotowaniu”.
+formularz: osoba potrzebująca i ekspert mają działający onboarding,
+a dostawca innowacji i instytucja otrzymują komunikat „Formularz w przygotowaniu”.
 
 Przycisk **Wypełnij przykładem Jana** uzupełnia fikcyjny profil seniora
 szukającego kontaktu z ludźmi. Po zapisie użytkownik sprawdza opis potrzeb,
@@ -104,6 +104,27 @@ takie konto; sesja jest zachowywana w `sessionStorage`. Menu konta udostępnia
 w wyborze osób przy logowaniu. To symulacja konta bez uwierzytelniania, więc
 należy korzystać wyłącznie z danych fikcyjnych. Wyszukiwanie jest oddzielone
 od scenariuszy pozostałych osób demonstracyjnych.
+
+### Perspektywa eksperta (POC)
+
+W `/onboarding` wybierz **Ekspert / mentor** lub otwórz
+`/onboarding?typ=expert`. Profil obejmuje imię lub pseudonim, zawód albo rolę,
+dziedzinę ekspertyzy oraz opis doświadczenia i kompetencji. Przycisk
+**Wypełnij przykładem Alicji** przygotowuje fikcyjny profil psycholożki
+pracującej z seniorami. Zapis przenosi do `/ekspert/innowacje`.
+
+Lista zawiera trzy demonstracyjne innowacje, uporządkowane według dziedziny
+i słów z opisu oraz zawodu. Wyszukiwarka filtruje katalog według tematu lub
+nazwy; nie korzysta z AI ani embeddingów. Menu konta pozwala wrócić do listy
+i edytować profil. Profil eksperta jest zapisywany osobno od profilu potrzeb.
+
+Na karcie innowacji zakładka **Komentarze eksperckie** umożliwia dodanie
+korekty, sugestii usprawnienia lub nowego pomysłu. Komentarz zawiera nazwę
+autora, jego rolę, dziedzinę i datę. Profil i komentarze pozostają w
+`localStorage`, również po odświeżeniu. Komentarze są przypisane do konkretnej
+innowacji i widoczne dla innych osób demonstracyjnych w tej przeglądarce;
+dodawać je może konto z profilem eksperta. Nie są wysyłane do twórców ani
+backendu i nie zmieniają automatycznie treści innowacji.
 
 ### Pozostałe scenariusze
 

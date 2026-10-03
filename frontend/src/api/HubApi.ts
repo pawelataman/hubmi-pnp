@@ -1,4 +1,9 @@
 import type {
+  ExpertComment,
+  ExpertCommentDraft,
+  ExpertInnovationMatch,
+  ExpertProfile,
+  ExpertSearchRequest,
   CaseSummary,
   CaseThread,
   DraftSection,
@@ -43,6 +48,20 @@ export interface HubApi {
     municipality: string,
     signal?: AbortSignal,
   ): Promise<LocalStats>;
+  findExpertInnovations(
+    request: ExpertSearchRequest,
+    signal?: AbortSignal,
+  ): Promise<readonly ExpertInnovationMatch[]>;
+  listExpertComments(
+    innovationId: string,
+    signal?: AbortSignal,
+  ): Promise<readonly ExpertComment[]>;
+  addExpertComment(
+    innovationId: string,
+    profile: ExpertProfile,
+    draft: ExpertCommentDraft,
+    signal?: AbortSignal,
+  ): Promise<ExpertComment>;
   getInnovation(id: string, signal?: AbortSignal): Promise<Innovation>;
   getMunicipalityFacts(
     municipality: string,

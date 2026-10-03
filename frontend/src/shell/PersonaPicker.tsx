@@ -30,7 +30,7 @@ export function PersonaPicker({
   onDone,
   onChoose,
 }: PersonaPickerProps): ReactElement {
-  const { signIn, needsProfile } = useSession();
+  const { signIn, needsProfile, expertProfile } = useSession();
   const dialogRef: RefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement | null>(null);
 
@@ -70,11 +70,14 @@ export function PersonaPicker({
     }
   }
   const choices: readonly Persona[] = PERSONA_IDS.map(
-    (id: PersonaId): Persona => getPersona(id, needsProfile),
+    (id: PersonaId): Persona => getPersona(id, needsProfile, expertProfile),
   ).filter(
     (persona: Persona): boolean =>
       (persona.id !== 'beneficiary' || needsProfile !== null) &&
-      (requiredRole !== 'curator' || persona.role === 'curator'),
+      (persona.id !== 'expert' || expertProfile !== null) &&
+      (requiredRole === null ||
+        requiredRole === 'user' ||
+        persona.role === requiredRole),
   );
 
   // The layout roots are size containers, which makes them the containing

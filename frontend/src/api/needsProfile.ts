@@ -1,3 +1,4 @@
+import { readProfile, writeProfile } from './profileStorage';
 import type { NeedsProfile } from './types';
 
 export const NEEDS_PROFILE_KEY: string = 'hubme.needsProfile.v1';
@@ -94,28 +95,7 @@ function decodeNeedsProfile(value: unknown): NeedsProfile | null {
 }
 
 export function readNeedsProfile(): StoredNeedsProfile {
-  try {
-    const raw: string | null = window.localStorage.getItem(NEEDS_PROFILE_KEY);
-    if (raw === null) {
-      return { profile: null, error: null };
-    }
-    const decoded: unknown = JSON.parse(raw);
-    const profile: NeedsProfile | null = decodeNeedsProfile(decoded);
-    return profile === null
-      ? {
-          profile: null,
-          error: 'Zapisany profil jest nieprawidłowy. Uzupełnij go ponownie.',
-        }
-      : { profile, error: null };
-  } catch (error: unknown) {
-    return {
-      profile: null,
-      error:
-        error instanceof SyntaxError
-          ? 'Nie udało się odczytać zapisanego profilu. Uzupełnij go ponownie.'
-          : 'Przeglądarka nie pozwala odczytać profilu. Sprawdź ustawienia zapisywania danych.',
-    };
-  }
+  return readProfile(NEEDS_PROFILE_KEY, decodeNeedsProfile);
 }
 
 /** Validates and persists before the caller updates its in-memory session. */
@@ -124,15 +104,5 @@ export function writeNeedsProfile(profile: NeedsProfile): void {
   if (!result.valid) {
     throw new Error('Profil zawiera nieprawidłowe dane.');
   }
-  try {
-    window.localStorage.setItem(
-      NEEDS_PROFILE_KEY,
-      JSON.stringify(result.profile),
-    );
-  } catch (error: unknown) {
-    throw new Error(
-      'Nie udało się zapisać profilu. Sprawdź ustawienia zapisywania danych w przeglądarce.',
-      { cause: error },
-    );
-  }
+  writeProfile(NEEDS_PROFILE_KEY, result.profile);
 }

@@ -98,15 +98,19 @@ export function HubTopBar(): ReactElement {
       </Link>
       <nav aria-label="Główna" className={styles['nav']}>
         {TOP_NAV.map((item: NavItem): ReactElement => {
-          const active: boolean = isNavActive(item, pathname);
+          const expertSearch: boolean =
+            persona?.id === 'expert' && item.to === '/';
+          const active: boolean = expertSearch
+            ? pathname === '/ekspert/innowacje'
+            : isNavActive(item, pathname);
           return (
             <Link
               key={item.label}
-              to={item.to}
+              to={expertSearch ? '/ekspert/innowacje' : item.to}
               aria-current={active ? 'page' : undefined}
               className={cx(styles['navLink'], active && styles['navActive'])}
             >
-              {item.label}
+              {expertSearch ? 'Znajdź innowację' : item.label}
             </Link>
           );
         })}
@@ -169,9 +173,11 @@ export function HubTopBar(): ReactElement {
                 <NotificationsPopover onClose={close} />
               ) : null}
             </div>
-            <Link to="/moje-sprawy" className={styles['cases']}>
-              Moje sprawy
-            </Link>
+            {persona.id !== 'expert' ? (
+              <Link to="/moje-sprawy" className={styles['cases']}>
+                Moje sprawy
+              </Link>
+            ) : null}
             <div ref={menuAnchor} className={styles['anchor']}>
               <button
                 type="button"
@@ -204,6 +210,26 @@ export function HubTopBar(): ReactElement {
                         onClick={close}
                       >
                         Moje dopasowania
+                      </Link>
+                    </>
+                  ) : null}
+                  {persona.id === 'expert' ? (
+                    <>
+                      <Link
+                        role="menuitem"
+                        to="/onboarding?typ=expert"
+                        className={styles['menuItem']}
+                        onClick={close}
+                      >
+                        Mój profil eksperta
+                      </Link>
+                      <Link
+                        role="menuitem"
+                        to="/ekspert/innowacje"
+                        className={styles['menuItem']}
+                        onClick={close}
+                      >
+                        Innowacje dla mnie
                       </Link>
                     </>
                   ) : null}

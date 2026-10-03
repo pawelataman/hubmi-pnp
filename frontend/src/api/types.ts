@@ -1,5 +1,5 @@
-export type PersonaId = 'ewa' | 'maria' | 'anna' | 'beneficiary';
-export type PersonaRole = 'user' | 'curator';
+export type PersonaId = 'ewa' | 'maria' | 'anna' | 'beneficiary' | 'expert';
+export type PersonaRole = 'user' | 'curator' | 'expert';
 
 export type PersonType = 'beneficiary' | 'innovator' | 'institution' | 'expert';
 
@@ -8,6 +8,47 @@ export interface NeedsProfile {
   readonly displayName: string;
   readonly description: string;
   readonly municipality: string;
+}
+
+export type ExpertiseDomain =
+  'senior-support' | 'digital-inclusion' | 'community' | 'service-design';
+
+export interface ExpertProfile {
+  readonly personType: 'expert';
+  readonly displayName: string;
+  readonly profession: string;
+  readonly domain: ExpertiseDomain;
+  readonly description: string;
+}
+
+export interface ExpertSearchRequest {
+  readonly profile: ExpertProfile;
+  readonly query: string;
+}
+
+export interface ExpertInnovationMatch {
+  readonly innovationId: string;
+  readonly name: string;
+  readonly category: string;
+  readonly summary: string;
+  readonly reason: string;
+  readonly contribution: string;
+}
+
+export type ExpertCommentKind = 'correction' | 'improvement' | 'idea';
+
+export interface ExpertCommentDraft {
+  readonly kind: ExpertCommentKind;
+  readonly text: string;
+}
+
+export interface ExpertComment extends ExpertCommentDraft {
+  readonly id: string;
+  readonly innovationId: string;
+  readonly authorName: string;
+  readonly profession: string;
+  readonly domain: ExpertiseDomain;
+  readonly createdAt: string;
 }
 
 export interface Persona {

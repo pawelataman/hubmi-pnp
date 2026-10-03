@@ -6,7 +6,12 @@ import {
   type RefObject,
   type SyntheticEvent,
 } from 'react';
-import { Link, useNavigate, type NavigateFunction } from 'react-router';
+import {
+  Link,
+  Navigate,
+  useNavigate,
+  type NavigateFunction,
+} from 'react-router';
 
 import { EXAMPLE_PROMPTS } from '../../api/examples';
 import { useMatchmaking, useSession, useToast } from '../../app/contexts';
@@ -48,6 +53,10 @@ export function StartScreen(): ReactElement {
       answers: {},
     });
     void navigate('/znajdz/podglad');
+  }
+
+  if (persona?.id === 'expert') {
+    return <Navigate to="/ekspert/innowacje" replace />;
   }
 
   return (

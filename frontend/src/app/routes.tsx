@@ -5,6 +5,7 @@ import { ProfileScreen } from '../features/adaptation/ProfileScreen';
 import { AuthorThreadScreen } from '../features/cases/AuthorThreadScreen';
 import { CasesScreen } from '../features/cases/CasesScreen';
 import { IdeaScreen } from '../features/idea/IdeaScreen';
+import { ExpertInnovationsScreen } from '../features/expert/ExpertInnovationsScreen';
 import { InnovationScreen } from '../features/innovation/InnovationScreen';
 import { OnboardingScreen } from '../features/onboarding/OnboardingScreen';
 import { CuratorThreadScreen } from '../features/rops/CuratorThreadScreen';
@@ -29,6 +30,7 @@ export const routes: RouteObject[] = [
         children: [
           { index: true, element: <StartScreen /> },
           { path: 'onboarding', element: <OnboardingScreen /> },
+          { path: 'ekspert/innowacje', element: <ExpertInnovationsScreen /> },
           { path: 'znajdz/podglad', element: <PreviewScreen /> },
           { path: 'znajdz/doprecyzowanie', element: <ProblemCardScreen /> },
           { path: 'znajdz/wyniki', element: <ResultsScreen /> },

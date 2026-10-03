@@ -6,7 +6,12 @@ import {
   type RefObject,
   type SyntheticEvent,
 } from 'react';
-import { Link, useNavigate, type NavigateFunction } from 'react-router';
+import {
+  Link,
+  useNavigate,
+  useSearchParams,
+  type NavigateFunction,
+} from 'react-router';
 
 import {
   EMPTY_PROFILE_ERRORS,
@@ -23,6 +28,10 @@ import { Button } from '../../ui/Button';
 import { buttonClass } from '../../ui/buttonClass';
 import { cx } from '../../ui/cx';
 import { FieldError } from '../../ui/FieldError';
+import {
+  ExpertOnboardingAside,
+  ExpertOnboardingForm,
+} from './ExpertOnboardingForm';
 import styles from './OnboardingScreen.module.css';
 
 interface PersonTypeOption {
@@ -60,10 +69,15 @@ export function OnboardingScreen(): ReactElement {
   const { persona, needsProfile, profileError, saveNeedsProfile, signIn } =
     useSession();
   const { update } = useMatchmaking();
+  const [params] = useSearchParams();
   const navigate: NavigateFunction = useNavigate();
   const editing: boolean =
     persona?.id === 'beneficiary' && needsProfile !== null;
-  const [personType, setPersonType] = useState<PersonType>('beneficiary');
+  const [personType, setPersonType] = useState<PersonType>(
+    params.get('typ') === 'expert' || persona?.id === 'expert'
+      ? 'expert'
+      : 'beneficiary',
+  );
   const [draft, setDraft] = useState<NeedsProfileDraft>(
     editing && needsProfile !== null ? needsProfile : EMPTY_DRAFT,
   );
@@ -138,25 +152,27 @@ export function OnboardingScreen(): ReactElement {
     <main className={styles['main']}>
       <header className={styles['intro']}>
         <span className={styles['eyebrow']}>
-          {editing ? 'Twój profil potrzeb' : 'Dołącz do HubMe'}
+          {personType === 'expert'
+            ? 'Twój profil eksperta'
+            : editing
+              ? 'Twój profil potrzeb'
+              : 'Dołącz do HubMe'}
         </span>
         <h1 className={styles['title']}>
-          {editing
-            ? 'Opowiedz, czego teraz potrzebujesz'
-            : 'Znajdź wsparcie dopasowane do Ciebie'}
+          {personType === 'expert'
+            ? 'Znajdź innowacje, które możesz rozwijać'
+            : editing
+              ? 'Opowiedz, czego teraz potrzebujesz'
+              : 'Znajdź wsparcie dopasowane do Ciebie'}
         </h1>
         <p className={styles['lead']}>
-          Opisz swoją sytuację własnymi słowami. Pomożemy Ci znaleźć innowacje,
-          które mogą ułatwić codzienne życie.
+          {personType === 'expert'
+            ? 'Podziel się swoim doświadczeniem. Znajdź rozwiązania pasujące do Twoich kompetencji i pomóż ich twórcom.'
+            : 'Opisz swoją sytuację własnymi słowami. Pomożemy Ci znaleźć innowacje, które mogą ułatwić codzienne życie.'}
         </p>
       </header>
       <div className={styles['columns']}>
-        <form
-          ref={form}
-          className={styles['form']}
-          onSubmit={submit}
-          noValidate
-        >
+        <div className={styles['form']}>
           <div className={styles['field']}>
             <label htmlFor="person-type" className={styles['label']}>
               Typ osoby
@@ -189,7 +205,12 @@ export function OnboardingScreen(): ReactElement {
             </p>
           </div>
           {personType === 'beneficiary' ? (
-            <>
+            <form
+              ref={form}
+              className={styles['formFields']}
+              onSubmit={submit}
+              noValidate
+            >
               <div className={styles['sectionIntro']}>
                 <h2 className={styles['sectionTitle']}>Opowiedz nam o sobie</h2>
                 <p>
@@ -323,7 +344,9 @@ export function OnboardingScreen(): ReactElement {
               <p className={styles['demoNote']}>
                 Konto demonstracyjne. Profil zapisujemy w tej przeglądarce.
               </p>
-            </>
+            </form>
+          ) : personType === 'expert' ? (
+            <ExpertOnboardingForm />
           ) : (
             <section className={styles['pending']} aria-live="polite">
               <span className={styles['pendingBadge']}>To be developed</span>
@@ -344,55 +367,61 @@ export function OnboardingScreen(): ReactElement {
               </Button>
             </section>
           )}
-        </form>
-        <aside
-          className={styles['aside']}
-          aria-label="Jak działa profil potrzeb"
-        >
-          <section className={styles['steps']}>
-            <span className={styles['eyebrow']}>
-              Od potrzeby do rozwiązania
-            </span>
-            <h2 className={styles['sectionTitle']}>
-              Twój opis to pierwszy krok
-            </h2>
-            <ol className={styles['stepList']}>
-              <li>
-                <strong>Opisz swoją sytuację</strong>
-                <span>
-                  Powiedz, czego potrzebujesz i co jest dla Ciebie ważne.
-                </span>
-              </li>
-              <li>
-                <strong>Sprawdź rozpoznane potrzeby</strong>
-                <span>Popraw podsumowanie i doprecyzuj oczekiwania.</span>
-              </li>
-              <li>
-                <strong>Poznaj propozycje innowacji</strong>
-                <span>
-                  Zobacz rozwiązania oraz wyjaśnienie, jak mogą Ci pomóc.
-                </span>
-              </li>
-            </ol>
-          </section>
-          <section className={styles['example']}>
-            <span className={styles['exampleBadge']}>Scenariusz POC</span>
-            <h2 className={styles['sectionTitle']}>Więcej kontaktu z ludźmi</h2>
-            <p>
-              Jan, 68 lat, mieszka sam. Szuka regularnych rozmów i wsparcia
-              dostępnego przez zwykły telefon.
-            </p>
-            <p className={styles['hint']}>
-              Ten prototyp pokazuje jeden scenariusz, z przykładowymi
-              rekomendacjami.
-            </p>
-            {personType === 'beneficiary' ? (
-              <Button variant="secondary" onClick={useExample}>
-                Wypełnij przykładem Jana
-              </Button>
-            ) : null}
-          </section>
-        </aside>
+        </div>
+        {personType === 'expert' ? (
+          <ExpertOnboardingAside />
+        ) : (
+          <aside
+            className={styles['aside']}
+            aria-label="Jak działa profil potrzeb"
+          >
+            <section className={styles['steps']}>
+              <span className={styles['eyebrow']}>
+                Od potrzeby do rozwiązania
+              </span>
+              <h2 className={styles['sectionTitle']}>
+                Twój opis to pierwszy krok
+              </h2>
+              <ol className={styles['stepList']}>
+                <li>
+                  <strong>Opisz swoją sytuację</strong>
+                  <span>
+                    Powiedz, czego potrzebujesz i co jest dla Ciebie ważne.
+                  </span>
+                </li>
+                <li>
+                  <strong>Sprawdź rozpoznane potrzeby</strong>
+                  <span>Popraw podsumowanie i doprecyzuj oczekiwania.</span>
+                </li>
+                <li>
+                  <strong>Poznaj propozycje innowacji</strong>
+                  <span>
+                    Zobacz rozwiązania oraz wyjaśnienie, jak mogą Ci pomóc.
+                  </span>
+                </li>
+              </ol>
+            </section>
+            <section className={styles['example']}>
+              <span className={styles['exampleBadge']}>Scenariusz POC</span>
+              <h2 className={styles['sectionTitle']}>
+                Więcej kontaktu z ludźmi
+              </h2>
+              <p>
+                Jan, 68 lat, mieszka sam. Szuka regularnych rozmów i wsparcia
+                dostępnego przez zwykły telefon.
+              </p>
+              <p className={styles['hint']}>
+                Ten prototyp pokazuje jeden scenariusz, z przykładowymi
+                rekomendacjami.
+              </p>
+              {personType === 'beneficiary' ? (
+                <Button variant="secondary" onClick={useExample}>
+                  Wypełnij przykładem Jana
+                </Button>
+              ) : null}
+            </section>
+          </aside>
+        )}
       </div>
       <Link to="/" className={buttonClass('link')}>
         ← HubMe

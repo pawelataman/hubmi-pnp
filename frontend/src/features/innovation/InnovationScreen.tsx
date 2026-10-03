@@ -3,22 +3,30 @@ import { Link, useParams } from 'react-router';
 
 import type { HubApi } from '../../api/HubApi';
 import type { Innovation, LabelledValue, Review } from '../../api/types';
-import { useApi, useMatchmaking, useToast } from '../../app/contexts';
+import {
+  useApi,
+  useMatchmaking,
+  useSession,
+  useToast,
+} from '../../app/contexts';
 import { useAsync, type AsyncResult } from '../../app/useAsync';
 import { AiBadge } from '../../ui/AiBadge';
 import { buttonClass } from '../../ui/buttonClass';
 import { cx } from '../../ui/cx';
 import { LoadError } from '../../ui/LoadError';
 import { Skeleton } from '../../ui/Skeleton';
+import { ExpertComments } from './ExpertComments';
 import styles from './InnovationScreen.module.css';
 
-type Tab = 'opis' | 'finansowanie' | 'opinie';
+type Tab = 'opis' | 'finansowanie' | 'opinie' | 'eksperci';
 
 export function InnovationScreen(): ReactElement {
   const { id = '' } = useParams();
   const api: HubApi = useApi();
   const { state: matchmaking } = useMatchmaking();
   const { stub } = useToast();
+  const { persona } = useSession();
+  const expert: boolean = persona?.id === 'expert';
   const [tab, setTab] = useState<Tab>('opis');
   const { state: load, retry }: AsyncResult<Innovation> = useAsync<Innovation>(
     `innovation:${id}`,
@@ -72,6 +80,7 @@ export function InnovationScreen(): ReactElement {
     ['opis', 'Opis'],
     ['finansowanie', 'Finansowanie i wsparcie'],
     ['opinie', `Opinie (${String(innovation.reviewCount)})`],
+    ['eksperci', 'Komentarze eksperckie'],
   ];
 
   const funding: ReactElement = (
@@ -108,7 +117,11 @@ export function InnovationScreen(): ReactElement {
 
   return (
     <main className={styles['main']}>
-      {matchmaking.card !== null ? (
+      {expert ? (
+        <Link to="/ekspert/innowacje" className={styles['backLink']}>
+          ← Wróć do innowacji dla Ciebie
+        </Link>
+      ) : matchmaking.card !== null ? (
         <Link to="/znajdz/wyniki" className={styles['backLink']}>
           ← Wróć do wyników
         </Link>
@@ -148,12 +161,30 @@ export function InnovationScreen(): ReactElement {
         </div>
       </header>
       <div className={styles['actions']}>
-        <Link
-          to={`/innowacje/${innovation.id}/dostosuj`}
-          className={cx(buttonClass('primary', 'lg'), styles['primaryAction'])}
-        >
-          Dostosuj do mojej gminy
-        </Link>
+        {expert ? (
+          <button
+            type="button"
+            className={cx(
+              buttonClass('primary', 'lg'),
+              styles['primaryAction'],
+            )}
+            onClick={(): void => {
+              setTab('eksperci');
+            }}
+          >
+            Dodaj komentarz ekspercki
+          </button>
+        ) : (
+          <Link
+            to={`/innowacje/${innovation.id}/dostosuj`}
+            className={cx(
+              buttonClass('primary', 'lg'),
+              styles['primaryAction'],
+            )}
+          >
+            Dostosuj do mojej gminy
+          </Link>
+        )}
         <button
           type="button"
           className={cx(styles['action'], styles['actionOutline'])}
@@ -294,6 +325,9 @@ export function InnovationScreen(): ReactElement {
         ) : null}
         {tab === 'finansowanie' ? funding : null}
         {tab === 'opinie' ? reviews : null}
+        {tab === 'eksperci' ? (
+          <ExpertComments key={innovation.id} innovationId={innovation.id} />
+        ) : null}
       </div>
     </main>
   );

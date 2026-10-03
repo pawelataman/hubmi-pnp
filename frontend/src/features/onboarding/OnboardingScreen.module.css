@@ -45,6 +45,7 @@
 }
 
 .form,
+.formFields,
 .aside {
   display: flex;
   flex-direction: column;
