@@ -156,7 +156,7 @@ export function QueueScreen(): ReactElement {
               Wczytujemy zgłoszenia…
             </div>
           ) : null}
-          <table className={styles['table']}>
+          <table className={styles['table']} aria-label="Zgłoszenia">
             <colgroup>
               <col className={styles['colCheck']} />
               <col className={styles['colType']} />

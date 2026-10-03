@@ -369,7 +369,7 @@
   font-weight: 600;
 }
 
-@media (width <= 90rem) {
+@media (width < 90rem) {
   .trendGrid {
     grid-template-columns: 7.5rem minmax(0, 1fr) 2.5rem 4.75rem;
   }

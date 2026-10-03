@@ -110,7 +110,11 @@ export function TrendsScreen(): ReactElement {
                   return (
                     <div key={area.area} className={styles['trendRow']}>
                       <span className={styles['areaName']}>{area.area}</span>
-                      <div className={styles['bars']}>
+                      <div
+                        className={styles['bars']}
+                        role="img"
+                        aria-label={`${area.area}, zgłoszenia w miesiącach ${state.data.months[0] ?? ''}–${state.data.months.at(-1) ?? ''}: ${area.values.join(', ')}`}
+                      >
                         {area.values.map(
                           (value: number, index: number): ReactElement => (
                             <div
@@ -165,6 +169,7 @@ export function TrendsScreen(): ReactElement {
                     <div
                       key={tile.name}
                       title={`${tile.name}: ${String(tile.value)}`}
+                      aria-label={`${tile.name}: ${String(tile.value)}`}
                       className={
                         styles[`level${String(tileLevel(tile.value))}`]
                       }

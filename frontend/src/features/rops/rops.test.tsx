@@ -69,6 +69,11 @@ describe('A6 trends', (): void => {
     ).toBeInTheDocument();
     expect(await screen.findByText('↑ +89%')).toBeInTheDocument();
     expect(screen.getByText('↓ -31%')).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', {
+        name: 'Samotność, zgłoszenia w miesiącach IV–IX: 18, 21, 22, 26, 29, 34',
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByTitle('Kraków: 38')).toBeInTheDocument();
     expect(screen.getByText('pow. tarnowski')).toBeInTheDocument();
     expect(
