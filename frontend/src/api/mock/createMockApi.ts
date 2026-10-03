@@ -10,6 +10,7 @@ import type {
   InstitutionProfile,
   LocalStats,
   MatchResults,
+  MatchRequest,
   MunicipalityFacts,
   Notification,
   PersonaId,
@@ -24,6 +25,11 @@ import type {
 } from '../types';
 import { exampleDraft, exampleFacts } from './data/adaptation';
 import { innovations } from './data/innovations';
+import {
+  findIndividualMatches,
+  individualReasons,
+  summariseIndividualProblem,
+} from './data/individualMatchmaking';
 import {
   exampleLocalStats,
   exampleMatches,
@@ -102,29 +108,36 @@ export function createMockApi(options: MockApiOptions = {}): HubApi {
     },
 
     async summariseProblem(
-      _input: ProblemInput,
+      input: ProblemInput,
       signal?: AbortSignal,
     ): Promise<ProblemCard> {
       await pause(signal);
-      return exampleProblemCard;
+      return input.audience === 'individual'
+        ? summariseIndividualProblem(input)
+        : exampleProblemCard;
     },
 
     async findMatches(
-      _card: ProblemCard,
+      request: MatchRequest,
       signal?: AbortSignal,
     ): Promise<MatchResults> {
       await pause(signal);
-      return exampleMatches;
+      return request.card.audience === 'individual'
+        ? findIndividualMatches(request)
+        : exampleMatches;
     },
 
     async getMatchReason(
       innovationId: string,
+      card: ProblemCard,
       signal?: AbortSignal,
     ): Promise<readonly ReasonSegment[]> {
       const position: number =
         Object.keys(exampleReasons).indexOf(innovationId);
       await pause(signal, position + 1);
-      return exampleReasons[innovationId] ?? [];
+      const reasons: Readonly<Record<string, readonly ReasonSegment[]>> =
+        card.audience === 'individual' ? individualReasons : exampleReasons;
+      return reasons[innovationId] ?? [];
     },
 
     async getLocalStats(

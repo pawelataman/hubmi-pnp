@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { PERSONA_IDS, PERSONAS } from '../api/personas';
+import { getPersona, PERSONA_IDS } from '../api/personas';
 import type { Persona, PersonaId, PersonaRole } from '../api/types';
 import { useSession } from '../app/contexts';
 import { Button } from '../ui/Button';
@@ -30,7 +30,7 @@ export function PersonaPicker({
   onDone,
   onChoose,
 }: PersonaPickerProps): ReactElement {
-  const { signIn } = useSession();
+  const { signIn, needsProfile } = useSession();
   const dialogRef: RefObject<HTMLDivElement | null> =
     useRef<HTMLDivElement | null>(null);
 
@@ -70,10 +70,11 @@ export function PersonaPicker({
     }
   }
   const choices: readonly Persona[] = PERSONA_IDS.map(
-    (id: PersonaId): Persona => PERSONAS[id],
+    (id: PersonaId): Persona => getPersona(id, needsProfile),
   ).filter(
     (persona: Persona): boolean =>
-      requiredRole !== 'curator' || persona.role === 'curator',
+      (persona.id !== 'beneficiary' || needsProfile !== null) &&
+      (requiredRole !== 'curator' || persona.role === 'curator'),
   );
 
   // The layout roots are size containers, which makes them the containing

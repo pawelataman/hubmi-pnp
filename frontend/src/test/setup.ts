@@ -9,5 +9,6 @@ window.scrollTo = (): void => {};
 afterEach((): void => {
   cleanup();
   window.sessionStorage.clear();
+  window.localStorage.clear();
   document.documentElement.style.fontSize = '';
 });

@@ -8,6 +8,7 @@ import type {
   InstitutionProfile,
   LocalStats,
   MatchResults,
+  MatchRequest,
   MunicipalityFacts,
   Notification,
   PersonaId,
@@ -30,9 +31,13 @@ export interface HubApi {
     input: ProblemInput,
     signal?: AbortSignal,
   ): Promise<ProblemCard>;
-  findMatches(card: ProblemCard, signal?: AbortSignal): Promise<MatchResults>;
+  findMatches(
+    request: MatchRequest,
+    signal?: AbortSignal,
+  ): Promise<MatchResults>;
   getMatchReason(
     innovationId: string,
+    card: ProblemCard,
     signal?: AbortSignal,
   ): Promise<readonly ReasonSegment[]>;
   getLocalStats(

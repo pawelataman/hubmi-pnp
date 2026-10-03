@@ -6,10 +6,10 @@ import {
   type RefObject,
   type SyntheticEvent,
 } from 'react';
-import { useNavigate, type NavigateFunction } from 'react-router';
+import { Link, useNavigate, type NavigateFunction } from 'react-router';
 
 import { EXAMPLE_PROMPTS } from '../../api/examples';
-import { useMatchmaking, useToast } from '../../app/contexts';
+import { useMatchmaking, useSession, useToast } from '../../app/contexts';
 import { Button } from '../../ui/Button';
 import { cx } from '../../ui/cx';
 import { FieldError } from '../../ui/FieldError';
@@ -20,6 +20,8 @@ const MIN_LENGTH: number = 60;
 
 export function StartScreen(): ReactElement {
   const { state, update } = useMatchmaking();
+  const { persona } = useSession();
+  const personal: boolean = persona?.id === 'beneficiary';
   const { stub } = useToast();
   const navigate: NavigateFunction = useNavigate();
   const [description, setDescription] = useState<string>(state.description);
@@ -60,6 +62,12 @@ export function StartScreen(): ReactElement {
           przetestował w Polsce. Nie musisz się logować.
         </p>
       </div>
+      {persona === null ? (
+        <p className={styles['hint']}>
+          Chcesz zachować swoje potrzeby?{' '}
+          <Link to="/onboarding">Załóż profil osoby potrzebującej</Link>.
+        </p>
+      ) : null}
       <form className={styles['form']} onSubmit={submit} noValidate>
         <div className={styles['field']}>
           <label htmlFor="description" className={styles['label']}>
@@ -100,8 +108,9 @@ export function StartScreen(): ReactElement {
             <span className={styles['info']} aria-hidden="true">
               i
             </span>
-            Opisz problem, nie osobę. Nie podawaj imion, adresów ani informacji
-            o zdrowiu.
+            {personal
+              ? 'Opisz potrzeby i istotny kontekst swojej sytuacji. Nie podawaj nazwisk, adresów ani numerów telefonu.'
+              : 'Opisz problem, nie osobę. Nie podawaj imion, adresów ani informacji o zdrowiu.'}
           </p>
         </div>
         <div className={styles['row']}>

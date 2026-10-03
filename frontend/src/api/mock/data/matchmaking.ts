@@ -76,6 +76,7 @@ export const exampleRedaction: RedactionResult = {
 };
 
 export const exampleProblemCard: ProblemCard = {
+  audience: 'institution',
   summary:
     'w Twojej wiejskiej gminie starsze osoby mieszkają same, bo rodziny wyjechały. Brakuje im kontaktu z innymi ludźmi i dojazdu do miasta. Szukasz rozwiązania, które może wdrożyć gmina albo GOPS.',
   groups: [

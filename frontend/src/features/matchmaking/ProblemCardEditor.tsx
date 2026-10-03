@@ -229,7 +229,7 @@ export function ProblemCardEditor({
         <section className={styles['questions']}>
           <div className={styles['questionsHead']}>
             <strong className={styles['questionsTitle']}>
-              3 krótkie pytania
+              Doprecyzuj potrzeby
             </strong>
             <span className={styles['questionsLead']}>
               Pomogą lepiej dobrać wyniki. Każde możesz pominąć.
@@ -278,8 +278,15 @@ export function ProblemCardEditor({
         <Button size="lg" onClick={confirm}>
           Szukaj rozwiązań →
         </Button>
-        <Link to="/znajdz/podglad" className={buttonClass('link', 'lg')}>
-          ← Wróć
+        <Link
+          to={
+            initial.audience === 'individual'
+              ? '/onboarding'
+              : '/znajdz/podglad'
+          }
+          className={buttonClass('link', 'lg')}
+        >
+          {initial.audience === 'individual' ? '← Wróć do profilu' : '← Wróć'}
         </Link>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { CasesScreen } from '../features/cases/CasesScreen';
 import { IdeaScreen } from '../features/idea/IdeaScreen';
 import { InnovationScreen } from '../features/innovation/InnovationScreen';
 import { LibraryScreen } from '../features/library/LibraryScreen';
+import { OnboardingScreen } from '../features/onboarding/OnboardingScreen';
 import { CuratorThreadScreen } from '../features/rops/CuratorThreadScreen';
 import { QueueScreen } from '../features/rops/QueueScreen';
 import { TrendsScreen } from '../features/rops/TrendsScreen';
@@ -28,6 +29,7 @@ export const routes: RouteObject[] = [
         element: <PublicLayout />,
         children: [
           { index: true, element: <StartScreen /> },
+          { path: 'onboarding', element: <OnboardingScreen /> },
           { path: 'znajdz/podglad', element: <PreviewScreen /> },
           { path: 'znajdz/doprecyzowanie', element: <ProblemCardScreen /> },
           { path: 'znajdz/wyniki', element: <ResultsScreen /> },
