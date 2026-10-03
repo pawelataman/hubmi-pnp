@@ -75,7 +75,8 @@
 .textarea {
   display: block;
   width: 100%;
-  min-height: 12.5rem;
+  field-sizing: content;
+  min-height: 14rem;
   padding: 1.375rem 1.5rem 4.5rem;
   border: 2px solid var(--c-primary);
   border-radius: var(--radius);
@@ -90,6 +91,11 @@
 .invalid {
   border: 3px solid var(--c-danger);
   outline: none;
+}
+
+.invalid:focus-visible {
+  outline: 2px solid var(--c-danger);
+  outline-offset: 3px;
 }
 
 .dictate {
@@ -234,9 +240,12 @@
 }
 
 .humanLink {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  min-height: var(--target);
   margin-left: auto;
-  padding: 0;
+  padding: 0 0.75rem;
   border: none;
   background: transparent;
   color: var(--c-primary);
