@@ -46,28 +46,32 @@ list as>` is a loop, `<dc-import name>` embeds another file, and the
 | Build approach | CSS Modules with design tokens, plus a typed `HubApi` interface with an in-process mock |
 | Language | Polish UI copy, taken verbatim from the mockups |
 
-## Tooling repair (prerequisite)
+## Tooling changes
 
-The committed frontend blueprint cannot be installed: `package.json` declares
-no dependencies and there is no `package-lock.json`, although the Dockerfile
-copies one.
+The base is commit `999b849` on `master`, which declares the frontend
+dependencies (React 19.3, Vite 8.3, Vitest 5.0, TypeScript 5.9, ESLint 10),
+commits `package-lock.json`, and adds `make install`, `make dev` and
+`make check`.
 
-- Declare the packages the existing config imports: `react`, `react-dom`,
-  `vite`, `@vitejs/plugin-react`, `typescript`, `vitest`, `eslint`,
-  `@eslint/js`, `globals`, `typescript-eslint`, `eslint-plugin-react-hooks`,
-  `eslint-plugin-react-refresh`, `prettier`, `@types/react`,
-  `@types/react-dom`, `@types/node`.
-- Add: `react-router`, `@testing-library/react`,
-  `@testing-library/user-event`, `@testing-library/jest-dom`, `jsdom`.
-- Commit `package-lock.json`. Versions are exact (`.npmrc` sets `save-exact`).
-- Node 24 is required by `engines` and `.nvmrc`. The development machine has
-  only Node 22 and 23, so the plan starts with `nvm install 24`.
-- `index.html`: `lang="pl"`, title "HubMe", Red Hat Display (400, 500, 600,
-  700) and Red Hat Mono (400, 500) from Google Fonts.
-- Remove the blueprint placeholder: `App.tsx` content, `components/ApiStatus.tsx`,
-  `hooks/useApiHealth.ts`, `styles.css`. Keep `api/health.ts` and its test.
+- Add `react-router` as a dependency, and `@testing-library/react`,
+  `@testing-library/user-event`, `@testing-library/jest-dom` and `jsdom` as
+  dev dependencies. Versions are exact (`.npmrc` sets `save-exact`), and the
+  lockfile is updated in the same commit.
+- Node 24 is mandatory: `.npmrc` sets `engine-strict`, so `npm ci` fails on
+  any other major version. The development machine has only Node 22 and 23,
+  so the plan starts with `nvm install 24`.
+- `index.html`: `lang="pl"`, title "HubMe", an updated description, and Red
+  Hat Display (400, 500, 600, 700) and Red Hat Mono (400, 500) from Google
+  Fonts.
+- Remove the blueprint placeholder: `App.tsx` content,
+  `components/ApiStatus.tsx`, `hooks/useApiHealth.ts`, `styles.css`. Keep
+  `api/health.ts` and its test.
 - `vitest.config.ts`: environment `jsdom`, include `src/**/*.test.{ts,tsx}`,
   a setup file that registers `jest-dom` matchers.
+- `README.md`: replace the description of the start page and the closing
+  note with a short description of the demo, its personas and its mock data.
+- Code follows the repo's existing conventions: Prettier formatting, explicit
+  return types and typed declarations as enforced by `eslint.config.js`.
 
 ## Source layout
 
@@ -410,8 +414,8 @@ Integration tests, rendered through the real router:
 - A stubbed control raises the demo toast.
 
 There are no automated visual tests. Fidelity is verified by eye against the
-mockups at 1440px and 1024px. `npm run check` (lint, format check, typecheck,
-tests, build) must pass.
+mockups at 1440px and 1024px. `make check` (backend checks plus the frontend's
+lint, format check, typecheck, tests and build) must pass.
 
 ## Out of scope
 
