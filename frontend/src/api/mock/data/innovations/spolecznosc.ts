@@ -66,7 +66,7 @@ export const sasiedzkaWypozyczalnia: Innovation = {
     'Sprawdzono 08.2025. Sprawdź aktualne nabory. Hub nie gwarantuje dofinansowania.',
   reviews: [
     {
-      heading: '4 – pomogło · gmina wiejska, urząd gminy',
+      heading: '4 – pomogło · urząd gminy, gmina wiejska',
       quote: 'Najczęściej pożyczana jest drabina, zaraz po niej kosiarka.',
     },
     {

@@ -62,14 +62,14 @@ export const pierwszaRozmowa: Innovation = {
     'Po pierwszym kwartale sprawdź czas oczekiwania i liczbę osób skierowanych dalej.',
   ],
   fundingProgrammes: [
-    'Narodowy Program Ochrony Zdrowia Psychicznego',
+    'Powiatowy Program Pomocy Psychologicznej (przykład)',
     'FERS – usługi zdrowotne',
   ],
   fundingNote:
     'Sprawdzono 03.2026. Sprawdź aktualne nabory. Hub nie gwarantuje dofinansowania.',
   reviews: [
     {
-      heading: '5 – bardzo pomogło · gmina wiejska, urząd gminy',
+      heading: '5 – bardzo pomogło · urząd gminy, gmina wiejska',
       quote:
         'Pierwsza rozmowa odbywa się w trzy dni, a nie po czterech miesiącach.',
     },

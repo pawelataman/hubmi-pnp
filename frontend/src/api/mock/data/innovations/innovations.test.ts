@@ -264,6 +264,11 @@ describe('example innovations', (): void => {
       expect(item.author).not.toBe('');
       expect(item.incubator).not.toBe('');
       expect(item.testerNote !== '').toBe(item.seeksTesters);
+      for (const review of item.reviews) {
+        expect(review.heading).toMatch(
+          /^[345] – (bardzo pomogło|pomogło|częściowo pomogło) · .+, .+$/,
+        );
+      }
     }
   });
 

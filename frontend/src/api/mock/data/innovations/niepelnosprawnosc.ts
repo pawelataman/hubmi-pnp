@@ -61,7 +61,7 @@ export const asystentNaGodziny: Innovation = {
     'Uruchom zamawianie telefoniczne i co kwartał sprawdzaj, czy pula godzin wystarcza.',
   ],
   fundingProgrammes: [
-    'Program Asystent Osobisty Osoby z Niepełnosprawnością',
+    'Gminny Program Asystencji Osobistej (przykład)',
     'FERS – usługi społeczne',
   ],
   fundingNote:

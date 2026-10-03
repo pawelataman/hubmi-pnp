@@ -61,7 +61,7 @@ export const wytchnieniowaSobota: Innovation = {
     'Zbierz od rodzin karty informacyjne i poznaj podopiecznych przed pierwszą sobotą.',
   ],
   fundingProgrammes: [
-    'Program Opieka Wytchnieniowa dla Członków Rodzin',
+    'Program Wsparcia Opiekunów Rodzinnych (przykład)',
     'FERS – usługi społeczne',
   ],
   fundingNote:

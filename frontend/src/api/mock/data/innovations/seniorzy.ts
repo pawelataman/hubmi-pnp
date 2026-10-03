@@ -142,7 +142,7 @@ export const mobilnaKawiarenka: Innovation = {
     'Sprawdzono 02.2026. Sprawdź aktualne nabory. Hub nie gwarantuje dofinansowania.',
   reviews: [
     {
-      heading: '4 – pomogło · gmina wiejska, urząd gminy',
+      heading: '4 – pomogło · urząd gminy, gmina wiejska',
       quote:
         'Na pierwszy postój przyszło osiem osób, po dwóch miesiącach już dwadzieścia.',
     },
