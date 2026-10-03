@@ -1,0 +1,77 @@
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.125rem;
+  border: 2px solid var(--c-line-strong);
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.composer:focus-within {
+  border-color: var(--c-primary);
+}
+
+.failed,
+.failed:focus-within {
+  border-color: var(--c-danger);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--c-ink);
+  font-size: 1.125rem;
+  line-height: 1.5;
+  resize: none;
+  field-sizing: content;
+}
+
+.field::placeholder {
+  color: var(--c-muted);
+  opacity: 1;
+}
+
+@supports not (field-sizing: content) {
+  .field {
+    min-height: 7rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.attach {
+  min-height: 3rem;
+}
+
+.note {
+  color: var(--c-muted);
+  font-size: 0.9375rem;
+}
+
+.send {
+  min-height: 3.25rem;
+  margin-left: auto;
+  padding: 0 1.625rem;
+  font-size: 1.125rem;
+}

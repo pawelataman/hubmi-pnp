@@ -2,6 +2,9 @@ import { Navigate, type RouteObject } from 'react-router';
 
 import { DraftScreen } from '../features/adaptation/DraftScreen';
 import { ProfileScreen } from '../features/adaptation/ProfileScreen';
+import { AuthorThreadScreen } from '../features/cases/AuthorThreadScreen';
+import { CasesScreen } from '../features/cases/CasesScreen';
+import { IdeaScreen } from '../features/idea/IdeaScreen';
 import { InnovationScreen } from '../features/innovation/InnovationScreen';
 import { PreviewScreen } from '../features/matchmaking/PreviewScreen';
 import { ProblemCardScreen } from '../features/matchmaking/ProblemCardScreen';
@@ -38,6 +41,23 @@ export const routes: RouteObject[] = [
             element: (
               <RequirePersona role="user">
                 <DraftScreen />
+              </RequirePersona>
+            ),
+          },
+          { path: 'zglos-pomysl', element: <IdeaScreen /> },
+          {
+            path: 'moje-sprawy',
+            element: (
+              <RequirePersona role="user">
+                <CasesScreen />
+              </RequirePersona>
+            ),
+          },
+          {
+            path: 'moje-sprawy/:id',
+            element: (
+              <RequirePersona role="user">
+                <AuthorThreadScreen />
               </RequirePersona>
             ),
           },
