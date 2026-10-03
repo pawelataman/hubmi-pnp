@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { EXAMPLE_IDEA } from '../../api/examples';
+import type { HubApi } from '../../api/HubApi';
 import { createMockApi } from '../../api/mock/createMockApi';
 import { renderApp } from '../../test/renderApp';
 
@@ -63,6 +64,26 @@ describe('K1 idea form', (): void => {
         name: 'Pomysł: Sąsiedzka kawiarenka',
       }),
     ).toHaveLength(2);
+  });
+
+  it('keeps the form and returns focus to the button when sending fails', async (): Promise<void> => {
+    const base: HubApi = createMockApi({ delayMs: 0 });
+    const api: HubApi = {
+      ...base,
+      submitIdea: (): Promise<never> => Promise.reject(new Error('offline')),
+    };
+    const { user } = renderApp('/zglos-pomysl', { api });
+    const send: HTMLElement = screen.getByRole('button', {
+      name: 'Wyślij fiszkę',
+    });
+    await user.click(send);
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Nie udało się wysłać fiszki. Spróbuj ponownie.',
+    );
+    expect(send).toHaveFocus();
+    expect(
+      screen.getByRole('textbox', { name: '1. Nazwa robocza' }),
+    ).toHaveValue(EXAMPLE_IDEA.name);
   });
 
   it('returns to a fresh form with focus on the first field', async (): Promise<void> => {

@@ -30,7 +30,7 @@ import {
 type TextField = 'name' | 'summary' | 'audience' | 'problem' | 'email';
 
 /** Where focus should go once the element it targets has been rendered. */
-type FocusTarget = 'invalid' | 'heading' | 'first';
+type FocusTarget = 'invalid' | 'heading' | 'first' | 'submit';
 
 export function IdeaScreen(): ReactElement {
   const api: HubApi = useApi();
@@ -90,6 +90,7 @@ export function IdeaScreen(): ReactElement {
       pendingFocus.current = 'heading';
       setSubmitted(result);
     } catch {
+      pendingFocus.current = 'submit';
       setFailed(true);
     } finally {
       setSending(false);
@@ -183,7 +184,9 @@ export function IdeaScreen(): ReactElement {
           </p>
         </div>
         <div className={styles['callNote']}>
-          <span className={styles['callIcon']}>◷</span>
+          <span className={styles['callIcon']} aria-hidden="true">
+            ◷
+          </span>
           Teraz nie ma aktywnego naboru. Fiszkę możesz wysłać zawsze.
         </div>
       </div>
@@ -193,7 +196,6 @@ export function IdeaScreen(): ReactElement {
             <label htmlFor="idea-name" className={styles['label']}>
               1. Nazwa robocza
             </label>
-            {error('name')}
             <input
               id="idea-name"
               type="text"
@@ -206,12 +208,12 @@ export function IdeaScreen(): ReactElement {
               onChange={text('name')}
               {...invalidProps('name')}
             />
+            {error('name')}
           </div>
           <div className={styles['field']}>
             <label htmlFor="idea-summary" className={styles['label']}>
               2. Istota pomysłu w jednym zdaniu
             </label>
-            {error('summary')}
             <textarea
               id="idea-summary"
               className={cx(
@@ -227,6 +229,7 @@ export function IdeaScreen(): ReactElement {
                   : 'idea-summary-count'
               }
             />
+            {error('summary')}
             <span id="idea-summary-count" className={styles['counter']}>
               {`${String(form.summary.length)} / ${String(SUMMARY_LIMIT)} znaków`}
             </span>
@@ -236,7 +239,6 @@ export function IdeaScreen(): ReactElement {
               <label htmlFor="idea-audience" className={styles['label']}>
                 3. Dla kogo
               </label>
-              {error('audience')}
               <input
                 id="idea-audience"
                 type="text"
@@ -248,12 +250,12 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('audience')}
                 {...invalidProps('audience')}
               />
+              {error('audience')}
             </div>
             <div className={styles['field']}>
               <label htmlFor="idea-problem" className={styles['label']}>
                 4. Jaki problem rozwiązuje
               </label>
-              {error('problem')}
               <input
                 id="idea-problem"
                 type="text"
@@ -265,6 +267,7 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('problem')}
                 {...invalidProps('problem')}
               />
+              {error('problem')}
             </div>
           </div>
           <div
@@ -307,7 +310,6 @@ export function IdeaScreen(): ReactElement {
                 E-mail do odpowiedzi{' '}
                 <span className={styles['optional']}>(opcjonalnie)</span>
               </label>
-              {error('email')}
               <input
                 id="idea-email"
                 type="email"
@@ -319,6 +321,7 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('email')}
                 {...invalidProps('email')}
               />
+              {error('email')}
             </div>
           </div>
           {failed ? (
@@ -330,6 +333,7 @@ export function IdeaScreen(): ReactElement {
             <Button
               type="submit"
               size="lg"
+              data-focus="submit"
               className={styles['submit']}
               disabled={sending}
             >
