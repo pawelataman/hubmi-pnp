@@ -4,6 +4,8 @@ import type { ProfileDraft } from '../api/examples';
 import type { HubApi } from '../api/HubApi';
 import type {
   Notification,
+  MatchmakingAudience,
+  NeedsProfile,
   Persona,
   PersonaId,
   ProblemCard,
@@ -28,6 +30,9 @@ export function useApi(): HubApi {
 // ── Session ──────────────────────────────────────────────────
 export interface SessionValue {
   readonly persona: Persona | null;
+  readonly needsProfile: NeedsProfile | null;
+  readonly profileError: string | null;
+  readonly saveNeedsProfile: (profile: NeedsProfile) => void;
   readonly signIn: (id: PersonaId) => void;
   readonly signOut: () => void;
 }
@@ -88,6 +93,7 @@ export function useNotifications(): NotificationsValue {
 
 // ── Matchmaking ──────────────────────────────────────────────
 export interface MatchmakingState {
+  readonly audience: MatchmakingAudience;
   readonly description: string;
   readonly municipality: string;
   readonly onBehalf: boolean;

@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { EXAMPLE_DESCRIPTION } from '../../api/examples';
 import type { HubApi } from '../../api/HubApi';
 import { createMockApi } from '../../api/mock/createMockApi';
-import type { ReasonSegment } from '../../api/types';
+import type { ProblemCard, ReasonSegment } from '../../api/types';
 import { renderApp } from '../../test/renderApp';
 
 const OWN_TEXT: string =
@@ -323,12 +323,13 @@ describe('M4 results', (): void => {
       ...base,
       getMatchReason: async (
         innovationId: string,
+        card: ProblemCard,
         signal?: AbortSignal,
       ): Promise<readonly ReasonSegment[]> => {
         await new Promise<void>((resolve: () => void): void => {
           release.push(resolve);
         });
-        return base.getMatchReason(innovationId, signal);
+        return base.getMatchReason(innovationId, card, signal);
       },
     };
     const { user } = renderApp('/', { api });

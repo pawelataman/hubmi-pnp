@@ -90,7 +90,7 @@ export function PreviewScreen(): ReactElement {
 
   return (
     <main className={styles['main']}>
-      <FlowSteps current={2} />
+      <FlowSteps current={2} audience={state.audience} />
       <div className={styles['intro']}>
         <h1 className={styles['title']}>Tak zobaczy to system</h1>
         <p className={styles['lead']}>

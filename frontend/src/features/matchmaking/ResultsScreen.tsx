@@ -55,11 +55,11 @@ export function ResultsScreen(): ReactElement {
   const card: ProblemCard | null = state.card;
   const { state: load, retry }: AsyncResult<MatchResults> =
     useAsync<MatchResults>(
-      `matches:${state.description}`,
+      `matches:${JSON.stringify({ card, answers: state.answers })}`,
       (signal: AbortSignal): Promise<MatchResults> =>
         card === null
           ? Promise.reject(new Error('Brak karty problemu.'))
-          : api.findMatches(card, signal),
+          : api.findMatches({ card, answers: state.answers }, signal),
     );
 
   if (!state.submitted) {
@@ -96,7 +96,11 @@ export function ResultsScreen(): ReactElement {
     <main className={styles['main']}>
       <div className={styles['header']}>
         <div className={styles['headerText']}>
-          <h1 className={styles['title']}>Rozwiązania dla Twojego problemu</h1>
+          <h1 className={styles['title']}>
+            {card.audience === 'individual'
+              ? 'Innowacje dopasowane do Twoich potrzeb'
+              : 'Rozwiązania dla Twojego problemu'}
+          </h1>
           <div className={styles['terms']}>
             <span className={styles['termsLabel']}>Szukamy dla:</span>
             {load.status === 'ready'
@@ -106,8 +110,13 @@ export function ResultsScreen(): ReactElement {
                   </span>
                 ))
               : null}
-            <Link to="/" className={styles['change']}>
-              Zmień opis
+            <Link
+              to={card.audience === 'individual' ? '/onboarding' : '/'}
+              className={styles['change']}
+            >
+              {card.audience === 'individual'
+                ? 'Edytuj profil potrzeb'
+                : 'Zmień opis'}
             </Link>
           </div>
         </div>
@@ -117,6 +126,12 @@ export function ResultsScreen(): ReactElement {
           </Switch>
         </div>
       </div>
+      {card.audience === 'individual' ? (
+        <p className={styles['loadingNote']}>
+          Scenariusz POC: kontakt z ludźmi dla osoby starszej. Rekomendacje są
+          przykładowe; dostępność usług wymaga potwierdzenia.
+        </p>
+      ) : null}
       <div className={styles['columns']}>
         <section className={styles['results']}>
           <div className={styles['resultsHead']}>
@@ -205,6 +220,7 @@ export function ResultsScreen(): ReactElement {
                     </div>
                     <MatchReason
                       innovationId={match.innovationId}
+                      card={card}
                       onSettled={reasonSettled}
                     />
                     <div className={styles['cardFoot']}>
@@ -212,7 +228,7 @@ export function ResultsScreen(): ReactElement {
                         ✓ Zweryfikowano {match.verified}
                       </span>
                       <span>
-                        Koszt:{' '}
+                        {card.audience === 'individual' ? 'Udział:' : 'Koszt:'}{' '}
                         <strong className={styles['cost']}>{match.cost}</strong>
                       </span>
                       <div className={styles['cardActions']}>
@@ -330,7 +346,9 @@ export function ResultsScreen(): ReactElement {
               </>
             ) : null}
           </section>
-          <LocalStatsPanel municipality={state.municipality} />
+          {card.audience === 'institution' ? (
+            <LocalStatsPanel municipality={state.municipality} />
+          ) : null}
         </aside>
       </div>
     </main>

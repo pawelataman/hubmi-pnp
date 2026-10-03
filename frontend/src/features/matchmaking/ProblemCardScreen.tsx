@@ -22,6 +22,7 @@ export function ProblemCardScreen(): ReactElement {
         state.card === null
           ? api.summariseProblem(
               {
+                audience: state.audience,
                 description: state.description,
                 municipality: state.municipality,
                 onBehalf: state.onBehalf,
@@ -37,7 +38,7 @@ export function ProblemCardScreen(): ReactElement {
 
   return (
     <main className={styles['main']}>
-      <FlowSteps current={3} />
+      <FlowSteps current={3} audience={state.audience} />
       <h1 className={styles['title']}>Sprawdź, czy dobrze rozumiemy</h1>
       {load.status === 'loading' ? (
         <div role="status" aria-live="polite" className={styles['loading']}>

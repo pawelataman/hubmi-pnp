@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 import type { HubApi } from '../../api/HubApi';
-import type { ReasonSegment } from '../../api/types';
+import type { ProblemCard, ReasonSegment } from '../../api/types';
 import { useApi } from '../../app/contexts';
 import { useAsync, type AsyncResult } from '../../app/useAsync';
 import { AiBadge } from '../../ui/AiBadge';
@@ -10,22 +10,24 @@ import styles from './ResultsScreen.module.css';
 
 interface MatchReasonProps {
   readonly innovationId: string;
+  readonly card: ProblemCard;
   /** Called once the reason has arrived or failed to arrive. */
   readonly onSettled: (innovationId: string) => void;
 }
 
 export function MatchReason({
   innovationId,
+  card,
   onSettled,
 }: MatchReasonProps): ReactElement {
   const api: HubApi = useApi();
   const { state }: AsyncResult<readonly ReasonSegment[]> = useAsync<
     readonly ReasonSegment[]
   >(
-    `reason:${innovationId}`,
+    `reason:${innovationId}:${JSON.stringify(card)}`,
     async (signal: AbortSignal): Promise<readonly ReasonSegment[]> => {
       try {
-        return await api.getMatchReason(innovationId, signal);
+        return await api.getMatchReason(innovationId, card, signal);
       } finally {
         // Reported from the request, not from an effect; an aborted request
         // (unmount, or a superseded one) reports nothing.

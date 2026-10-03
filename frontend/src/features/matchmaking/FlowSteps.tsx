@@ -1,5 +1,6 @@
 import { Fragment, type ReactElement } from 'react';
 
+import type { MatchmakingAudience } from '../../api/types';
 import { cx } from '../../ui/cx';
 import styles from './FlowSteps.module.css';
 
@@ -13,12 +14,21 @@ const STEPS: readonly string[] = [
 interface FlowStepsProps {
   /** 1-based number of the current step. */
   readonly current: 2 | 3;
+  readonly audience?: MatchmakingAudience;
 }
 
-export function FlowSteps({ current }: FlowStepsProps): ReactElement {
+export function FlowSteps({
+  current,
+  audience = 'institution',
+}: FlowStepsProps): ReactElement {
+  const steps: readonly string[] =
+    audience === 'individual'
+      ? ['Profil potrzeb', 'Doprecyzowanie', 'Wyniki']
+      : STEPS;
+  const active: number = audience === 'individual' ? current - 1 : current;
   return (
     <ol aria-label="Etapy" className={styles['steps']}>
-      {STEPS.map((label: string, index: number): ReactElement => {
+      {steps.map((label: string, index: number): ReactElement => {
         const position: number = index + 1;
         return (
           <Fragment key={label}>
@@ -28,13 +38,13 @@ export function FlowSteps({ current }: FlowStepsProps): ReactElement {
               </li>
             ) : null}
             <li
-              aria-current={position === current ? 'step' : undefined}
+              aria-current={position === active ? 'step' : undefined}
               className={cx(
-                position < current && styles['done'],
-                position === current && styles['current'],
+                position < active && styles['done'],
+                position === active && styles['current'],
               )}
             >
-              {position < current ? '✓ ' : ''}
+              {position < active ? '✓ ' : ''}
               {String(position)}. {label}
             </li>
           </Fragment>

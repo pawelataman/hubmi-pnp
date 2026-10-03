@@ -86,6 +86,27 @@ Podgląd buildu: `npm run preview --prefix frontend`.
 
 ## Wersja demonstracyjna
 
+### Onboarding osoby potrzebującej (POC)
+
+Przycisk **Załóż konto** otwiera `/onboarding`. Pole **Typ osoby** przełącza
+formularz: osoba potrzebująca ma działający onboarding, a dostawca innowacji,
+instytucja i ekspert otrzymują komunikat „Formularz w przygotowaniu”.
+
+Przycisk **Wypełnij przykładem Jana** uzupełnia fikcyjny profil seniora
+szukającego kontaktu z ludźmi. Po zapisie użytkownik sprawdza opis potrzeb,
+odpowiada na pytania i przechodzi do przykładowych rekomendacji. Odpowiedzi
+wpływają na kolejność propozycji w tym jednym scenariuszu POC. Całość działa
+na mockach; embeddingi ani rzeczywiste AI nie są uruchamiane.
+
+Profil jest zapisywany w `localStorage` tej przeglądarki. Demo obsługuje jedno
+takie konto; sesja jest zachowywana w `sessionStorage`. Menu konta udostępnia
+**Mój profil potrzeb** i **Moje dopasowania**. Utworzone konto pojawia się też
+w wyborze osób przy logowaniu. To symulacja konta bez uwierzytelniania, więc
+należy korzystać wyłącznie z danych fikcyjnych. Wyszukiwanie jest oddzielone
+od scenariuszy pozostałych osób demonstracyjnych.
+
+### Pozostałe scenariusze
+
 Wszystkie dane są przykładowe i pochodzą z makiet w
 `docs/design/hubme-makiety`. Frontend nie wysyła żadnych zapytań do backendu:
 dane dostarcza `frontend/src/api/mock`, a ekrany korzystają wyłącznie z

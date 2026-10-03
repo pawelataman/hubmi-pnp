@@ -15,8 +15,13 @@ import {
   EXAMPLE_PROFILE,
 } from '../api/examples';
 import type { HubApi } from '../api/HubApi';
-import { PERSONA_IDS, PERSONAS } from '../api/personas';
-import type { Notification, PersonaId } from '../api/types';
+import {
+  readNeedsProfile,
+  writeNeedsProfile,
+  type StoredNeedsProfile,
+} from '../api/needsProfile';
+import { getPersona, PERSONA_IDS } from '../api/personas';
+import type { NeedsProfile, Notification, PersonaId } from '../api/types';
 import {
   AdaptationContext,
   ApiContext,
@@ -81,10 +86,23 @@ function readTextSize(): number {
 }
 
 function SessionProvider({ children }: ChildrenProps): ReactElement {
-  const [id, setId] = useState<PersonaId | null>(readPersona);
+  const [storedProfile, setStoredProfile] =
+    useState<StoredNeedsProfile>(readNeedsProfile);
+  const [id, setId] = useState<PersonaId | null>((): PersonaId | null => {
+    const storedId: PersonaId | null = readPersona();
+    return storedId === 'beneficiary' && storedProfile.profile === null
+      ? null
+      : storedId;
+  });
   const value: SessionValue = useMemo(
     (): SessionValue => ({
-      persona: id === null ? null : PERSONAS[id],
+      persona: id === null ? null : getPersona(id, storedProfile.profile),
+      needsProfile: storedProfile.profile,
+      profileError: storedProfile.error,
+      saveNeedsProfile: (profile: NeedsProfile): void => {
+        writeNeedsProfile(profile);
+        setStoredProfile({ profile, error: null });
+      },
       signIn: (next: PersonaId): void => {
         writeStored(PERSONA_KEY, next);
         setId(next);
@@ -94,7 +112,7 @@ function SessionProvider({ children }: ChildrenProps): ReactElement {
         setId(null);
       },
     }),
-    [id],
+    [id, storedProfile],
   );
   return <SessionContext value={value}>{children}</SessionContext>;
 }
@@ -275,6 +293,7 @@ function NotificationsProvider({ children }: ChildrenProps): ReactElement {
 }
 
 const INITIAL_MATCHMAKING: MatchmakingState = {
+  audience: 'institution',
   description: EXAMPLE_DESCRIPTION,
   municipality: EXAMPLE_MUNICIPALITY,
   onBehalf: true,
@@ -285,7 +304,19 @@ const INITIAL_MATCHMAKING: MatchmakingState = {
 };
 
 function MatchmakingProvider({ children }: ChildrenProps): ReactElement {
-  const [state, setState] = useState<MatchmakingState>(INITIAL_MATCHMAKING);
+  const { persona, needsProfile } = useSession();
+  const [state, setState] = useState<MatchmakingState>((): MatchmakingState =>
+    persona?.id === 'beneficiary' && needsProfile !== null
+      ? {
+          ...INITIAL_MATCHMAKING,
+          audience: 'individual',
+          description: needsProfile.description,
+          municipality: needsProfile.municipality,
+          onBehalf: false,
+          submitted: true,
+        }
+      : INITIAL_MATCHMAKING,
+  );
   const value: MatchmakingValue = useMemo(
     (): MatchmakingValue => ({
       state,
@@ -328,6 +359,17 @@ interface AppProvidersProps {
   readonly children: ReactNode;
 }
 
+/** Changing the demo account starts a separate matchmaking and adaptation flow. */
+function UserStateProviders({ children }: ChildrenProps): ReactElement {
+  const { persona } = useSession();
+  const owner: string = persona?.id ?? 'visitor';
+  return (
+    <MatchmakingProvider key={owner}>
+      <AdaptationProvider>{children}</AdaptationProvider>
+    </MatchmakingProvider>
+  );
+}
+
 export function AppProviders({
   api,
   children,
@@ -338,9 +380,7 @@ export function AppProviders({
         <TextSizeProvider>
           <ToastProvider>
             <NotificationsProvider>
-              <MatchmakingProvider>
-                <AdaptationProvider>{children}</AdaptationProvider>
-              </MatchmakingProvider>
+              <UserStateProviders>{children}</UserStateProviders>
             </NotificationsProvider>
           </ToastProvider>
         </TextSizeProvider>

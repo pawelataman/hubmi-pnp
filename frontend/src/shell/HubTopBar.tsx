@@ -14,6 +14,7 @@ import {
   useToast,
 } from '../app/contexts';
 import { Button } from '../ui/Button';
+import { buttonClass } from '../ui/buttonClass';
 import { cx } from '../ui/cx';
 import { Switch } from '../ui/Switch';
 import styles from './HubTopBar.module.css';
@@ -123,14 +124,24 @@ export function HubTopBar(): ReactElement {
           Prosty język
         </Switch>
         {persona === null ? (
-          <Button
-            variant="secondary"
-            onClick={(): void => {
-              toggle('picker');
-            }}
-          >
-            Zaloguj się
-          </Button>
+          <>
+            {pathname !== '/onboarding' ? (
+              <Link
+                to="/onboarding"
+                className={cx(buttonClass('primary'), styles['signup'])}
+              >
+                Załóż konto
+              </Link>
+            ) : null}
+            <Button
+              variant="secondary"
+              onClick={(): void => {
+                toggle('picker');
+              }}
+            >
+              Zaloguj się
+            </Button>
+          </>
         ) : (
           <>
             <div ref={bellAnchor} className={styles['anchor']}>
@@ -176,6 +187,26 @@ export function HubTopBar(): ReactElement {
               </button>
               {panel === 'menu' ? (
                 <div role="menu" className={styles['menu']}>
+                  {persona.id === 'beneficiary' ? (
+                    <>
+                      <Link
+                        role="menuitem"
+                        to="/onboarding"
+                        className={styles['menuItem']}
+                        onClick={close}
+                      >
+                        Mój profil potrzeb
+                      </Link>
+                      <Link
+                        role="menuitem"
+                        to="/znajdz/doprecyzowanie"
+                        className={styles['menuItem']}
+                        onClick={close}
+                      >
+                        Moje dopasowania
+                      </Link>
+                    </>
+                  ) : null}
                   {persona.role === 'curator' ? (
                     <Link
                       role="menuitem"

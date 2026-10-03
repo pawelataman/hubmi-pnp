@@ -1,5 +1,14 @@
-export type PersonaId = 'ewa' | 'maria' | 'anna';
+export type PersonaId = 'ewa' | 'maria' | 'anna' | 'beneficiary';
 export type PersonaRole = 'user' | 'curator';
+
+export type PersonType = 'beneficiary' | 'innovator' | 'institution' | 'expert';
+
+export interface NeedsProfile {
+  readonly personType: 'beneficiary';
+  readonly displayName: string;
+  readonly description: string;
+  readonly municipality: string;
+}
 
 export interface Persona {
   readonly id: PersonaId;
@@ -31,10 +40,13 @@ export interface RedactionResult {
 }
 
 export interface ProblemInput {
+  readonly audience: MatchmakingAudience;
   readonly description: string;
   readonly municipality: string;
   readonly onBehalf: boolean;
 }
+
+export type MatchmakingAudience = 'individual' | 'institution';
 
 export interface ChipGroup {
   readonly id: string;
@@ -50,9 +62,15 @@ export interface Question {
 }
 
 export interface ProblemCard {
+  readonly audience: MatchmakingAudience;
   readonly summary: string;
   readonly groups: readonly ChipGroup[];
   readonly questions: readonly Question[];
+}
+
+export interface MatchRequest {
+  readonly card: ProblemCard;
+  readonly answers: Readonly<Record<string, string | null>>;
 }
 
 export type MatchBand = 'strong' | 'medium' | 'weak';

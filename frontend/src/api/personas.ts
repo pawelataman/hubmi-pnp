@@ -1,6 +1,14 @@
-import type { Persona, PersonaId } from './types';
+import type { NeedsProfile, Persona, PersonaId } from './types';
 
 export const PERSONAS: Readonly<Record<PersonaId, Persona>> = {
+  beneficiary: {
+    id: 'beneficiary',
+    name: 'Osoba potrzebująca',
+    initials: 'OP',
+    role: 'user',
+    description: 'Osoba potrzebująca',
+    threadRole: 'Mieszkaniec',
+  },
   ewa: {
     id: 'ewa',
     name: 'Ewa W.',
@@ -27,4 +35,24 @@ export const PERSONAS: Readonly<Record<PersonaId, Persona>> = {
   },
 };
 
-export const PERSONA_IDS: readonly PersonaId[] = ['ewa', 'maria', 'anna'];
+export const PERSONA_IDS: readonly PersonaId[] = [
+  'beneficiary',
+  'ewa',
+  'maria',
+  'anna',
+];
+
+export function getPersona(
+  id: PersonaId,
+  profile: NeedsProfile | null,
+): Persona {
+  const persona: Persona = PERSONAS[id];
+  if (id !== 'beneficiary' || profile === null) {
+    return persona;
+  }
+  return {
+    ...persona,
+    name: profile.displayName,
+    initials: profile.displayName.slice(0, 2).toLocaleUpperCase('pl'),
+  };
+}
