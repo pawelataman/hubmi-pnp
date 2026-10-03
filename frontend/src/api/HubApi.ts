@@ -4,6 +4,7 @@ import type {
   DraftSection,
   IdeaForm,
   Innovation,
+  InnovationSummary,
   InstitutionProfile,
   LocalStats,
   MatchResults,
@@ -38,6 +39,7 @@ export interface HubApi {
     municipality: string,
     signal?: AbortSignal,
   ): Promise<LocalStats>;
+  listInnovations(signal?: AbortSignal): Promise<readonly InnovationSummary[]>;
   getInnovation(id: string, signal?: AbortSignal): Promise<Innovation>;
   getMunicipalityFacts(
     municipality: string,
