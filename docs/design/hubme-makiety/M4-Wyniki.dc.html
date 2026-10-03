@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Znajdź rozwiązanie" hint-size="1440px,124px"></dc-import>
+  <main style="padding:36px 56px 56px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:flex-end;gap:24px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <h1 style="margin:0;font-size:40px;line-height:1.15;font-weight:500;letter-spacing:-.02em">Rozwiązania dla Twojego problemu</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:16px">
+          <span style="color:#4D504D;font-weight:600">Szukamy dla:</span>
+          <span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600">seniorzy 65+</span><span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600">samotność</span><span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600">brak transportu</span><span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600">gmina wiejska</span>
+          <a href="#" style="font-weight:600;margin-left:6px">Zmień opis</a>
+        </div>
+      </div>
+      <div role="switch" aria-checked="false" style="margin-left:auto;display:flex;align-items:center;gap:12px;height:48px;padding:0 16px 0 10px;border:1px solid #8A8A8A;border-radius:4px;background:#FFFFFF;font-size:16px;font-weight:600">
+        <span style="width:44px;height:26px;border-radius:4px;background:#BDBDBD;position:relative;display:inline-block"><span style="position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:10px;background:#FFFFFF"></span></span>Pokaż, jak system dopasował
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1.85fr) minmax(0,1fr);gap:28px;align-items:start">
+      <section style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:baseline;gap:12px"><h2 style="margin:0;font-size:26px;font-weight:600">1. Innowacje, które mogą pomóc</h2><span style="color:#4D504D;font-size:17px">3 wyniki</span></div>
+        <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+          <div role="status" aria-live="polite" style="font-size:17px;color:#333333;font-weight:600">Mamy 3 innowacje. Uzasadnienia pojawiają się po kolei…</div>
+          <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:24px 26px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between"><strong style="font-size:24px">Sąsiedzkie Telefony Życzliwości</strong><span style="font-weight:600;color:#1E7A3C">●●● Silne dopasowanie</span></div>
+            <div style="display:flex;gap:8px"><span style="padding:6px 12px;border-radius:4px;background:#E6F2EA;color:#1E7A3C;font-weight:600;font-size:16px">✓ seniorzy</span><span style="padding:6px 12px;border-radius:4px;background:#E6F2EA;color:#1E7A3C;font-weight:600;font-size:16px">✓ JST + NGO</span></div>
+            <div style="border:1.5px dashed #8A8A8A;border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:10px"><span style="font-size:16px;font-weight:600;color:#4D504D">Dlaczego pasuje — piszemy uzasadnienie…</span><div style="height:18px;width:90%;background:#ECECEC;border-radius:4px"></div><div style="height:18px;width:70%;background:#ECECEC;border-radius:4px"></div></div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:24px 26px;display:flex;flex-direction:column;gap:14px"><div style="height:28px;width:55%;background:#ECECEC;border-radius:4px"></div><div style="display:flex;gap:8px"><div style="height:34px;width:110px;background:#ECECEC;border-radius:4px"></div><div style="height:34px;width:120px;background:#ECECEC;border-radius:4px"></div></div><div style="height:80px;background:#F3F3F3;border-radius:4px"></div></div>
+          <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:24px 26px;display:flex;flex-direction:column;gap:14px"><div style="height:28px;width:45%;background:#ECECEC;border-radius:4px"></div><div style="height:80px;background:#F3F3F3;border-radius:4px"></div></div>
+        </sc-if>
+        <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+            <article style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:24px 26px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:flex-start;gap:16px">
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <span style="font-size:15px;font-weight:600;color:#4D504D;text-transform:uppercase;letter-spacing:.04em">{{ c.cat }}</span>
+                  <h3 style="margin:0;font-size:25px;line-height:1.2;font-weight:600">{{ c.name }}</h3>
+                </div>
+                <div style="margin-left:auto;flex:none;display:flex;flex-direction:column;align-items:flex-end">
+                  <span style="display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:4px;border:2px solid {{ c.bandColor }};color:{{ c.bandColor }};font-weight:600;font-size:17px"><span style="letter-spacing:1px">{{ c.bars }}</span>{{ c.band }}</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ c.fit }}" as="f" hint-placeholder-count="3">
+                  <sc-if value="{{ f.ok }}" hint-placeholder-val="{{ true }}"><span style="padding:5px 12px;border-radius:4px;background:#E6F2EA;color:#1E7A3C;font-weight:600;font-size:16px">✓ {{ f.t }}</span></sc-if>
+                  <sc-if value="{{ f.no }}" hint-placeholder-val="{{ false }}"><span style="padding:5px 12px;border-radius:4px;background:#F3F3F3;color:#4D504D;font-weight:600;font-size:16px;border:1.5px solid #8A8A8A">✗ {{ f.t }}</span></sc-if>
+                </sc-for>
+              </div>
+              <div style="background:#FFFFFF;border:1.5px dashed #8A8A8A;border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;align-items:center;gap:10px"><strong style="font-size:17px">Dlaczego pasuje</strong><span style="font-size:12px;font-weight:600;background:#292929;color:#FFFFFF;border-radius:4px;padding:3px 6px">AI</span><span style="font-size:15px;color:#4D504D">Sugestia AI, do weryfikacji</span></div>
+                <p style="margin:0;font-size:18px;text-wrap:pretty"><sc-for list="{{ c.why }}" as="w" hint-placeholder-count="3"><sc-if value="{{ w.hl }}" hint-placeholder-val="{{ false }}"><mark style="background:#E8F0F9;color:#292929;font-weight:600;border-bottom:2px solid #2462AD;padding:0 2px">{{ w.t }}</mark></sc-if><sc-if value="{{ w.pl }}" hint-placeholder-val="{{ true }}"><span>{{ w.t }}</span></sc-if></sc-for></p>
+              </div>
+              <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-size:16px;color:#333333">
+                <span style="font-weight:600;color:#1E7A3C">✓ Zweryfikowano {{ c.date }}</span>
+                <span>Koszt: <strong style="color:#292929">{{ c.cost }}</strong></span>
+                <div style="margin-left:auto;display:flex;gap:8px">
+                  <button style="height:44px;padding:0 14px;border:1px solid #8A8A8A;border-radius:4px;background:#FFFFFF;font:inherit;font-size:16px;font-weight:600;color:#292929">✓ Przydatne</button>
+                  <button style="height:44px;padding:0 14px;border:1px solid #8A8A8A;border-radius:4px;background:#FFFFFF;font:inherit;font-size:16px;font-weight:600;color:#292929">✕ Nieprzydatne</button>
+                  <button style="height:44px;padding:0 18px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:16px;font-weight:600">Zobacz szczegóły →</button>
+                </div>
+              </div>
+            </article>
+          </sc-for>
+        </sc-if>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px 24px;border:1px dashed #8A8A8A;border-radius:4px">
+          <div style="display:flex;flex-direction:column"><strong style="font-size:19px">Żadne nie pasuje?</strong><span style="color:#333333;font-size:17px">Kurator ROPS przejrzy problem i odpowie w ciągu 7 dni.</span></div>
+          <button style="margin-left:auto;height:52px;padding:0 22px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">Przekaż problem do Hubu</button>
+        </div>
+      </section>
+      <aside style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;font-size:16px">
+          <span style="flex:none;width:28px;height:28px;border-radius:14px;border:2px solid #292929;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;box-sizing:border-box">i</span>
+          <span>Potrzebujesz pilnej pomocy? <strong>112</strong> · Niebieska Linia <strong>800 120 002</strong> · <a href="#">Znajdź swój OPS</a></span>
+        </div>
+        <section style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-size:22px;font-weight:600">2. Podobne problemy</h2>
+          <span style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600;font-size:16px">Inni zgłaszali podobny problem: 4 <span style="font-weight:400;color:#4D504D">(dane przykładowe)</span></span>
+          <sc-for list="{{ similar }}" as="s" hint-placeholder-count="3">
+            <figure style="margin:0;padding-top:12px;border-top:1px solid #E6E6E6;display:flex;flex-direction:column;gap:4px">
+              <blockquote style="margin:0;font-size:17px;text-wrap:pretty">„{{ s.q }}”</blockquote>
+              <figcaption style="font-size:15px;color:#4D504D">z karty: <a href="#" style="font-weight:600">{{ s.src }} ↗</a></figcaption>
+            </figure>
+          </sc-for>
+        </section>
+        <section style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+          <h2 style="margin:0;font-size:22px;font-weight:600">3. Skala w Twojej gminie</h2>
+          <sc-for list="{{ stats }}" as="st" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <strong style="font-size:17px">{{ st.label }}</strong>
+              <sc-for list="{{ st.rows }}" as="r" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 52px;gap:10px;align-items:center;font-size:16px">
+                  <span style="color:#333333">{{ r.who }}</span>
+                  <div style="height:14px;background:#F6F6F6;border-radius:4px;overflow:hidden"><div style="height:100%;width:{{ r.w }};background:{{ r.c }};border-radius:4px"></div></div>
+                  <strong style="text-align:right">{{ r.v }}</strong>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+          <span style="font-size:15px;color:#4D504D">Źródło: GUS, Bank Danych Lokalnych, 2024 · dane przykładowe</span>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1500},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'default';
+    const seg = str => str.split('*').map((t, i) => ({ t, hl: i % 2 === 1, pl: i % 2 === 0 }));
+    const fit = arr => arr.map(x => ({ t: x.replace(/^!/, ''), ok: !x.startsWith('!'), no: x.startsWith('!') }));
+    const band = { s: ['Silne dopasowanie', '●●●', '#2462AD'], m: ['Średnie dopasowanie', '●●○', '#2462AD'], w: ['Słabe dopasowanie', '●○○', '#4D504D'] };
+    const card = (name, cat, b, f, why, date, cost) => ({ name, cat, band: band[b][0], bars: band[b][1], bandColor: band[b][2], fit: fit(f), why: seg(why), date, cost });
+    const row = (who, v, max, c) => ({ who, v: v + '%', w: (v / max * 100) + '%', c });
+    return {
+      isDefault: s !== 'loading', isLoading: s === 'loading',
+      cards: [
+        card('Sąsiedzkie Telefony Życzliwości', 'Seniorzy · usługa', 's', ['seniorzy', 'JST + NGO', 'teren wiejski'],
+          'Odpowiada na *samotność* osób starszych w *małych miejscowościach*. Wolontariusze dzwonią codziennie, więc *nie potrzeba transportu*. Może prowadzić *GOPS z NGO*.', '05.2026', 'ok. 8–15 tys. zł / rok'),
+        card('Mobilna Kawiarenka Seniora', 'Seniorzy · usługa', 's', ['seniorzy', 'teren wiejski', '!wymaga busa'],
+          'Spotkania przyjeżdżają *do wsi*, więc rozwiązuje *brak dojazdu*. Daje *kontakt z ludźmi* raz w tygodniu.', '02.2026', 'ok. 40–60 tys. zł / rok'),
+        card('Cyfrowy Wnuk', 'Seniorzy · metoda', 'm', ['seniorzy', 'NGO', '!testowane w mieście'],
+          'Młodzież uczy seniorów *rozmów wideo z rodziną za granicą*. Testowane głównie w mieście, wymaga dostępu do internetu.', '11.2025', 'ok. 5 tys. zł / edycja') ],
+      similar: [
+        { q: 'Starsze osoby we wsiach bez komunikacji publicznej tygodniami nie rozmawiają z nikim poza rodziną przez telefon.', src: 'Sąsiedzkie Telefony Życzliwości' },
+        { q: 'Dzieci seniorów pracują za granicą, a sąsiedzka pomoc zanikła razem z wiejskim sklepem.', src: 'Mobilna Kawiarenka Seniora' },
+        { q: 'Seniorzy chcą kontaktu z wnukami, ale nie umieją obsługiwać komunikatorów.', src: 'Cyfrowy Wnuk' } ],
+      stats: [
+        { label: 'Osoby 65+ mieszkające samotnie', rows: [row('Gmina', 14, 16, '#2462AD'), row('Powiat', 11, 16, '#8A8A8A'), row('Województwo', 10, 16, '#8A8A8A')] },
+        { label: 'Odsetek mieszkańców w wieku 65+', rows: [row('Gmina', 23, 26, '#2462AD'), row('Powiat', 19, 26, '#8A8A8A'), row('Województwo', 19, 26, '#8A8A8A')] } ] };
+  }
+}
+</script>
+</body>
+</html>

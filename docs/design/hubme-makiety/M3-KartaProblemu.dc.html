@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Znajdź rozwiązanie" hint-size="1440px,124px"></dc-import>
+  <main style="width:1120px;margin:0 auto;padding:44px 0 56px;display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;color:#4D504D">
+      <span style="color:#1E7A3C">✓ 1. Opis</span><span>—</span><span style="color:#1E7A3C">✓ 2. Podgląd</span><span>—</span><span style="color:#292929;border-bottom:3px solid #2462AD">3. Doprecyzowanie</span><span>—</span><span>4. Wyniki</span>
+    </div>
+    <h1 style="margin:0;font-size:42px;line-height:1.15;font-weight:500;letter-spacing:-.02em">Sprawdź, czy dobrze rozumiemy</h1>
+    <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+      <div role="status" aria-live="polite" style="background:#FFFFFF;border:1.5px dashed #8A8A8A;border-radius:4px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
+        <strong>Przygotowujemy streszczenie…</strong>
+        <div style="height:22px;width:94%;background:#ECECEC;border-radius:4px"></div>
+        <div style="height:22px;width:80%;background:#ECECEC;border-radius:4px"></div>
+        <div style="display:flex;gap:10px;padding-top:8px"><div style="height:44px;width:150px;background:#ECECEC;border-radius:4px"></div><div style="height:44px;width:120px;background:#ECECEC;border-radius:4px"></div><div style="height:44px;width:170px;background:#ECECEC;border-radius:4px"></div></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:24px;align-items:start">
+        <section style="background:#FFFFFF;border:1.5px dashed #4D504D;border-radius:4px;padding:26px 30px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 4px;border:1.5px dashed #4D504D;border-radius:4px;background:#FFFFFF;font-size:16px;font-weight:600"><span style="font-size:12px;font-weight:600;background:#292929;color:#FFFFFF;border-radius:4px;padding:3px 6px">AI</span>Sugestia AI, do weryfikacji</span>
+            <a href="#" style="font-weight:600;font-size:17px">Popraw streszczenie</a>
+          </div>
+          <p style="margin:0;font-size:22px;line-height:1.5;text-wrap:pretty"><strong>Rozumiem, że</strong> w Twojej wiejskiej gminie starsze osoby mieszkają same, bo rodziny wyjechały. Brakuje im kontaktu z innymi ludźmi i dojazdu do miasta. Szukasz rozwiązania, które może wdrożyć gmina albo GOPS.</p>
+          <div style="display:flex;flex-direction:column;gap:14px;border-top:1px solid #E6E6E6;padding-top:18px">
+            <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px;align-items:center">
+                <span style="font-size:16px;font-weight:600;color:#4D504D">{{ g.label }}</span>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ g.chips }}" as="c" hint-placeholder-count="1">
+                    <span style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 6px 0 16px;border-radius:4px;background:#F6F6F6;border:1px solid #8A8A8A;font-weight:600;font-size:17px">{{ c }}<button aria-label="Usuń {{ c }}" style="width:32px;height:32px;border-radius:16px;border:none;background:#FFFFFF;font:inherit;font-size:15px;color:#292929">✕</button></span>
+                  </sc-for>
+                  <button style="min-height:44px;padding:0 16px;border-radius:4px;border:1px dashed #8A8A8A;background:transparent;font:inherit;font-size:17px;font-weight:600;color:#333333">+ Dodaj</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:2px"><strong style="font-size:21px">3 krótkie pytania</strong><span style="color:#4D504D;font-size:17px">Pomogą lepiej dobrać wyniki. Każde możesz pominąć.</span></div>
+          <sc-for list="{{ questions }}" as="q" hint-placeholder-count="3">
+            <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+              <strong style="font-size:18px">{{ q.title }}</strong>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="3">
+                  <sc-if value="{{ o.sel }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;border:2px solid #2462AD;font-weight:600;font-size:17px">✓ {{ o.label }}</span></sc-if>
+                  <sc-if value="{{ o.unsel }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#FFFFFF;border:1px solid #8A8A8A;font-size:17px">{{ o.label }}</span></sc-if>
+                </sc-for>
+                <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 10px;font-size:17px;font-weight:600;color:#4D504D;text-decoration:underline">Pomiń</span>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+      </div>
+    </sc-if>
+    <div style="display:flex;gap:14px;align-items:center">
+      <button style="height:60px;padding:0 36px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:20px;font-weight:600">Szukaj rozwiązań →</button>
+      <button style="height:60px;padding:0 22px;border:none;background:transparent;font:inherit;font-size:18px;font-weight:600;color:#292929;text-decoration:underline">← Wróć</button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1050},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'default';
+    const q = (title, opts, sel) => ({ title, opts: opts.map(l => ({ label: l, sel: l === sel, unsel: l !== sel })) });
+    return {
+      isDefault: s !== 'loading', isLoading: s === 'loading',
+      groups: [
+        { label: 'Grupa docelowa', chips: ['seniorzy 65+'] },
+        { label: 'Problem', chips: ['samotność', 'brak transportu'] },
+        { label: 'Typ gminy', chips: ['wiejska'] },
+        { label: 'Kto wdraża', chips: ['GOPS'] } ],
+      questions: [
+        q('Kto miałby wdrażać?', ['GOPS / OPS', 'NGO', 'Gmina z NGO', 'Nie wiem'], 'Gmina z NGO'),
+        q('Co jest najpilniejsze?', ['Kontakt z ludźmi', 'Dojazdy', 'Pomoc w domu'], 'Kontakt z ludźmi'),
+        q('Skala budżetu?', ['do 10 tys. zł', '10–50 tys. zł', 'ponad 50 tys. zł'], null) ] };
+  }
+}
+</script>
+</body>
+</html>

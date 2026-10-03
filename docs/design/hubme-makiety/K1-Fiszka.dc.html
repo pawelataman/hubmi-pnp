@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Zgłoś pomysł" show-ai="{{ false }}" hint-size="1440px,77px"></dc-import>
+  <sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
+    <main role="status" aria-live="polite" style="width:820px;margin:0 auto;padding:80px 0;display:flex;flex-direction:column;gap:24px;align-items:flex-start">
+      <span style="width:72px;height:72px;border-radius:36px;background:#1E7A3C;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:500">✓</span>
+      <h1 style="margin:0;font-size:46px;line-height:1.1;font-weight:500;letter-spacing:-.02em">Fiszka wysłana. Dziękujemy!</h1>
+      <div style="display:flex;flex-direction:column;gap:6px;padding:20px 24px;background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;width:100%;box-sizing:border-box">
+        <span style="color:#4D504D;font-size:16px">Numer zgłoszenia</span>
+        <strong style="font-size:30px;font-family:'Red Hat Mono',monospace;letter-spacing:.02em">HUB-2026-0142</strong>
+      </div>
+      <p style="margin:0;font-size:21px;text-wrap:pretty">Kurator ROPS przeczyta pomysł <strong>„Sąsiedzka kawiarenka”</strong> i odpowie do <strong>21 października 2026</strong>. Powiadomimy Cię w aplikacji i e-mailem.</p>
+      <div style="display:flex;gap:12px"><button style="height:58px;padding:0 28px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:19px;font-weight:600">Przejdź do Moich spraw</button><button style="height:58px;padding:0 24px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">Zgłoś kolejny pomysł</button></div>
+    </main>
+  </sc-if>
+  <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+    <main style="padding:36px 56px 56px;display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;align-items:flex-end;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:16px;font-weight:600;color:#2462AD;letter-spacing:.04em;text-transform:uppercase">Kreator pomysłów</span>
+          <h1 style="margin:0;font-size:42px;line-height:1.15;font-weight:500;letter-spacing:-.02em">Zgłoś pomysł</h1>
+          <p style="margin:0;font-size:19px;color:#333333">5 krótkich pól. Resztę doprecyzujemy razem.</p>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:4px;background:#F6F6F6;font-size:16px"><span style="font-weight:600">◷</span>Teraz nie ma aktywnego naboru. Fiszkę możesz wysłać zawsze.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start">
+        <form style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:28px 32px;display:flex;flex-direction:column;gap:22px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">1. Nazwa robocza</label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">Sąsiedzka kawiarenka</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">2. Istota pomysłu w jednym zdaniu</label><div style="min-height:84px;border:2px solid #292929;outline:2px solid #2462AD;outline-offset:2px;border-radius:4px;padding:14px 16px;box-sizing:border-box">Raz w tygodniu w remizie seniorzy i młodzi piją kawę i uczą się od siebie nawzajem.</div><span style="align-self:flex-end;font-size:15px;color:#4D504D">82 / 160 znaków</span></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">3. Dla kogo</label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">Seniorzy i młodzież ze wsi</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">4. Jaki problem rozwiązuje</label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">Samotność, brak miejsc spotkań</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px"><label style="font-weight:600">5. Etap</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Pomysł</span>
+              <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;font-size:17px;font-weight:600">✓ Prototyp</span>
+              <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Testowane w mikroskali</span>
+              <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Działa</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;border-top:1px solid #EFEFEF;padding-top:20px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">Zdjęcie lub szkic <span style="font-weight:400;color:#4D504D">(opcjonalnie)</span></label><div style="height:56px;border:1px dashed #8A8A8A;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px">+ Dodaj plik</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">E-mail do odpowiedzi <span style="font-weight:400;color:#4D504D">(opcjonalnie)</span></label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">m.nowak@przyklad.pl</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <button style="height:58px;padding:0 30px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:19px;font-weight:600">Wyślij fiszkę</button>
+            <button style="height:58px;padding:0 20px;border:1.5px dashed #4D504D;border-radius:4px;background:#FFFFFF;font:inherit;font-weight:600;color:#292929;display:flex;align-items:center;gap:10px"><span style="font-size:12px;font-weight:600;background:#292929;color:#FFFFFF;border-radius:4px;padding:3px 6px">AI</span>Rozwiń pomysł z asystentem</button>
+          </div>
+        </form>
+        <aside style="display:flex;flex-direction:column;gap:10px;position:sticky;top:0">
+          <span style="font-size:16px;font-weight:600;color:#4D504D">Podgląd fiszki</span>
+          <div style="background:#FFFFFF;border:2px solid #292929;border-radius:4px;padding:26px;display:flex;flex-direction:column;gap:14px;box-shadow:6px 6px 0 #E6E6E6">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="padding:5px 12px;border-radius:4px;background:#F6F6F6;font-weight:600;font-size:15px">Prototyp</span><span style="font-family:'Red Hat Mono',monospace;font-size:15px;color:#4D504D">szkic · nie wysłano</span></div>
+            <strong style="font-size:28px;line-height:1.15">Sąsiedzka kawiarenka</strong>
+            <p style="margin:0;font-size:19px;text-wrap:pretty">Raz w tygodniu w remizie seniorzy i młodzi piją kawę i uczą się od siebie nawzajem.</p>
+            <div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;font-size:16px;border-top:1px solid #E6E6E6;padding-top:14px"><span style="color:#4D504D;font-weight:600">Dla kogo</span><span>Seniorzy i młodzież ze wsi</span><span style="color:#4D504D;font-weight:600">Problem</span><span>Samotność, brak miejsc spotkań</span></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1100},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;success&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() { const s = this.props.state ?? 'default'; return { isDefault: s !== 'success', isSuccess: s === 'success' }; }
+}
+</script>
+</body>
+</html>

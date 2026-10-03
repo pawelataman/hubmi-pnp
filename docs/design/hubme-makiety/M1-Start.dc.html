@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5;display:flex;flex-direction:column">
+  <dc-import name="HubTopBar" active="Znajdź rozwiązanie" hint-size="1440px,124px"></dc-import>
+  <main style="width:960px;margin:0 auto;padding:56px 0 48px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:16px;font-weight:600;color:#2462AD;letter-spacing:.04em;text-transform:uppercase">Matchmaking społeczny</span>
+      <h1 style="margin:0;font-size:50px;line-height:1.1;font-weight:500;letter-spacing:-.02em;text-wrap:balance">Znajdź sprawdzone rozwiązanie problemu społecznego</h1>
+      <p style="margin:0;font-size:21px;color:#333333;max-width:760px;text-wrap:pretty">Opisz sytuację własnymi słowami. Pokażemy innowacje, które ktoś już przetestował w Polsce. Nie musisz się logować.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <label style="font-size:19px;font-weight:600">Opisz problem</label>
+      <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+        <div role="alert" style="display:flex;gap:10px;align-items:flex-start;color:#C8000E;font-weight:600;font-size:17px">
+          <span style="flex:none;width:24px;height:24px;border-radius:12px;background:#C8000E;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600">!</span>
+          Opis jest za krótki. Dopisz 2–3 zdania: kogo dotyczy problem i co jest najtrudniejsze.
+        </div>
+        <div style="position:relative;background:#FFFFFF;border:3px solid #C8000E;border-radius:4px;min-height:200px;padding:22px 24px 72px;box-sizing:border-box;font-size:20px">Starsi ludzie są samotni.<span style="display:inline-block;width:2px;height:24px;background:#292929;vertical-align:middle;margin-left:2px"></span>
+          <button aria-label="Dyktuj opis" style="position:absolute;right:16px;bottom:16px;height:48px;padding:0 18px 0 14px;border-radius:4px;border:1px solid #8A8A8A;background:#FFFFFF;display:flex;align-items:center;gap:10px;font:inherit;font-size:16px;font-weight:600;color:#292929"><span style="width:12px;height:18px;border-radius:4px;background:#292929;display:inline-block"></span>Dyktuj</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+        <div style="position:relative;background:#FFFFFF;border:2px solid #2462AD;outline:2px solid #2462AD;outline-offset:3px;border-radius:4px;min-height:200px;padding:22px 24px 72px;box-sizing:border-box;font-size:20px;line-height:1.55;text-wrap:pretty">W naszej gminie wielu starszych ludzi mieszka samotnie, dzieci wyjechały do pracy za granicę. Pani Janina z Jodłowej Woli (tel. 600 123 456) od zawału prawie nie wychodzi z domu, a jej syn Marek jest w Niemczech. Nie ma transportu do miasta i poza listonoszem nikt ich nie odwiedza.<span style="display:inline-block;width:2px;height:24px;background:#292929;vertical-align:middle;margin-left:2px"></span>
+          <button aria-label="Dyktuj opis" style="position:absolute;right:16px;bottom:16px;height:48px;padding:0 18px 0 14px;border-radius:4px;border:1px solid #8A8A8A;background:#FFFFFF;display:flex;align-items:center;gap:10px;font:inherit;font-size:16px;font-weight:600;color:#292929"><span style="width:12px;height:18px;border-radius:4px;background:#292929;display:inline-block"></span>Dyktuj</button>
+        </div>
+      </sc-if>
+      <p style="margin:0;display:flex;gap:10px;align-items:center;font-size:17px;color:#333333"><span style="flex:none;width:22px;height:22px;border-radius:11px;border:2px solid #333333;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;box-sizing:border-box">i</span>Opisz problem, nie osobę. Nie podawaj imion, adresów ani informacji o zdrowiu.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="font-size:17px;font-weight:600">Gmina lub powiat <span style="font-weight:400;color:#4D504D">(opcjonalnie)</span></label>
+        <div style="height:56px;background:#FFFFFF;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px;gap:10px"><span style="width:14px;height:14px;border:2px solid #4D504D;border-radius:50%;box-sizing:border-box"></span>Jodłowa Wola, pow. tarnowski <span style="margin-left:auto;font-size:15px;color:#4D504D">przykład</span></div>
+      </div>
+      <div role="switch" aria-checked="true" style="height:56px;display:flex;align-items:center;gap:14px;padding:0 16px;border:1px solid #8A8A8A;border-radius:4px;background:#FFFFFF;font-weight:600">
+        <span style="width:48px;height:28px;border-radius:4px;background:#1E7A3C;position:relative;display:inline-block"><span style="position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:11px;background:#FFFFFF;color:#1E7A3C;font-size:14px;display:flex;align-items:center;justify-content:center">✓</span></span>
+        Zgłaszam w czyimś imieniu <span style="margin-left:auto;font-size:15px;font-weight:600;color:#1E7A3C">Włączone</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:17px;font-weight:600">Nie wiesz, jak zacząć? Kliknij przykład:</span>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+        <button style="text-align:left;min-height:84px;padding:14px 18px;border:2px solid #E6E6E6;border-radius:4px;background:#FFFFFF;font:inherit;font-size:17px;color:#292929">„Starsi sąsiedzi mieszkają sami i nie mają z kim porozmawiać”</button>
+        <button style="text-align:left;min-height:84px;padding:14px 18px;border:2px solid #E6E6E6;border-radius:4px;background:#FFFFFF;font:inherit;font-size:17px;color:#292929">„Młodzież po szkole nie ma gdzie się spotykać”</button>
+        <button style="text-align:left;min-height:84px;padding:14px 18px;border:2px solid #E6E6E6;border-radius:4px;background:#FFFFFF;font:inherit;font-size:17px;color:#292929">„Rodzice dzieci z niepełnosprawnością nie mają chwili wytchnienia”</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;padding-top:4px">
+      <button style="height:60px;padding:0 40px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:20px;font-weight:600">Dalej →</button>
+      <span style="font-size:17px;color:#4D504D">Zajmie to około 2 minut.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;padding:20px 24px;background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px">
+      <span style="flex:none;width:48px;height:48px;border-radius:24px;background:#E6F2EA;color:#1E7A3C;display:flex;align-items:center;justify-content:center;font-weight:600">ROPS</span>
+      <div style="display:flex;flex-direction:column"><strong style="font-size:18px">Wolisz porozmawiać z człowiekiem?</strong><span style="font-size:17px;color:#333333">Dział Innowacji Społecznych ROPS w Krakowie · tel. 12 000 00 00 (przykład) · pon.–pt. 8:00–16:00</span></div>
+      <a href="#" style="margin-left:auto;font-weight:600">Napisz do nas</a>
+    </div>
+  </main>
+  <footer style="margin-top:auto;background:#0F4A91;padding:28px 40px;display:flex;gap:32px;font-size:16px;color:#FFFFFF">
+    <a href="#" style="color:#B9E0F7">Kontakt z ROPS</a><a href="#" style="color:#B9E0F7">Deklaracja dostępności</a><a href="#" style="color:#B9E0F7">Jak działa AI w HubMe</a><span style="margin-left:auto">Wszystkie dane na makietach są przykładowe</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1100},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;error&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() { const s = this.props.state ?? 'default'; return { isDefault: s !== 'error', isError: s === 'error' }; }
+}
+</script>
+</body>
+</html>

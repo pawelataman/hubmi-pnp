@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&family=Red+Hat+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#2462AD}a:hover{color:#0F4A91}</style>
+</helmet>
+<aside style="width:280px;min-height:100%;height:100%;box-sizing:border-box;background:#0F4A91;color:#FFFFFF;display:flex;flex-direction:column;padding:24px 16px;font-family:'Red Hat Display',system-ui,sans-serif">
+  <div style="display:flex;align-items:center;gap:10px;padding:0 8px 24px">
+    <span style="width:34px;height:34px;border-radius:4px;background:#FFFFFF;color:#0F4A91;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:19px">H</span>
+    <div style="display:flex;flex-direction:column;line-height:1.15"><span style="font-size:22px;font-weight:600">HubMe</span><span style="font-size:15px;color:#B9E0F7">Panel ROPS</span></div>
+  </div>
+  <nav aria-label="Panel" style="display:flex;flex-direction:column;gap:4px">
+    <sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+      <sc-if value="{{ it.isActive }}" hint-placeholder-val="{{ false }}">
+        <a href="#" aria-current="page" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:4px;background:#FFFFFF;color:#292929;text-decoration:none;font-size:17px;font-weight:600">
+          <span style="width:10px;height:10px;border-radius:2px;background:#2462AD;transform:rotate(45deg)"></span>{{ it.label }}
+          <sc-if value="{{ it.count }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;font-size:14px;font-weight:600;background:#2462AD;color:#FFFFFF;border-radius:4px;padding:2px 8px">{{ it.count }}</span></sc-if>
+        </a>
+      </sc-if>
+      <sc-if value="{{ it.notActive }}" hint-placeholder-val="{{ true }}">
+        <a href="#" style="display:flex;align-items:center;gap:12px;min-height:48px;padding:0 14px;border-radius:4px;color:#FFFFFF;text-decoration:none;font-size:17px">
+          <span style="width:10px;height:10px;border-radius:2px;border:1.5px solid #B9E0F7;transform:rotate(45deg);box-sizing:border-box"></span>{{ it.label }}
+          <sc-if value="{{ it.count }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;font-size:14px;font-weight:600;background:#FFFFFF;color:#0F4A91;border-radius:4px;padding:2px 8px">{{ it.count }}</span></sc-if>
+        </a>
+      </sc-if>
+    </sc-for>
+  </nav>
+  <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:16px 8px 0;border-top:1px solid #2E63A8">
+    <div style="display:flex;gap:8px">
+      <button style="min-width:48px;height:44px;border:2px solid #88C1E9;background:transparent;border-radius:4px;color:#FFFFFF;font:inherit;font-weight:600">A+</button>
+      <button style="flex:1;height:44px;border:2px solid #88C1E9;background:transparent;border-radius:4px;color:#FFFFFF;font:inherit;font-size:16px;font-weight:600">Prosty język</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="width:40px;height:40px;border-radius:20px;background:#E6F2EA;color:#1E7A3C;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px">AK</span>
+      <div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:16px;font-weight:600">Anna Kowalczyk</span><span style="font-size:15px;color:#B9E0F7">Kuratorka · przykład</span></div>
+    </div>
+  </div>
+</aside>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:280,&quot;height&quot;:900},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Pulpit&quot;,&quot;Kolejka zgłoszeń&quot;,&quot;Innowacje&quot;,&quot;Nabory&quot;,&quot;Trendy potrzeb&quot;,&quot;Eksperci i użytkownicy&quot;],&quot;default&quot;:&quot;Kolejka zgłoszeń&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.active ?? 'Kolejka zgłoszeń';
+    const items = [['Pulpit',0],['Kolejka zgłoszeń',12],['Innowacje',0],['Nabory',0],['Trendy potrzeb',0],['Eksperci i użytkownicy',0]]
+      .map(([l,c]) => ({ label: l, count: c || null, isActive: l === a, notActive: l !== a }));
+    return { items };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Biblioteka innowacji" hint-size="1440px,124px"></dc-import>
+  <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+    <main role="status" aria-live="polite" style="padding:32px 56px;display:flex;flex-direction:column;gap:20px">
+      <span style="font-weight:600;color:#4D504D">Wczytujemy kartę innowacji…</span>
+      <div style="height:22px;width:160px;background:#ECECEC;border-radius:4px"></div>
+      <div style="height:48px;width:640px;background:#ECECEC;border-radius:4px"></div>
+      <div style="display:flex;gap:10px"><div style="height:56px;width:260px;background:#ECECEC;border-radius:4px"></div><div style="height:56px;width:170px;background:#ECECEC;border-radius:4px"></div><div style="height:56px;width:170px;background:#ECECEC;border-radius:4px"></div></div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px"><div style="height:420px;background:#ECECEC;border-radius:4px"></div><div style="display:flex;flex-direction:column;gap:12px"><div style="height:20px;width:80%;background:#ECECEC;border-radius:4px"></div><div style="height:20px;width:90%;background:#ECECEC;border-radius:4px"></div><div style="height:20px;width:70%;background:#ECECEC;border-radius:4px"></div></div></div>
+    </main>
+  </sc-if>
+  <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+    <main style="padding:28px 56px 56px;display:flex;flex-direction:column;gap:24px">
+      <a href="#" style="font-weight:600;font-size:17px;color:#292929">← Wróć do wyników</a>
+      <header style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:16px">
+          <span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600">Seniorzy · usługa</span>
+          <span style="padding:6px 12px;border-radius:4px;background:#E6F2EA;color:#1E7A3C;font-weight:600">✓ Zweryfikowano 05.2026</span>
+          <span style="padding:6px 12px;border-radius:4px;border:2px solid #2462AD;color:#C8000E;font-weight:600">◎ Szuka testerów</span>
+          <span style="padding:6px 12px;border-radius:4px;border:1px solid #8A8A8A;font-weight:600">▶ Ma film</span>
+        </div>
+        <h1 style="margin:0;font-size:48px;line-height:1.1;font-weight:500;letter-spacing:-.02em">Sąsiedzkie Telefony Życzliwości</h1>
+        <div style="display:flex;gap:28px;font-size:17px;color:#333333;flex-wrap:wrap">
+          <span>Autor: <strong style="color:#292929">Stowarzyszenie Dobry Sąsiad</strong></span>
+          <span>Inkubator: <strong style="color:#292929">Inkubator Innowacji Społecznych „Most”</strong></span>
+          <span><strong style="color:#292929">4,6 / 5</strong> · 12 opinii</span>
+          <span style="color:#4D504D">przykładowe dane</span>
+        </div>
+      </header>
+      <div style="display:flex;gap:10px;align-items:center;padding:14px;background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;position:sticky;top:0">
+        <button style="height:56px;padding:0 26px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:19px;font-weight:600">Dostosuj do mojej gminy</button>
+        <button style="height:56px;padding:0 20px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">Zapytaj autora</button>
+        <button style="height:56px;padding:0 20px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">Chcę testować</button>
+        <button style="height:56px;padding:0 20px;border:1px solid #8A8A8A;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#292929">Oceń</button>
+        <span style="margin-left:auto;font-size:16px;color:#4D504D">Zostało 6 miejsc dla testerów · do 30.11.2026</span>
+      </div>
+      <nav role="tablist" style="display:flex;gap:4px;border-bottom:2px solid #E6E6E6">
+        <span role="tab" aria-selected="true" style="padding:12px 18px;font-weight:600;border-bottom:4px solid #2462AD;margin-bottom:-2px">Opis</span>
+        <span role="tab" style="padding:12px 18px;color:#333333">Finansowanie i wsparcie</span>
+        <span role="tab" style="padding:12px 18px;color:#333333">Opinie (12)</span>
+      </nav>
+      <div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:24px">
+          <div style="position:relative;height:400px;border-radius:4px;overflow:hidden;background:repeating-linear-gradient(135deg,#F6F6F6 0 14px,#EFEFEF 14px 28px);display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Red Hat Mono',monospace;font-size:16px;color:#4D504D">kadr z filmu o innowacji · 3:12</span>
+            <span style="position:absolute;left:20px;bottom:20px;display:flex;gap:8px"><span style="height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;display:flex;align-items:center;font-weight:600">▶ Odtwórz</span><span style="height:44px;padding:0 14px;border-radius:4px;background:#FFFFFF;display:flex;align-items:center;font-weight:600;font-size:16px">Napisy PL</span><span style="height:44px;padding:0 14px;border-radius:4px;background:#FFFFFF;display:flex;align-items:center;font-weight:600;font-size:16px">Transkrypcja</span></span>
+          </div>
+          <section style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:26px 30px;display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px"><h2 style="margin:0;font-size:24px;font-weight:600">Co mówi źródło</h2><span style="font-size:15px;padding:4px 10px;border-radius:4px;border:1.5px solid #292929;font-weight:600">Fakty z karty innowacji</span></div>
+            <sc-for list="{{ facts }}" as="f" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid #EFEFEF">
+                <span style="font-weight:600;color:#4D504D;font-size:17px">{{ f.k }}</span><span style="text-wrap:pretty">{{ f.v }}</span>
+              </div>
+            </sc-for>
+            <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid #EFEFEF">
+              <span style="font-weight:600;color:#4D504D;font-size:17px">Materiały</span>
+              <div style="display:flex;flex-direction:column;gap:6px"><a href="#" style="font-weight:600">↓ Podręcznik wdrożenia (PDF, 2,1 MB)</a><a href="#" style="font-weight:600">↓ Scenariusz rozmowy (DOCX, 140 KB)</a><a href="#" style="font-weight:600">↓ Wzór grafiku wolontariuszy (XLSX, 60 KB)</a></div>
+            </div>
+          </section>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <section style="background:#FFFFFF;border:1.5px dashed #4D504D;border-radius:4px;padding:24px 26px;display:flex;flex-direction:column;gap:14px">
+            <span style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;height:32px;padding:0 12px 0 4px;border:1.5px dashed #4D504D;border-radius:4px;background:#FFFFFF;font-size:16px;font-weight:600"><span style="font-size:12px;font-weight:600;background:#292929;color:#FFFFFF;border-radius:4px;padding:3px 6px">AI</span>Sugestia AI, do weryfikacji</span>
+            <h2 style="margin:0;font-size:24px;font-weight:600">Jak to przenieść do siebie</h2>
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <span style="flex:none;width:34px;height:34px;border-radius:17px;border:2px solid #292929;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;box-sizing:border-box">{{ s.n }}</span>
+                <span style="text-wrap:pretty;padding-top:3px">{{ s.t }}</span>
+              </div>
+            </sc-for>
+          </section>
+          <section style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:22px 26px;display:flex;flex-direction:column;gap:12px">
+            <h2 style="margin:0;font-size:21px;font-weight:600">Finansowanie i wsparcie</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:8px"><span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600;font-size:16px">FERS – usługi społeczne</span><span style="padding:6px 12px;border-radius:4px;background:#F6F6F6;font-weight:600;font-size:16px">Małopolska dla Seniorów (przykład)</span></div>
+            <span style="font-size:16px;color:#333333">Sprawdzono 05.2026. Sprawdź aktualne nabory. Hub nie gwarantuje dofinansowania.</span>
+          </section>
+          <section style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:22px 26px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:baseline;gap:10px"><h2 style="margin:0;font-size:21px;font-weight:600">Opinie</h2><strong style="font-size:21px">4,6</strong><span style="color:#4D504D;font-size:16px">średnio z 12 opinii</span></div>
+            <div style="border-top:1px solid #EFEFEF;padding-top:12px;display:flex;flex-direction:column;gap:4px"><strong style="font-size:16px">5 – bardzo pomogło · GOPS, gmina wiejska</strong><span style="font-size:17px">„Ruszyliśmy w miesiąc. Seniorzy czekają na telefon jak na wizytę.”</span></div>
+            <div style="border-top:1px solid #EFEFEF;padding-top:12px;display:flex;flex-direction:column;gap:4px"><strong style="font-size:16px">4 – pomogło · NGO, miasto</strong><span style="font-size:17px">„Warto od razu zaplanować szkolenie wolontariuszy.”</span></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1500},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'default';
+    return {
+      isDefault: s !== 'loading', isLoading: s === 'loading',
+      facts: [
+        { k: 'Problem', v: 'Samotność i brak codziennego kontaktu u osób starszych, zwłaszcza w małych miejscowościach.' },
+        { k: 'Grupa docelowa', v: 'Seniorzy 65+ mieszkający samotnie.' },
+        { k: 'Kto może skorzystać', v: 'OPS/GOPS, organizacje pozarządowe, parafie, kluby seniora.' },
+        { k: 'Składowe', v: 'Grafik codziennych rozmów, wolontariusze, koordynator, szkolenie, procedura na sytuacje niepokojące.' },
+        { k: 'Koszt i kadra', v: 'Ok. 8–15 tys. zł rocznie. Koordynator na 1/4 etatu i 6–10 wolontariuszy.' },
+        { k: 'Jak skorzystać', v: 'Pobierz podręcznik, wyznacz koordynatora, zgłoś się do autora po bezpłatne szkolenie online.' } ],
+      steps: [
+        { n: 1, t: 'Wyznacz w GOPS koordynatora i porozmawiaj z KGW lub parafią o wolontariuszach.' },
+        { n: 2, t: 'Zrób listę seniorów chętnych do rozmów razem z sołtysami.' },
+        { n: 3, t: 'Przeprowadź szkolenie wolontariuszy z materiałów autora.' },
+        { n: 4, t: 'Zacznij od 3 miesięcy pilotażu i zbierz opinie seniorów.' } ] };
+  }
+}
+</script>
+</body>
+</html>

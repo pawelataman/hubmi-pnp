@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Biblioteka innowacji" logged-in="{{ true }}" notif="1" initials="EW" hint-size="1440px,124px"></dc-import>
+  <main style="padding:32px 56px 56px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:16px;font-weight:600;color:#2462AD;letter-spacing:.04em;text-transform:uppercase">Dostosuj do mojej gminy</span>
+      <h1 style="margin:0;font-size:40px;line-height:1.15;font-weight:500;letter-spacing:-.02em">Opowiedz nam o swojej instytucji</h1>
+      <p style="margin:0;font-size:19px;color:#333333">Na tej podstawie przygotujemy szkic usługi. Wystarczą przybliżone dane.</p>
+    </div>
+    <ol aria-label="Kroki" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+        <li style="display:flex;flex-direction:column;gap:8px">
+          <sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}"><div style="height:6px;border-radius:3px;background:#1E7A3C"></div><span style="font-size:16px;font-weight:600;color:#1E7A3C">✓ {{ s.n }}. {{ s.t }}</span></sc-if>
+          <sc-if value="{{ s.cur }}" hint-placeholder-val="{{ false }}"><div style="height:6px;border-radius:3px;background:#2462AD"></div><span aria-current="step" style="font-size:16px;font-weight:600">{{ s.n }}. {{ s.t }} · teraz</span></sc-if>
+          <sc-if value="{{ s.todo }}" hint-placeholder-val="{{ true }}"><div style="height:6px;border-radius:3px;background:#E6E6E6"></div><span style="font-size:16px;color:#4D504D">{{ s.n }}. {{ s.t }}</span></sc-if>
+        </li>
+      </sc-for>
+    </ol>
+    <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;align-items:start">
+      <form style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:28px 32px;display:flex;flex-direction:column;gap:26px">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px">
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">Gmina</label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">Jodłowa Wola (wiejska)<span style="margin-left:auto;color:#4D504D">▾</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">Grupa odbiorców</label><div style="height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">Seniorzy 65+ mieszkający samotnie</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="font-weight:600">Szacowana liczba odbiorców</label>
+          <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+            <span role="alert" style="display:flex;gap:10px;align-items:center;color:#C8000E;font-weight:600;font-size:17px"><span style="flex:none;width:24px;height:24px;border-radius:12px;background:#C8000E;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:15px">!</span>Wpisz liczbę, np. 40. Wystarczy przybliżenie.</span>
+            <div style="height:56px;width:240px;border:3px solid #C8000E;border-radius:4px;display:flex;align-items:center;padding:0 16px;box-sizing:border-box;color:#4D504D">około czterdziestu</div>
+          </sc-if>
+          <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+            <div style="height:56px;width:240px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px;box-sizing:border-box">40 osób</div>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="font-weight:600">Budżet na rok</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">do 10 tys. zł</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;border:2px solid #2462AD;font-size:17px;font-weight:600">✓ 10–30 tys. zł</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">30–60 tys. zł</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">ponad 60 tys. zł</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Nie wiem</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px"><label style="font-weight:600">Dostępna kadra</label><div style="min-height:56px;border:1px solid #8A8A8A;border-radius:4px;display:flex;align-items:center;padding:0 16px">1 pracownik socjalny na część etatu, asystent rodziny</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label style="font-weight:600">Zasoby i partnerzy</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;font-size:17px;font-weight:600">✓ Lokal (świetlica)</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Transport</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;font-size:17px;font-weight:600">✓ KGW</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;font-size:17px;font-weight:600">✓ OSP</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;border:1px solid #8A8A8A;font-size:17px">Parafia</span>
+            <span style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:4px;background:#2462AD;color:#FFFFFF;font-size:17px;font-weight:600">✓ Szkoła</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;padding-top:6px;border-top:1px solid #EFEFEF;padding-top:22px">
+          <button style="height:58px;padding:0 24px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">← Wstecz</button>
+          <button style="height:58px;padding:0 30px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:19px;font-weight:600">Przygotuj szkic usługi →</button>
+          <span style="margin-left:auto;align-self:center;font-size:16px;color:#4D504D">Zapisano automatycznie</span>
+        </div>
+      </form>
+      <aside style="display:flex;flex-direction:column;gap:18px">
+        <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;overflow:hidden">
+          <div style="height:130px;background:repeating-linear-gradient(135deg,#F6F6F6 0 12px,#EFEFEF 12px 24px);display:flex;align-items:center;justify-content:center;font-family:'Red Hat Mono',monospace;font-size:15px;color:#4D504D">miniatura innowacji</div>
+          <div style="padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:15px;font-weight:600;color:#4D504D;text-transform:uppercase;letter-spacing:.04em">Wybrana innowacja</span>
+            <strong style="font-size:21px;line-height:1.25">Sąsiedzkie Telefony Życzliwości</strong>
+            <span style="font-size:16px;color:#333333">Seniorzy · usługa · ok. 8–15 tys. zł / rok</span>
+            <a href="#" style="font-weight:600;font-size:16px">Zmień innowację</a>
+          </div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px">
+          <strong style="font-size:18px">Gmina Jodłowa Wola w liczbach</strong>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid #EFEFEF;padding-top:12px"><span>Mieszkańcy 65+</span><strong>1 240</strong></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid #EFEFEF;padding-top:12px"><span>65+ mieszkający samotnie</span><strong>14%</strong></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid #EFEFEF;padding-top:12px"><span>Sołectwa</span><strong>11</strong></div>
+          <span style="font-size:15px;color:#4D504D">GUS BDL, 2024 · dane przykładowe</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1200},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;error&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'default';
+    const cur = 5;
+    const steps = ['Gmina', 'Odbiorcy', 'Budżet', 'Kadra', 'Zasoby'].map((t, i) => ({ n: i + 1, t, done: i + 1 < cur, cur: i + 1 === cur, todo: i + 1 > cur }));
+    return { steps, isDefault: s !== 'error', isError: s === 'error' };
+  }
+}
+</script>
+</body>
+</html>

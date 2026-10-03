@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:1440px;min-height:1000px;background:#FFFFFF;font-family:'Red Hat Display',system-ui,sans-serif;color:#292929;font-size:18px;line-height:1.5">
+  <dc-import name="HubTopBar" active="Biblioteka innowacji" logged-in="{{ true }}" notif="1" initials="EW" hint-size="1440px,124px"></dc-import>
+  <main style="padding:28px 56px 56px;display:grid;grid-template-columns:220px minmax(0,1fr) 340px;gap:28px;align-items:start">
+    <nav aria-label="Sekcje szkicu" style="display:flex;flex-direction:column;gap:2px;position:sticky;top:0;padding-top:72px">
+      <span style="font-size:15px;font-weight:600;color:#4D504D;text-transform:uppercase;letter-spacing:.04em;padding:0 12px 8px">Sekcje</span>
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+        <a href="#" style="display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:4px;color:#292929;text-decoration:none;font-size:17px">{{ n }}</a>
+      </sc-for>
+    </nav>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px dashed #4D504D;border-radius:4px;background:#FFFFFF">
+        <span style="font-size:12px;font-weight:600;background:#292929;color:#FFFFFF;border-radius:4px;padding:3px 6px">AI</span>
+        <strong>Szkic AI do weryfikacji</strong><span style="color:#333333;font-size:17px">Każdą sekcję możesz edytować. Sprawdź koszty z księgowością.</span>
+        <span style="margin-left:auto;font-size:16px;color:#1E7A3C;font-weight:600">✓ Zapisano 14:32</span>
+      </div>
+      <article style="background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:44px 56px;display:flex;flex-direction:column;gap:28px;box-shadow:0 1px 0 #E6E6E6">
+        <header style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:16px;color:#4D504D">Szkic usługi · wersja 1 · przykład</span>
+          <h1 style="margin:0;font-size:36px;line-height:1.2;font-weight:500;letter-spacing:-.01em">Sąsiedzkie Telefony Życzliwości w gminie Jodłowa Wola</h1>
+        </header>
+        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+          <section style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:12px"><h2 style="margin:0;font-size:22px;font-weight:600">{{ s.h }}</h2><button style="margin-left:auto;height:40px;padding:0 12px;border:1.5px solid #8A8A8A;border-radius:4px;background:#FFFFFF;font:inherit;font-size:15px;font-weight:600;color:#292929">✎ Edytuj</button></div>
+            <p style="margin:0;text-wrap:pretty">{{ s.t }}</p>
+          </section>
+        </sc-for>
+        <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+          <section role="status" aria-live="polite" style="display:flex;flex-direction:column;gap:10px;padding:18px;border:1.5px dashed #8A8A8A;border-radius:4px">
+            <strong style="font-size:18px;color:#4D504D">Piszemy sekcję „Harmonogram”…</strong>
+            <div style="height:18px;width:92%;background:#ECECEC;border-radius:4px"></div><div style="height:18px;width:76%;background:#ECECEC;border-radius:4px"></div>
+            <span style="font-size:16px;color:#4D504D">Pozostało: Koszty, Ryzyka, Adaptacje</span>
+          </section>
+        </sc-if>
+        <sc-if value="{{ isDefault }}" hint-placeholder-val="{{ true }}">
+          <section style="display:flex;flex-direction:column;gap:12px">
+            <h2 style="margin:0;font-size:22px;font-weight:600">Harmonogram</h2>
+            <div style="display:grid;grid-template-columns:200px repeat(6,minmax(0,1fr));gap:4px 4px;font-size:16px;align-items:center">
+              <span></span><span style="color:#4D504D;font-weight:600">I</span><span style="color:#4D504D;font-weight:600">II</span><span style="color:#4D504D;font-weight:600">III</span><span style="color:#4D504D;font-weight:600">IV</span><span style="color:#4D504D;font-weight:600">V</span><span style="color:#4D504D;font-weight:600">VI</span>
+              <span>Rekrutacja wolontariuszy</span><div style="grid-column:2 / 4;height:28px;border-radius:4px;background:#E8F0F9;border:1.5px solid #2462AD"></div><span style="grid-column:4 / 8"></span>
+              <span>Szkolenie</span><span></span><div style="grid-column:3 / 4;height:28px;border-radius:4px;background:#E8F0F9;border:1.5px solid #2462AD"></div><span style="grid-column:4 / 8"></span>
+              <span>Pilotaż rozmów</span><span style="grid-column:2 / 4"></span><div style="grid-column:4 / 7;height:28px;border-radius:4px;background:#E6F2EA;border:1.5px solid #1E7A3C"></div><span></span>
+              <span>Ewaluacja</span><span style="grid-column:2 / 7"></span><div style="grid-column:7 / 8;height:28px;border-radius:4px;background:#F6F6F6;border:1.5px solid #4D504D"></div>
+            </div>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:10px">
+            <h2 style="margin:0;font-size:22px;font-weight:600">Koszty (widełki na rok)</h2>
+            <div style="display:flex;flex-direction:column;font-size:17px">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #EFEFEF"><span>Koordynator (1/4 etatu)</span><strong>6–9 tys. zł</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #EFEFEF"><span>Szkolenia i superwizja</span><strong>2–3 tys. zł</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #EFEFEF"><span>Telefony, abonamenty</span><strong>1–2 tys. zł</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:2px solid #292929"><strong>Razem</strong><strong>9–14 tys. zł</strong></div>
+            </div>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:8px">
+            <h2 style="margin:0;font-size:22px;font-weight:600">Ryzyka</h2>
+            <p style="margin:0">Zbyt mało wolontariuszy w małych sołectwach · rezygnacja seniorów po 1–2 rozmowach · brak procedury, gdy senior nie odbiera.</p>
+          </section>
+        </sc-if>
+      </article>
+    </div>
+    <aside style="display:flex;flex-direction:column;gap:16px;position:sticky;top:0">
+      <div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #E6E6E6;border-radius:4px;padding:20px">
+        <button style="height:56px;border:none;border-radius:4px;background:#2462AD;color:#FFFFFF;font:inherit;font-size:18px;font-weight:600">Przenieś do wniosku →</button>
+        <span style="font-size:15px;color:#1E7A3C;font-weight:600;text-align:center">◷ Trwa nabór „Usługa Wrażliwa” · do 30.11</span>
+        <button style="height:50px;border:2px solid #2462AD;border-radius:4px;background:transparent;font:inherit;font-weight:600;color:#2462AD">↓ Pobierz PDF dla kierownika</button>
+        <div style="display:flex;gap:8px"><button style="flex:1;height:48px;border:1px solid #8A8A8A;border-radius:4px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:#292929">Zapytaj autora</button><button style="flex:1;height:48px;border:1px solid #8A8A8A;border-radius:4px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:#292929">Zapytaj eksperta</button></div>
+      </div>
+      <div style="background:#F6F6F6;border:2px solid #292929;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:10px">
+        <strong style="font-size:18px">Założenia, na których opiera się szkic</strong>
+        <sc-for list="{{ assumptions }}" as="a" hint-placeholder-count="5">
+          <div style="display:flex;gap:10px;font-size:16px"><span style="flex:none;font-weight:600">→</span><span>{{ a }}</span></div>
+        </sc-for>
+        <a href="#" style="font-weight:600;font-size:16px">Zmień dane gminy</a>
+      </div>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1500},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'default';
+    return {
+      isDefault: s !== 'loading', isLoading: s === 'loading',
+      nav: ['Zakres usługi', 'Odbiorcy', 'Kadra', 'Harmonogram', 'Koszty', 'Ryzyka', 'Wymagane adaptacje'],
+      sections: [
+        { h: 'Zakres usługi', t: 'Codzienne, 10–15-minutowe rozmowy telefoniczne wolontariuszy z samotnymi seniorami oraz spotkanie w świetlicy raz w miesiącu.' },
+        { h: 'Odbiorcy', t: 'Około 40 osób 65+ mieszkających samotnie w 11 sołectwach, wskazanych przez GOPS i sołtysów.' },
+        { h: 'Kadra', t: 'Koordynator z GOPS (1/4 etatu), 8 wolontariuszy z KGW, OSP i szkoły średniej; superwizja raz w miesiącu.' } ],
+      assumptions: ['Gmina wiejska, 11 sołectw', '40 odbiorców', 'Budżet 10–30 tys. zł / rok', 'Lokal: świetlica; partnerzy: KGW, OSP, szkoła', 'Brak własnego transportu'] };
+  }
+}
+</script>
+</body>
+</html>
