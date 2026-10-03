@@ -417,6 +417,33 @@ There are no automated visual tests. Fidelity is verified by eye against the
 mockups at 1440px and 1024px. `make check` (backend checks plus the frontend's
 lint, format check, typecheck, tests and build) must pass.
 
+## Implementation notes
+
+Refinements made while writing the implementation plan. Where they differ from
+the wording above, these take precedence.
+
+- `useAsync(key, load)` takes a string key instead of a dependency array; the
+  request reloads when the key changes.
+- The contexts and their hooks live in one file, `app/contexts.ts`, and the
+  providers in `app/AppProviders.tsx`. `MatchmakingProvider` and
+  `AdaptationProvider` wrap the whole app, so their state survives a visit to
+  the innovation card.
+- `features/thread/` holds `useThread` and `Composer`, shared by both C3 views.
+- `api/examples.ts` holds the form defaults that screens pre-fill; it sits
+  outside `api/mock/` so screens may import it.
+- A notification created while its recipient is not the current persona is
+  queued and delivered when that persona next signs in, which is when the
+  toast appears. In a single browser the author is never signed in at the
+  moment the curator replies.
+- The seeded case `HUB-2026-0142` has the status drawn in C3 ("Odpowiedziano",
+  with its three messages), not the "Nowe" drawn for the same row in A2.
+- Cases other than `HUB-2026-0142` are seeded with one placeholder message.
+- The A2 list is a real `<table>`; MW2's section list contains the six
+  sections the draft actually has ("Wymagane adaptacje" is drawn in the
+  mockup's list but has no section).
+- The curator's sidebar gains "Zmień osobę", "Wyloguj" and "Strona główna"
+  links, which the mockup does not draw, so the demo can leave the panel.
+
 ## Out of scope
 
 - Any backend change, real authentication or authorisation, persistence
