@@ -356,7 +356,7 @@
   font-weight: 600;
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .main {
     grid-template-columns: minmax(0, 10rem) minmax(0, 1fr) minmax(0, 16.25rem);
     gap: 1.25rem;

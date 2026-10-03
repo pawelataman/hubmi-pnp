@@ -262,7 +262,7 @@
   align-items: center;
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .columns {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   }

@@ -281,7 +281,7 @@
   font-weight: 600;
 }
 
-@media (width <= 80rem) {
+@container page (width <= 80rem) {
   .main {
     padding-inline: 1.5rem;
   }

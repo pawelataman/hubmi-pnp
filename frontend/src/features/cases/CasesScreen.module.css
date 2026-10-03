@@ -62,7 +62,7 @@
   text-decoration: underline;
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .main {
     padding-inline: 2rem;
   }

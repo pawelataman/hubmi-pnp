@@ -369,13 +369,13 @@
   font-weight: 600;
 }
 
-@media (width < 90rem) {
+@container page (width < 90rem) {
   .trendGrid {
     grid-template-columns: 7.5rem minmax(0, 1fr) 2.5rem 4.75rem;
   }
 }
 
-@media (width <= 80rem) {
+@container page (width <= 80rem) {
   .columns,
   .skeletons {
     grid-template-columns: minmax(0, 1fr);

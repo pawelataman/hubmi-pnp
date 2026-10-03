@@ -167,14 +167,14 @@
   color: var(--c-primary);
 }
 
-@media (width <= 80rem) {
+@container page (width <= 80rem) {
   .main {
     grid-template-columns: minmax(0, 1fr) 16rem;
     padding-inline: 1.5rem;
   }
 }
 
-@media (width <= 68rem) {
+@container page (width <= 68rem) {
   .main {
     grid-template-columns: minmax(0, 1fr);
   }

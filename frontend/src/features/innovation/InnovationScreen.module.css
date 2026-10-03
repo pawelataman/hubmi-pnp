@@ -433,7 +433,7 @@
   font-size: 1.0625rem;
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .main,
   .loading {
     padding-inline: 2rem;

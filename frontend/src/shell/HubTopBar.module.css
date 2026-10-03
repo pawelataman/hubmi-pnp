@@ -208,7 +208,7 @@
   color: var(--c-ink);
 }
 
-@media (width <= 87.5rem) {
+@container page (width <= 87.5rem) {
   .bar {
     gap: 0.75rem;
     padding: 0 1.5rem;
@@ -229,7 +229,7 @@
   }
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .bar {
     gap: 0.5rem;
     padding: 0 1rem;

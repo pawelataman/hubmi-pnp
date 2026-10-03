@@ -175,7 +175,7 @@
   padding-top: 0.5rem;
 }
 
-@media (width <= 75rem) {
+@container page (width <= 75rem) {
   .columns {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   }

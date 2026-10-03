@@ -1,4 +1,10 @@
 .page {
+  /*
+   * The whole-page size container: layout breakpoints are container queries
+   * on it, so their rem follows the root font size that "A+" changes
+   * (media-query rem does not).
+   */
+  container: page / inline-size;
   display: flex;
   min-height: 100vh;
 }
