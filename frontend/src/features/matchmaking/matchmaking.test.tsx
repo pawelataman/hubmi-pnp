@@ -333,4 +333,27 @@ describe('M4 results', (): void => {
     const { router } = renderApp('/znajdz/wyniki');
     expect(router.state.location.pathname).toBe('/');
   });
+
+  it('opens the innovation card and returns to the results', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachResults(user);
+    await user.click(
+      screen.getByRole('link', {
+        name: 'Zobacz szczegóły: Sąsiedzkie Telefony Życzliwości',
+      }),
+    );
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Sąsiedzkie Telefony Życzliwości',
+      }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('link', { name: '← Wróć do wyników' }));
+    expect(
+      await screen.findByRole('heading', {
+        level: 1,
+        name: 'Rozwiązania dla Twojego problemu',
+      }),
+    ).toBeInTheDocument();
+  });
 });
