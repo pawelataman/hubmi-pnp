@@ -1,0 +1,2 @@
+"""Hubmi backend application."""
+
