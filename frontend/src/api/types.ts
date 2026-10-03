@@ -118,18 +118,40 @@ export interface Review {
   readonly quote: string;
 }
 
-export interface Innovation {
+export type InnovationArea =
+  | 'Seniorzy'
+  | 'Niepełnosprawność'
+  | 'Rodzina i opiekunowie'
+  | 'Zdrowie psychiczne'
+  | 'Społeczność lokalna';
+
+export type InnovationKind = 'usługa' | 'metoda' | 'narzędzie';
+
+/** Yearly cost: low up to 10 000 zł, mid up to 50 000 zł, high above. */
+export type CostBand = 'low' | 'mid' | 'high';
+
+/** What the library tile and its filters need. */
+export interface InnovationSummary {
   readonly id: string;
   readonly name: string;
-  readonly category: string;
+  readonly area: InnovationArea;
+  readonly kind: InnovationKind;
+  readonly summary: string;
+  /** `MM.YYYY` */
   readonly verified: string;
   readonly cost: string;
-  readonly seeksTesters: boolean;
-  readonly hasVideo: boolean;
-  readonly author: string;
-  readonly incubator: string;
+  readonly costBand: CostBand;
+  /** One decimal with a comma, e.g. `4,6`. */
   readonly rating: string;
   readonly reviewCount: number;
+  readonly seeksTesters: boolean;
+  readonly hasVideo: boolean;
+}
+
+export interface Innovation extends InnovationSummary {
+  readonly category: string;
+  readonly author: string;
+  readonly incubator: string;
   readonly testerNote: string;
   readonly facts: readonly LabelledValue[];
   readonly materials: readonly string[];
