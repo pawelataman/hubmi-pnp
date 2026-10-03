@@ -1,0 +1,57 @@
+.toast {
+  position: fixed;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  z-index: 30;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  width: 28.75rem;
+  padding: 1.125rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--c-ink);
+  box-shadow: 0 0.75rem 1.875rem var(--c-shadow);
+  color: var(--c-white);
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius);
+  background: var(--c-white);
+  color: var(--c-ink);
+  font-weight: 600;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  font-size: 1.0625rem;
+}
+
+.link {
+  color: var(--c-blue-200);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.link:hover {
+  color: var(--c-white);
+}
+
+.close {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: auto;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--c-white);
+  font-size: 1.125rem;
+}

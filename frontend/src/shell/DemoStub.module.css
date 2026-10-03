@@ -1,0 +1,21 @@
+.stub {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 51.25rem;
+  margin-inline: auto;
+  padding: 5rem 2rem;
+}
+
+.title {
+  font-size: 2.625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.text {
+  color: var(--c-ink-2);
+  font-size: 1.3125rem;
+}

@@ -1,0 +1,20 @@
+.footer {
+  display: flex;
+  gap: 2rem;
+  padding: 1.75rem 2.5rem;
+  background: var(--c-primary-dark);
+  color: var(--c-white);
+  font-size: 1rem;
+}
+
+.footer a {
+  color: var(--c-blue-200);
+}
+
+.footer a:hover {
+  color: var(--c-white);
+}
+
+.note {
+  margin-left: auto;
+}

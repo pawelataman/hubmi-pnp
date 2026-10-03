@@ -1,0 +1,44 @@
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.625rem 2rem;
+  border-top: 1px solid var(--c-primary);
+  border-bottom: 1px solid var(--c-primary);
+  background: var(--c-primary-tint);
+  color: var(--c-ink-2);
+  font-size: 1rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 1.625rem;
+  padding: 0 0.5rem;
+  border: 1.5px dashed var(--c-ink);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  color: var(--c-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.strong {
+  color: var(--c-primary-dark);
+}
+
+.human {
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--c-primary);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.human:hover {
+  color: var(--c-primary-dark);
+}
