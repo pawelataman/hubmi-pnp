@@ -1,7 +1,8 @@
 # Hubmi
 
-Szkielet aplikacji: React + TypeScript + Vite oraz API w FastAPI. Strona startowa
-wykonuje prawdziwe żądanie do backendu i pokazuje stan połączenia.
+Klikalna wersja demonstracyjna HubMe — Hubu Innowacji Społecznych: React +
+TypeScript + Vite oraz API w FastAPI. Frontend działa na danych przykładowych
+z makiet; backend udostępnia na razie tylko kontrolę stanu.
 
 ## Uruchomienie lokalne
 
@@ -57,7 +58,7 @@ docker compose down
 
 Porty hosta można zmienić przez `FRONTEND_PORT` i `BACKEND_PORT`, np.
 `FRONTEND_PORT=5174 BACKEND_PORT=8001 docker compose up --build`.
-Bezpośrednie linki do API na stronie startowej używają domyślnych portów.
+Adresy API podane w tym README zakładają domyślne porty.
 
 ## Kontrola jakości
 
@@ -69,17 +70,41 @@ make check
 
 Sprawdza lint, formatowanie, typy i testy obu części oraz produkcyjny build
 frontendu. Sam build można wykonać przez `npm run build --prefix frontend`.
-Podgląd buildu: `npm run preview --prefix frontend`; do połączenia z API używaj
-serwera developerskiego (`make dev`).
+Podgląd buildu: `npm run preview --prefix frontend`.
 
 ## Struktura
 
-- `frontend/src` — interfejs i klient API.
+- `frontend/src` — interfejs: `app` (routing, konteksty), `shell` (nagłówek,
+  panel boczny), `ui` (wspólne komponenty), `features` (ekrany), `api`
+  (typy, interfejs `HubApi`, dane przykładowe).
+- `docs/design/hubme-makiety` — źródła makiet, wzorzec wyglądu ekranów.
 - `backend/app` — aplikacja FastAPI i ustawienia `APP_*`.
 - `backend/tests` — testy integracyjne API i konfiguracji CORS.
 - `scripts/dev.py` — wspólne uruchamianie i zatrzymywanie lokalnych serwerów.
 - `compose.yaml` — środowisko developerskie w Dockerze.
 - `IDEATION.md` — opis planowanej funkcjonalności matchmakingu.
 
-Obecna aplikacja jest bazą do dalszego rozwoju. Matchmaking opisany w
-`IDEATION.md` nie został jeszcze zaimplementowany.
+## Wersja demonstracyjna
+
+Wszystkie dane są przykładowe i pochodzą z makiet w
+`docs/design/hubme-makiety`. Frontend nie wysyła żadnych zapytań do backendu:
+dane dostarcza `frontend/src/api/mock`, a ekrany korzystają wyłącznie z
+interfejsu `HubApi` (`frontend/src/api/HubApi.ts`). Stan zgłoszeń i wątków
+trzymany jest w pamięci i znika po odświeżeniu strony.
+
+Logowanie jest zastąpione wyborem jednej z trzech przykładowych osób
+(przycisk „Zaloguj się”):
+
+- **Ewa W.** — pracownica GOPS, szuka rozwiązania i dostosowuje je do gminy,
+- **Maria N.** — autorka pomysłu, wysyła fiszkę i rozmawia z ROPS,
+- **Anna Kowalczyk** — kuratorka ROPS, ma dostęp do panelu pod `/rops`.
+
+Scenariusz w sześciu krokach: opis problemu (`/`) → wyniki i karta innowacji →
+„Dostosuj do mojej gminy” → fiszka pomysłu (`/zglos-pomysl`) → kolejka i wątek
+w panelu ROPS (`/rops/kolejka`) → trendy potrzeb (`/rops/trendy`).
+
+Funkcje bez makiety (m.in. „Prosty język”, dyktowanie, załączniki, PDF)
+pokazują komunikat, że nie są dostępne w wersji demonstracyjnej. Układ jest
+przygotowany dla ekranów o szerokości od 1024 px.
+
+Matchmaking opisany w `IDEATION.md` nie został jeszcze zaimplementowany.
