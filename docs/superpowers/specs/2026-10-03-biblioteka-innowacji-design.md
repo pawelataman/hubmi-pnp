@@ -35,8 +35,8 @@ Layout, top to bottom:
 1. Title "Biblioteka innowacji" and a one-sentence introduction.
 2. Search field with a visible label.
 3. Chip row "Obszar": one chip per area, each with a count.
-4. Chip row with the groups "Typ" and "Koszt" and the two toggles "Szuka
-   testerów" and "Ma film".
+4. Chip row with the groups "Typ" and "Koszt roczny" and a group "Cechy"
+   holding the two toggles "Szuka testerów" and "Ma film".
 5. Result bar: "5 innowacji z 12", a "Wyczyść filtry" link shown only when a
    filter or search text is set and at least one tile is listed (the empty
    state carries its own button), and the sort control on the right. Clearing
@@ -46,7 +46,7 @@ Layout, top to bottom:
 
 ### Tile
 
-Category line in small capitals (`area · kind`), name, one-sentence summary,
+Category line in upper case (`area · kind`), name, one-sentence summary,
 and tags: verification date, cost, "Szuka testerów" (when true), "Film" (when
 true), and rating with review count. The name is a heading and a link to
 `/innowacje/:id`; the link is stretched over the tile so the whole tile is
@@ -88,6 +88,7 @@ Ties in every order fall back to name ascending. The control is a native
 - Unknown parameters and unknown values are ignored without an error.
 - Every change replaces the current history entry. "Back" from an innovation
   card returns to the same filtered list instead of stepping through filters.
+- A filter change does not reset the scroll position.
 
 ### States
 
@@ -175,8 +176,8 @@ New folder `frontend/src/features/library/`:
 
 Reused: `ChoiceChip`, `Skeleton`, `LoadError`, `Card`, design tokens.
 
-`app/routes.tsx` gains the `biblioteka` route. `shell/navigation.ts` needs no
-change.
+`app/routes.tsx` gains the `biblioteka` route. The `/biblioteka` entry is removed
+from `STUB_TITLES` in `shell/navigation.ts`.
 
 ## Accessibility
 
