@@ -24,6 +24,25 @@ describe('shell', (): void => {
     ).toBeInTheDocument();
   });
 
+  it('opens the innovation library from the top bar', async (): Promise<void> => {
+    const { user } = renderApp('/nabory');
+    const nav: HTMLElement = screen.getByRole('navigation', { name: 'Główna' });
+    await user.click(
+      within(nav).getByRole('link', { name: 'Biblioteka innowacji' }),
+    );
+    expect(
+      await screen.findByRole('searchbox', { name: 'Szukaj w bibliotece' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'Ta część nie jest dostępna w wersji demonstracyjnej.',
+      ),
+    ).not.toBeInTheDocument();
+    expect(
+      within(nav).getByRole('link', { name: 'Biblioteka innowacji' }),
+    ).toHaveAttribute('aria-current', 'page');
+  });
+
   it('renders a placeholder page for an undesigned section', (): void => {
     renderApp('/nabory');
     expect(
