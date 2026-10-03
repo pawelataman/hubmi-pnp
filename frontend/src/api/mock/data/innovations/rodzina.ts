@@ -17,7 +17,7 @@ export const wytchnieniowaSobota: Innovation = {
   incubator: 'Inkubator Innowacji Społecznych „Most”',
   rating: '4,8',
   reviewCount: 11,
-  testerNote: 'Zostało 3 miejsca dla testerów · do 15.12.2026',
+  testerNote: 'Zostały 3 miejsca dla testerów · do 15.12.2026',
   facts: [
     {
       label: 'Problem',

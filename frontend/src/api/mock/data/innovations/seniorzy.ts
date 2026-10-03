@@ -131,7 +131,7 @@ export const mobilnaKawiarenka: Innovation = {
   steps: [
     'Sprawdź z sołtysami, w których wsiach seniorzy nie mają gdzie się spotkać.',
     'Wybierz pojazd i ustal, kto będzie nim jeździł oraz prowadził spotkania.',
-    'Zaplanuj trasę tak, aby każda wieś miała postój raz na dwa tygodnie.',
+    'Zaplanuj trasę tak, aby każda wieś miała postój raz w tygodniu.',
     'Po trzech miesiącach przejrzyj frekwencję i zmień przystanki, które świecą pustkami.',
   ],
   fundingProgrammes: [
@@ -209,7 +209,7 @@ export const cyfrowyWnuk: Innovation = {
   steps: [
     'Umów się z dyrektorem szkoły i bibliotekarzem na wspólny termin spotkań.',
     'Zbierz zgłoszenia seniorów przez klub seniora, parafię i sołtysów.',
-    'Połącz uczniów i seniorów w pary i rozdaj karty ćwiczeń.',
+    'Połącz uczniów i seniorów w pary i rozdaj karty ćwiczeń, także do nauki rozmów wideo z rodziną.',
     'Po szóstym spotkaniu zrób małą uroczystość i zapytaj seniorów, czego jeszcze chcą się nauczyć.',
   ],
   fundingProgrammes: ['Fundusz Małych Inicjatyw Lokalnych (przykład)'],
@@ -221,7 +221,7 @@ export const cyfrowyWnuk: Innovation = {
       quote: 'Seniorzy po raz pierwszy sami odebrali e-receptę z apteki.',
     },
     {
-      heading: '4 – pomogło · szkoła, gmina miejsko-wiejska',
+      heading: '4 – pomogło · szkoła, miasto',
       quote: 'Dzieci uczą się cierpliwości, a babcie przestają się bać ekranu.',
     },
   ],

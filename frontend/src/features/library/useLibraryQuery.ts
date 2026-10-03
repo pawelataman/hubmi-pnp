@@ -37,7 +37,10 @@ export function useLibraryQuery(): LibraryQueryState {
 
   function setQuery(next: LibraryQuery): void {
     setText(next.text);
-    setParams(toSearchParams(next), { replace: true });
+    setParams(toSearchParams(next), {
+      replace: true,
+      preventScrollReset: true,
+    });
   }
 
   return { query: { ...stored, text }, setQuery };

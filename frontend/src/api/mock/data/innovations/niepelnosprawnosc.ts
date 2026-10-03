@@ -96,7 +96,7 @@ export const mapaBarier: Innovation = {
   incubator: 'Pracownia Wdrożeń Społecznych „Żuraw”',
   rating: '4,1',
   reviewCount: 6,
-  testerNote: 'Zostało 4 miejsca dla testerów · do 31.10.2026',
+  testerNote: 'Zostały 4 miejsca dla testerów · do 31.10.2026',
   facts: [
     {
       label: 'Problem',

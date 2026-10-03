@@ -136,7 +136,7 @@ export const termometrNastroju: Innovation = {
   ],
   steps: [
     'Omów pomysł z dyrektorem szkoły i pedagogiem, a potem z radą rodziców.',
-    'Wypełnij formularz ankiety w jednej klasie przez dwa miesiące na próbę.',
+    'Przeprowadzaj ankietę w jednej klasie przez dwa miesiące na próbę.',
     'Spotykaj się z wychowawcami po każdym zestawieniu wyników i ustalaj kolejne kroki.',
     'Dopiero po pierwszym semestrze rozszerz ankietę na kolejne klasy.',
   ],

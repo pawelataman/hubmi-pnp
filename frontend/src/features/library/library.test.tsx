@@ -1,5 +1,5 @@
 import { screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi, type MockInstance } from 'vitest';
 
 import type { HubApi } from '../../api/HubApi';
 import { createMockApi } from '../../api/mock/createMockApi';
@@ -187,6 +187,44 @@ describe('innovation library', (): void => {
     expect(router.state.location.search).toBe(
       '?obszar=zdrowie-psychiczne&typ=usluga',
     );
+  });
+
+  it('keeps the scroll position when a filter changes', async (): Promise<void> => {
+    const { user } = renderApp('/biblioteka');
+    await tiles();
+    const scrollTo: MockInstance<typeof window.scrollTo> = vi.spyOn(
+      window,
+      'scrollTo',
+    );
+    await user.click(chip('Obszar', /^Seniorzy · 3$/));
+    expect(await screen.findByText('3 innowacje z 12')).toBeInTheDocument();
+    expect(scrollTo).not.toHaveBeenCalled();
+    scrollTo.mockRestore();
+  });
+
+  it('follows the address when the library is opened again from the top bar', async (): Promise<void> => {
+    const { user, router } = renderApp(
+      '/biblioteka?q=zyczliwosci&obszar=seniorzy',
+    );
+    expect(names(await tiles())).toEqual(['Sąsiedzkie Telefony Życzliwości']);
+    const search: HTMLElement = screen.getByRole('searchbox', {
+      name: 'Szukaj w bibliotece',
+    });
+    expect(search).toHaveValue('zyczliwosci');
+    await user.click(
+      within(screen.getByRole('navigation', { name: 'Główna' })).getByRole(
+        'link',
+        { name: 'Biblioteka innowacji' },
+      ),
+    );
+    expect(await screen.findByText('12 innowacji')).toBeInTheDocument();
+    expect(search).toHaveValue('');
+    expect(await tiles()).toHaveLength(12);
+    expect(router.state.location.search).toBe('');
+    await router.navigate(-1);
+    expect(await screen.findByText('1 innowacja z 12')).toBeInTheDocument();
+    expect(search).toHaveValue('zyczliwosci');
+    expect(names(await tiles())).toEqual(['Sąsiedzkie Telefony Życzliwości']);
   });
 
   it('offers a retry when the list fails to load', async (): Promise<void> => {

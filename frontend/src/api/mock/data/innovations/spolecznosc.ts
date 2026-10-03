@@ -104,7 +104,7 @@ export const lawkaDialogu: Innovation = {
     {
       label: 'Grupa docelowa',
       value:
-        'Mieszkańcy wsi w każdym wieku, zwłaszcza nowi osadnicy i długoletni sąsiedzi.',
+        'Mieszkańcy wsi w każdym wieku, zwłaszcza nowi mieszkańcy i długoletni sąsiedzi.',
     },
     {
       label: 'Kto może skorzystać',
