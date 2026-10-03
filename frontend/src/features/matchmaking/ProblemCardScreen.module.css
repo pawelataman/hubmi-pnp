@@ -32,6 +32,12 @@
   padding-top: 0.5rem;
 }
 
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.625rem;
+}
+
 .columns {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
@@ -89,7 +95,8 @@
   display: block;
   width: 100%;
   field-sizing: content;
-  min-height: 9rem;
+  /* Fallback without field-sizing: 7 lines at 64rem (see fix report). */
+  min-height: 16.5rem;
   padding: 0.75rem 1rem;
   border: 2px solid var(--c-primary);
   border-radius: var(--radius);

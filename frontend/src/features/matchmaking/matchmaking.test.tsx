@@ -209,6 +209,71 @@ describe('M3 problem card', (): void => {
   });
 });
 
+describe('M3 keyboard focus', (): void => {
+  it('focuses the summary field, then returns focus to the edit button', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    await user.click(
+      screen.getByRole('button', { name: 'Popraw streszczenie' }),
+    );
+    expect(screen.getByRole('textbox', { name: 'Streszczenie' })).toHaveFocus();
+    await user.click(
+      screen.getByRole('button', { name: 'Zapisz streszczenie' }),
+    );
+    expect(
+      screen.getByRole('button', { name: 'Popraw streszczenie' }),
+    ).toHaveFocus();
+  });
+
+  it('returns focus to the add button after Enter and Escape', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    await user.click(screen.getByRole('button', { name: 'Dodaj: Problem' }));
+    await user.type(
+      screen.getByRole('textbox', { name: 'Nowy element: Problem' }),
+      'brak opieki{Enter}',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Dodaj: Problem' }),
+    ).toHaveFocus();
+    await user.click(screen.getByRole('button', { name: 'Dodaj: Problem' }));
+    expect(
+      screen.getByRole('textbox', { name: 'Nowy element: Problem' }),
+    ).toHaveFocus();
+    await user.keyboard('{Escape}');
+    expect(
+      screen.getByRole('button', { name: 'Dodaj: Problem' }),
+    ).toHaveFocus();
+  });
+
+  it('moves focus to a neighbouring chip or the add button on removal', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    // Problem group: samotność, brak transportu
+    await user.click(screen.getByRole('button', { name: 'Usuń samotność' }));
+    expect(
+      screen.getByRole('button', { name: 'Usuń brak transportu' }),
+    ).toHaveFocus();
+    await user.click(
+      screen.getByRole('button', { name: 'Usuń brak transportu' }),
+    );
+    expect(
+      screen.getByRole('button', { name: 'Dodaj: Problem' }),
+    ).toHaveFocus();
+  });
+
+  it('moves focus to the previous chip when the last one is removed', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    await user.click(
+      screen.getByRole('button', { name: 'Usuń brak transportu' }),
+    );
+    expect(
+      screen.getByRole('button', { name: 'Usuń samotność' }),
+    ).toHaveFocus();
+  });
+});
+
 describe('M4 results', (): void => {
   async function reachResults(user: UserEvent): Promise<void> {
     await reachProblemCard(user);

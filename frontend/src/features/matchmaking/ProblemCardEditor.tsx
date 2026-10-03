@@ -1,8 +1,11 @@
 import {
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type KeyboardEvent,
   type ReactElement,
+  type RefObject,
 } from 'react';
 import { Link } from 'react-router';
 
@@ -49,7 +52,37 @@ export function ProblemCardEditor({
       startingAnswers(initial, initialAnswers),
   );
 
+  const root: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);
+  const pendingFocus: RefObject<string | null> = useRef<string | null>(null);
+
+  // Runs after every render; moves focus to a control that replaced the
+  // one the user just activated.
+  useEffect((): void => {
+    const target: string | null = pendingFocus.current;
+    if (target === null || root.current === null) {
+      return;
+    }
+    pendingFocus.current = null;
+    for (const element of root.current.querySelectorAll<HTMLElement>(
+      '[data-focus]',
+    )) {
+      if (element.dataset['focus'] === target) {
+        element.focus();
+        return;
+      }
+    }
+  });
+
   function removeChip(groupId: string, chip: string): void {
+    const chips: readonly string[] =
+      groups.find((group: ChipGroup): boolean => group.id === groupId)?.chips ??
+      [];
+    const index: number = chips.indexOf(chip);
+    const neighbour: string | undefined = chips[index + 1] ?? chips[index - 1];
+    pendingFocus.current =
+      neighbour === undefined
+        ? `add:${groupId}`
+        : `remove:${groupId}:${neighbour}`;
     setGroups((current: readonly ChipGroup[]): readonly ChipGroup[] =>
       current.map((group: ChipGroup): ChipGroup =>
         group.id === groupId
@@ -75,6 +108,11 @@ export function ProblemCardEditor({
         ),
       );
     }
+    cancelAdd(groupId);
+  }
+
+  function cancelAdd(groupId: string): void {
+    pendingFocus.current = `add:${groupId}`;
     setAdding(null);
     setNewChip('');
   }
@@ -95,7 +133,7 @@ export function ProblemCardEditor({
   }
 
   return (
-    <>
+    <div ref={root} className={styles['root']}>
       <div className={styles['columns']}>
         <section className={styles['summaryCard']}>
           <div className={styles['summaryHead']}>
@@ -104,6 +142,7 @@ export function ProblemCardEditor({
               <button
                 type="button"
                 className={styles['textButton']}
+                data-focus="edit-summary"
                 onClick={(): void => {
                   setDraftSummary(summary);
                 }}
@@ -120,6 +159,7 @@ export function ProblemCardEditor({
             <div className={styles['editor']}>
               <textarea
                 aria-label="Streszczenie"
+                autoFocus
                 className={styles['textarea']}
                 value={draftSummary}
                 onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
@@ -128,6 +168,7 @@ export function ProblemCardEditor({
               />
               <Button
                 onClick={(): void => {
+                  pendingFocus.current = 'edit-summary';
                   setSummary(draftSummary.trim());
                   setDraftSummary(null);
                 }}
@@ -147,6 +188,7 @@ export function ProblemCardEditor({
                       <button
                         type="button"
                         aria-label={`Usuń ${chip}`}
+                        data-focus={`remove:${group.id}:${chip}`}
                         className={styles['remove']}
                         onClick={(): void => {
                           removeChip(group.id, chip);
@@ -181,8 +223,7 @@ export function ProblemCardEditor({
                           addChip(group.id);
                         }
                         if (event.key === 'Escape') {
-                          setAdding(null);
-                          setNewChip('');
+                          cancelAdd(group.id);
                         }
                       }}
                     />
@@ -190,6 +231,7 @@ export function ProblemCardEditor({
                     <button
                       type="button"
                       aria-label={`Dodaj: ${group.label}`}
+                      data-focus={`add:${group.id}`}
                       className={styles['add']}
                       onClick={(): void => {
                         setAdding(group.id);
@@ -260,6 +302,6 @@ export function ProblemCardEditor({
           ← Wróć
         </Link>
       </div>
-    </>
+    </div>
   );
 }
