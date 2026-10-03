@@ -1,0 +1,264 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.625rem;
+  width: 100%;
+  max-width: 74rem;
+  margin-inline: auto;
+  padding: 2.75rem 2rem 3.5rem;
+}
+
+.title {
+  font-size: 2.625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1.75rem 2rem;
+  border: 1.5px dashed var(--c-line-strong);
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.loadingChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  padding-top: 0.5rem;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.625rem 1.875rem;
+  border: 1.5px dashed var(--c-muted);
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.summaryHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.textButton {
+  min-height: var(--target);
+  padding: 0 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--c-primary);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.textButton:hover {
+  color: var(--c-primary-dark);
+}
+
+.summary {
+  font-size: 1.375rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.textarea {
+  display: block;
+  width: 100%;
+  field-sizing: content;
+  min-height: 9rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--c-primary);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  font-size: 1.375rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding-top: 1.125rem;
+  border-top: 1px solid var(--c-line);
+}
+
+.group {
+  display: grid;
+  grid-template-columns: minmax(0, 10.625rem) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.groupLabel {
+  color: var(--c-muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: var(--target);
+  padding: 0 0 0 1rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--radius);
+  background: var(--c-surface);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.remove {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--target);
+  height: var(--target);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--c-ink);
+  font-size: 0.9375rem;
+}
+
+.removeMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--c-white);
+}
+
+.add {
+  min-height: var(--target);
+  padding: 0 1rem;
+  border: 1px dashed var(--c-line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--c-ink-2);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.addInput {
+  width: 12rem;
+  max-width: 100%;
+  min-height: var(--target);
+  padding: 0 0.75rem;
+  border: 2px solid var(--c-primary);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  font-size: 1.0625rem;
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.questionsHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.questionsTitle {
+  font-size: 1.3125rem;
+}
+
+.questionsLead {
+  color: var(--c-muted);
+  font-size: 1.0625rem;
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1.125rem 1.25rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.questionTitle {
+  padding: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skip {
+  min-height: var(--target);
+  padding: 0 0.625rem;
+  border: none;
+  background: transparent;
+  color: var(--c-muted);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  align-items: center;
+}
+
+@media (width <= 75rem) {
+  .columns {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+
+  .summaryCard {
+    padding: 1.5rem;
+  }
+
+  .group {
+    grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
+  }
+}

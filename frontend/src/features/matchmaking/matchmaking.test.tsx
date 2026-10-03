@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
@@ -121,6 +121,151 @@ describe('M2 preview', (): void => {
 
   it('redirects to the start when opened without a description', (): void => {
     const { router } = renderApp('/znajdz/podglad');
+    expect(router.state.location.pathname).toBe('/');
+  });
+});
+
+async function reachProblemCard(user: UserEvent): Promise<void> {
+  await user.click(screen.getByRole('button', { name: 'Dalej →' }));
+  await screen.findByText('Zamiany (5)');
+  await user.click(
+    screen.getByRole('button', { name: 'Akceptuję, szukaj dalej →' }),
+  );
+  await screen.findByRole('button', { name: 'Usuń samotność' });
+}
+
+describe('M3 problem card', (): void => {
+  it('shows the AI summary, chips and suggested answers', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Sprawdź, czy dobrze rozumiemy',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Sugestia AI, do weryfikacji')).toBeInTheDocument();
+    const question: HTMLElement = screen.getByRole('group', {
+      name: 'Kto miałby wdrażać?',
+    });
+    expect(
+      within(question).getByRole('button', { name: 'Gmina z NGO' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('removes and adds chips', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    await user.click(
+      screen.getByRole('button', { name: 'Usuń brak transportu' }),
+    );
+    expect(screen.queryByText('brak transportu')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Dodaj: Problem' }));
+    await user.type(
+      screen.getByRole('textbox', { name: 'Nowy element: Problem' }),
+      'brak opieki{Enter}',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Usuń brak opieki' }),
+    ).toBeInTheDocument();
+  });
+
+  it('selects one answer per question and can skip', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    const question: HTMLElement = screen.getByRole('group', {
+      name: 'Kto miałby wdrażać?',
+    });
+    await user.click(within(question).getByRole('button', { name: 'NGO' }));
+    expect(
+      within(question).getByRole('button', { name: 'NGO' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    expect(
+      within(question).getByRole('button', { name: 'Gmina z NGO' }),
+    ).toHaveAttribute('aria-pressed', 'false');
+    await user.click(
+      screen.getByRole('button', { name: 'Pomiń: Kto miałby wdrażać?' }),
+    );
+    expect(
+      within(question).getByRole('button', { name: 'NGO' }),
+    ).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('edits the summary in place', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachProblemCard(user);
+    await user.click(
+      screen.getByRole('button', { name: 'Popraw streszczenie' }),
+    );
+    const field: HTMLElement = screen.getByRole('textbox', {
+      name: 'Streszczenie',
+    });
+    await user.clear(field);
+    await user.type(field, 'seniorzy są samotni.');
+    await user.click(
+      screen.getByRole('button', { name: 'Zapisz streszczenie' }),
+    );
+    expect(screen.getByText(/seniorzy są samotni\./)).toBeInTheDocument();
+  });
+});
+
+describe('M4 results', (): void => {
+  async function reachResults(user: UserEvent): Promise<void> {
+    await reachProblemCard(user);
+    await user.click(
+      screen.getByRole('button', { name: 'Szukaj rozwiązań →' }),
+    );
+    await screen.findByRole('heading', {
+      level: 3,
+      name: 'Sąsiedzkie Telefony Życzliwości',
+    });
+  }
+
+  it('shows three matches with their reasons, similar problems and local stats', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachResults(user);
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Rozwiązania dla Twojego problemu',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('article')).toHaveLength(3);
+    expect(
+      await screen.findByText(/Wolontariusze dzwonią codziennie/),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Spotkania przyjeżdżają/),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Młodzież uczy seniorów/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Starsze osoby we wsiach bez komunikacji publicznej/),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText('Osoby 65+ mieszkające samotnie'),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the feedback buttons mutually exclusive', async (): Promise<void> => {
+    const { user } = renderApp('/');
+    await reachResults(user);
+    const useful: HTMLElement = screen.getByRole('button', {
+      name: 'Przydatne: Cyfrowy Wnuk',
+    });
+    const useless: HTMLElement = screen.getByRole('button', {
+      name: 'Nieprzydatne: Cyfrowy Wnuk',
+    });
+    await user.click(useful);
+    expect(useful).toHaveAttribute('aria-pressed', 'true');
+    await user.click(useless);
+    expect(useful).toHaveAttribute('aria-pressed', 'false');
+    expect(useless).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('redirects to the start when opened without a description', (): void => {
+    const { router } = renderApp('/znajdz/wyniki');
     expect(router.state.location.pathname).toBe('/');
   });
 });
