@@ -1,5 +1,7 @@
 import { Navigate, type RouteObject } from 'react-router';
 
+import { PreviewScreen } from '../features/matchmaking/PreviewScreen';
+import { StartScreen } from '../features/matchmaking/StartScreen';
 import { DemoStub } from '../shell/DemoStub';
 import { PublicLayout } from '../shell/PublicLayout';
 import { Root } from '../shell/Root';
@@ -12,7 +14,11 @@ export const routes: RouteObject[] = [
     children: [
       {
         element: <PublicLayout />,
-        children: [{ path: '*', element: <DemoStub /> }],
+        children: [
+          { index: true, element: <StartScreen /> },
+          { path: 'znajdz/podglad', element: <PreviewScreen /> },
+          { path: '*', element: <DemoStub /> },
+        ],
       },
       {
         path: 'rops',
