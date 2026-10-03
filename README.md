@@ -103,6 +103,10 @@ Scenariusz w sześciu krokach: opis problemu (`/`) → wyniki i karta innowacji 
 „Dostosuj do mojej gminy” → fiszka pomysłu (`/zglos-pomysl`) → kolejka i wątek
 w panelu ROPS (`/rops/kolejka`) → trendy potrzeb (`/rops/trendy`).
 
+Biblioteka innowacji (`/biblioteka`) pokazuje 12 przykładowych innowacji
+z wyszukiwaniem, filtrami obszaru, typu i kosztu oraz sortowaniem. Stan filtrów
+jest zapisany w adresie strony, więc widok można wysłać linkiem.
+
 Funkcje bez makiety (m.in. „Prosty język”, dyktowanie, załączniki, PDF)
 pokazują komunikat, że nie są dostępne w wersji demonstracyjnej. Układ jest
 przygotowany dla ekranów o szerokości od 1024 px.
