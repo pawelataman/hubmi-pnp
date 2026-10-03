@@ -11,6 +11,7 @@ import type {
   DraftSection,
   IdeaForm,
   Innovation,
+  InnovationSummary,
   InstitutionProfile,
   LocalStats,
   MatchResults,
@@ -71,6 +72,24 @@ function wait(ms: number, signal?: AbortSignal): Promise<void> {
       );
     },
   );
+}
+
+/** Picks the summary fields, so the list never leaks card content. */
+function toSummary(innovation: Innovation): InnovationSummary {
+  return {
+    id: innovation.id,
+    name: innovation.name,
+    area: innovation.area,
+    kind: innovation.kind,
+    summary: innovation.summary,
+    verified: innovation.verified,
+    cost: innovation.cost,
+    costBand: innovation.costBand,
+    rating: innovation.rating,
+    reviewCount: innovation.reviewCount,
+    seeksTesters: innovation.seeksTesters,
+    hasVideo: innovation.hasVideo,
+  };
 }
 
 export function createMockApi(options: MockApiOptions = {}): HubApi {
@@ -171,6 +190,13 @@ export function createMockApi(options: MockApiOptions = {}): HubApi {
         draft,
         options.now?.() ?? new Date(),
       );
+    },
+
+    async listInnovations(
+      signal?: AbortSignal,
+    ): Promise<readonly InnovationSummary[]> {
+      await pause(signal);
+      return Object.values(innovations).map(toSummary);
     },
 
     async getInnovation(id: string, signal?: AbortSignal): Promise<Innovation> {

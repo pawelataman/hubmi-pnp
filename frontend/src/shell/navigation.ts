@@ -58,7 +58,6 @@ export function requiresPersona(pathname: string): boolean {
 }
 
 export const STUB_TITLES: Readonly<Record<string, string>> = {
-  '/biblioteka': 'Biblioteka innowacji',
   '/wyzwania': 'Wyzwania Małopolski',
   '/nabory': 'Nabory',
   '/kontakt': 'Kontakt z ROPS',

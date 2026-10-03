@@ -7,6 +7,7 @@ import { CasesScreen } from '../features/cases/CasesScreen';
 import { IdeaScreen } from '../features/idea/IdeaScreen';
 import { ExpertInnovationsScreen } from '../features/expert/ExpertInnovationsScreen';
 import { InnovationScreen } from '../features/innovation/InnovationScreen';
+import { LibraryScreen } from '../features/library/LibraryScreen';
 import { OnboardingScreen } from '../features/onboarding/OnboardingScreen';
 import { CuratorThreadScreen } from '../features/rops/CuratorThreadScreen';
 import { QueueScreen } from '../features/rops/QueueScreen';
@@ -34,6 +35,7 @@ export const routes: RouteObject[] = [
           { path: 'znajdz/podglad', element: <PreviewScreen /> },
           { path: 'znajdz/doprecyzowanie', element: <ProblemCardScreen /> },
           { path: 'znajdz/wyniki', element: <ResultsScreen /> },
+          { path: 'biblioteka', element: <LibraryScreen /> },
           { path: 'innowacje/:id', element: <InnovationScreen /> },
           {
             path: 'innowacje/:id/dostosuj',

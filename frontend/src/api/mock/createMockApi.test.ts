@@ -5,6 +5,7 @@ import type { HubApi } from '../HubApi';
 import type {
   DraftSection,
   InstitutionProfile,
+  InnovationSummary,
   RedactionResult,
   Replacement,
 } from '../types';
@@ -93,5 +94,38 @@ describe('createMockApi', (): void => {
     expect((await api.listNotifications('maria'))[0]?.caseId).toBe(
       'HUB-2026-0142',
     );
+  });
+
+  it('lists a summary for every innovation and each one opens', async (): Promise<void> => {
+    const api: HubApi = createMockApi({ delayMs: 0 });
+    const list: readonly InnovationSummary[] = await api.listInnovations();
+    expect(list).toHaveLength(12);
+    expect(list[0]).toEqual({
+      id: 'telefony-zyczliwosci',
+      name: 'Sąsiedzkie Telefony Życzliwości',
+      area: 'Seniorzy',
+      kind: 'usługa',
+      summary:
+        'Wolontariusze codziennie dzwonią do samotnych seniorów i reagują, gdy coś ich niepokoi.',
+      verified: '05.2026',
+      cost: 'ok. 8–15 tys. zł / rok',
+      costBand: 'mid',
+      rating: '4,6',
+      reviewCount: 12,
+      seeksTesters: true,
+      hasVideo: true,
+    });
+    for (const item of list) {
+      expect((await api.getInnovation(item.id)).name).toBe(item.name);
+    }
+  });
+
+  it('rejects listing innovations when the signal is already aborted', async (): Promise<void> => {
+    const api: HubApi = createMockApi({ delayMs: 0 });
+    const controller: AbortController = new AbortController();
+    controller.abort();
+    await expect(api.listInnovations(controller.signal)).rejects.toMatchObject({
+      name: 'AbortError',
+    });
   });
 });

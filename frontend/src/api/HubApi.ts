@@ -9,6 +9,7 @@ import type {
   DraftSection,
   IdeaForm,
   Innovation,
+  InnovationSummary,
   InstitutionProfile,
   LocalStats,
   MatchResults,
@@ -62,6 +63,7 @@ export interface HubApi {
     draft: ExpertCommentDraft,
     signal?: AbortSignal,
   ): Promise<ExpertComment>;
+  listInnovations(signal?: AbortSignal): Promise<readonly InnovationSummary[]>;
   getInnovation(id: string, signal?: AbortSignal): Promise<Innovation>;
   getMunicipalityFacts(
     municipality: string,
