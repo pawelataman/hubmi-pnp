@@ -15,9 +15,9 @@ import { ResultsScreen } from '../features/matchmaking/ResultsScreen';
 import { StartScreen } from '../features/matchmaking/StartScreen';
 import { DemoStub } from '../shell/DemoStub';
 import { PublicLayout } from '../shell/PublicLayout';
+import { RequirePersona } from '../shell/RequirePersona';
 import { Root } from '../shell/Root';
 import { RopsLayout } from '../shell/RopsLayout';
-import { RequirePersona } from './RequirePersona';
 
 export const routes: RouteObject[] = [
   {

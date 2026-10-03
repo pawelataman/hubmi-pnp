@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { Link } from 'react-router';
 
 import type { HubApi } from '../../api/HubApi';
-import { STATUS_VIEW } from '../../api/status';
+import { STATUS_VIEW } from '../thread/status';
 import type { CaseSummary, PersonaId } from '../../api/types';
 import { useApi, useSession } from '../../app/contexts';
 import { useAsync, type AsyncResult } from '../../app/useAsync';

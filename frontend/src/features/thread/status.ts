@@ -1,5 +1,5 @@
-import type { StatusTone } from '../ui/StatusPill';
-import type { CaseStatus } from './types';
+import type { CaseStatus } from '../../api/types';
+import type { StatusTone } from '../../ui/StatusPill';
 
 export const STATUS_VIEW: Readonly<
   Record<CaseStatus, { readonly tone: StatusTone; readonly icon: string }>

@@ -33,6 +33,28 @@ describe('store', (): void => {
     expect(page).toMatchObject({ total: 38, open: 38, fresh: 12, overdue: 4 });
   });
 
+  it('opens a seeded case with a message from its author', (): void => {
+    const store: Store = createStore(fixedNow);
+    expect(store.getCase('HUB-2026-0138').messages[0]).toMatchObject({
+      from: 'maria',
+      authorName: 'Maria N.',
+      initials: 'MN',
+      role: 'Autorka pomysłu',
+    });
+    expect(store.getCase('HUB-2026-0141').messages[0]).toMatchObject({
+      from: 'ewa',
+      authorName: 'Ewa W.',
+      initials: 'EW',
+      role: 'Pracownica GOPS',
+    });
+    expect(store.getCase('HUB-2026-0140').messages[0]).toMatchObject({
+      from: null,
+      authorName: 'Zgłaszający',
+      initials: 'Z',
+      role: 'Zgłaszający',
+    });
+  });
+
   it('filters the queue by type', (): void => {
     const store: Store = createStore(fixedNow);
     const page: QueuePage = store.listQueue({ type: 'Pomysł' });

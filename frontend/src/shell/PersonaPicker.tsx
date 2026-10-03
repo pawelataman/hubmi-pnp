@@ -85,7 +85,7 @@ export function PersonaPicker({
         <h2 className={styles['title']}>Wybierz osobę</h2>
         <p className={styles['lead']}>
           {requiredRole === 'curator'
-            ? 'Panel ROPS jest dostępny dla kuratora.'
+            ? 'Panel ROPS jest dostępny dla kuratorki ROPS.'
             : 'To wersja demonstracyjna. Zaloguj się jako jedna z przykładowych osób.'}
         </p>
         <ul className={styles['list']}>

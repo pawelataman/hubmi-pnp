@@ -2,8 +2,9 @@ import type { ReactElement, ReactNode } from 'react';
 import { useNavigate, type NavigateFunction } from 'react-router';
 
 import type { PersonaRole } from '../api/types';
-import { PersonaPicker } from '../shell/PersonaPicker';
-import { useSession } from './contexts';
+
+import { useSession } from '../app/contexts';
+import { PersonaPicker } from './PersonaPicker';
 
 interface RequirePersonaProps {
   /** `user` admits any signed-in persona; `curator` only the curator. */
@@ -28,7 +29,7 @@ export function RequirePersona({
       requiredRole={role}
       onDone={(chosen: boolean): void => {
         if (!chosen) {
-          void navigate('/');
+          void navigate('/', { replace: true });
         }
       }}
     />

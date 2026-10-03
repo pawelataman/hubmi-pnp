@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { Link, useParams } from 'react-router';
 
-import { STATUS_VIEW } from '../../api/status';
+import { STATUS_VIEW } from '../thread/status';
 import type { CaseThread, Message } from '../../api/types';
 import { useSession } from '../../app/contexts';
 import { cx } from '../../ui/cx';

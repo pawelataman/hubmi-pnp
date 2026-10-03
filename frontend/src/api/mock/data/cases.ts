@@ -6,6 +6,7 @@ import type {
   Notification,
   PersonaId,
 } from '../../types';
+import { PERSONAS } from '../../personas';
 
 export interface StoredCase {
   id: string;
@@ -30,13 +31,17 @@ export const QUEUE_BASE: {
   readonly overdue: number;
 } = { total: 38, fresh: 12, overdue: 4 };
 
-function placeholderMessage(id: string, date: string): Message {
+function placeholderMessage(
+  id: string,
+  date: string,
+  authorId: PersonaId | null,
+): Message {
   return {
     id: `${id}-m1`,
-    from: null,
-    authorName: 'Zgłaszający',
-    initials: 'Z',
-    role: 'Zgłaszający',
+    from: authorId,
+    authorName: authorId === null ? 'Zgłaszający' : PERSONAS[authorId].name,
+    initials: authorId === null ? 'Z' : PERSONAS[authorId].initials,
+    role: authorId === null ? 'Zgłaszający' : PERSONAS[authorId].threadRole,
     time: `${date}, 09:00`,
     text: 'Zgłoszenie przykładowe.',
   };
@@ -73,7 +78,7 @@ function seedCase(
       answered: status === 'Odpowiedziano' ? date : null,
       closed: null,
     },
-    messages: [placeholderMessage(id, date)],
+    messages: [placeholderMessage(id, date, authorId)],
   };
 }
 

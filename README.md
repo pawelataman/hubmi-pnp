@@ -107,4 +107,5 @@ Funkcje bez makiety (m.in. „Prosty język”, dyktowanie, załączniki, PDF)
 pokazują komunikat, że nie są dostępne w wersji demonstracyjnej. Układ jest
 przygotowany dla ekranów o szerokości od 1024 px.
 
-Matchmaking opisany w `IDEATION.md` nie został jeszcze zaimplementowany.
+Dopasowywanie oparte na embeddingach, opisane w `IDEATION.md`, nie zostało
+jeszcze zaimplementowane — wyniki w demie są przykładowe.
