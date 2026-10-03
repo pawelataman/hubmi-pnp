@@ -46,6 +46,17 @@ export function showsAiNotice(pathname: string): boolean {
   );
 }
 
+const GUARDED_ADAPTATION: RegExp = /^\/innowacje\/[^/]+\/(dostosuj|szkic)$/;
+
+/** Pages of the public layout that only a signed-in persona can see. */
+export function requiresPersona(pathname: string): boolean {
+  return (
+    pathname === '/moje-sprawy' ||
+    pathname.startsWith('/moje-sprawy/') ||
+    GUARDED_ADAPTATION.test(pathname)
+  );
+}
+
 export const STUB_TITLES: Readonly<Record<string, string>> = {
   '/biblioteka': 'Biblioteka innowacji',
   '/wyzwania': 'Wyzwania Małopolski',

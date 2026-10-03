@@ -41,6 +41,25 @@ describe('K1 idea form', (): void => {
     ).not.toBeInTheDocument();
   });
 
+  it('clears a field error as soon as the field changes', async (): Promise<void> => {
+    const { user } = renderApp('/zglos-pomysl');
+    const name: HTMLElement = screen.getByRole('textbox', {
+      name: '1. Nazwa robocza',
+    });
+    await user.clear(name);
+    await user.click(screen.getByRole('button', { name: 'Wyślij fiszkę' }));
+    const alert: HTMLElement = screen.getByRole('alert');
+    expect(name).toHaveAttribute('aria-invalid', 'true');
+    expect(name).toHaveAccessibleDescription(/Podaj nazwę roboczą\./);
+    // The M1 pattern: the error sits between the label and the control.
+    expect(
+      alert.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).not.toBe(0);
+    await user.type(name, 'K');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(name).toHaveAttribute('aria-invalid', 'false');
+  });
+
   it('sends the idea and shows the case number and reply date', async (): Promise<void> => {
     const { user } = renderApp('/zglos-pomysl', {
       api: createMockApi({ delayMs: 0, now: fixedNow }),
@@ -165,6 +184,27 @@ describe('my cases and the author thread', (): void => {
     await user.click(screen.getByRole('button', { name: 'Spróbuj ponownie' }));
     expect(await screen.findAllByRole('article')).toHaveLength(4);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('hides a case from a persona who did not send it', async (): Promise<void> => {
+    renderApp('/moje-sprawy/HUB-2026-0142', { persona: 'ewa' });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Nie znaleziono zgłoszenia.',
+    );
+    expect(
+      screen.getByRole('link', { name: '← Moje sprawy' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', { name: 'Twoja odpowiedź' }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('article')).not.toBeInTheDocument();
+  });
+
+  it('shows a seeded case to its author with their own first message', async (): Promise<void> => {
+    renderApp('/moje-sprawy/HUB-2026-0141', { persona: 'ewa' });
+    const messages: HTMLElement[] = await screen.findAllByRole('article');
+    expect(messages[0]).toHaveTextContent('Ty');
+    expect(messages[0]).not.toHaveTextContent('Zgłaszający');
   });
 
   it('reports an unknown case', async (): Promise<void> => {

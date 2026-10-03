@@ -2,18 +2,20 @@ import { useState, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import type { HubApi } from '../api/HubApi';
-import type { QueuePage } from '../api/types';
+import type { Persona, QueuePage } from '../api/types';
 import { useApi, useSession, useTextSize, useToast } from '../app/contexts';
 import { useAsync, type AsyncResult } from '../app/useAsync';
 import { cx } from '../ui/cx';
 import { isNavActive, SIDE_NAV, type NavItem } from './navigation';
 import { PersonaPicker } from './PersonaPicker';
 import styles from './RopsSidebar.module.css';
+import { useLeaveThen } from './useLeaveThen';
 
 export function RopsSidebar(): ReactElement {
   const api: HubApi = useApi();
   const { pathname } = useLocation();
-  const { persona, signOut } = useSession();
+  const { persona, signIn, signOut } = useSession();
+  const leaveThen: (change: () => void) => void = useLeaveThen();
   const { cycle } = useTextSize();
   const { stub } = useToast();
   const [picking, setPicking] = useState<boolean>(false);
@@ -91,7 +93,9 @@ export function RopsSidebar(): ReactElement {
           <button
             type="button"
             className={styles['sessionLink']}
-            onClick={signOut}
+            onClick={(): void => {
+              leaveThen(signOut);
+            }}
           >
             Wyloguj
           </button>
@@ -105,6 +109,17 @@ export function RopsSidebar(): ReactElement {
           requiredRole={null}
           onDone={(): void => {
             setPicking(false);
+          }}
+          onChoose={(chosen: Persona): void => {
+            setPicking(false);
+            if (chosen.role === 'curator') {
+              signIn(chosen.id);
+            } else {
+              // The panel is curator-only: leave it before switching.
+              leaveThen((): void => {
+                signIn(chosen.id);
+              });
+            }
           }}
         />
       ) : null}

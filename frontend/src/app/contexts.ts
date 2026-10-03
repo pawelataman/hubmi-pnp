@@ -76,6 +76,8 @@ export function useToast(): ToastValue {
 export interface NotificationsValue {
   readonly items: readonly Notification[];
   readonly unread: number;
+  /** True only until the current persona's list has loaded for the first time. */
+  readonly loading: boolean;
   readonly markAllRead: () => void;
 }
 export const NotificationsContext: Context<NotificationsValue | null> =

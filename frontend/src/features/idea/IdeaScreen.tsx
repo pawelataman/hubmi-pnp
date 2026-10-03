@@ -1,10 +1,7 @@
 import {
-  useEffect,
-  useRef,
   useState,
   type ChangeEvent,
   type ReactElement,
-  type RefObject,
   type SyntheticEvent,
 } from 'react';
 import { Link } from 'react-router';
@@ -13,6 +10,7 @@ import { EXAMPLE_IDEA, IDEA_STAGES } from '../../api/examples';
 import type { HubApi } from '../../api/HubApi';
 import type { IdeaForm, IdeaStage, SubmittedCase } from '../../api/types';
 import { useApi, useSession, useToast } from '../../app/contexts';
+import { usePendingFocus } from '../../app/usePendingFocus';
 import { AiBadge } from '../../ui/AiBadge';
 import { Button } from '../../ui/Button';
 import { buttonClass } from '../../ui/buttonClass';
@@ -29,7 +27,10 @@ import {
 
 type TextField = 'name' | 'summary' | 'audience' | 'problem' | 'email';
 
-/** Where focus should go once the element it targets has been rendered. */
+/**
+ * Where focus should go once the element it targets has been rendered.
+ * Every field with an error is marked `invalid`; the first one takes focus.
+ */
 type FocusTarget = 'invalid' | 'heading' | 'first' | 'submit';
 
 export function IdeaScreen(): ReactElement {
@@ -41,29 +42,7 @@ export function IdeaScreen(): ReactElement {
   const [sending, setSending] = useState<boolean>(false);
   const [failed, setFailed] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<SubmittedCase | null>(null);
-  const root: RefObject<HTMLElement | null> = useRef<HTMLElement>(null);
-  const pendingFocus: RefObject<FocusTarget | null> =
-    useRef<FocusTarget | null>(null);
-
-  // Runs after every render. A request stays pending until its target exists,
-  // because a render that was already queued can run this effect before the
-  // render that the click caused.
-  useEffect((): void => {
-    const target: FocusTarget | null = pendingFocus.current;
-    if (target === null || root.current === null) {
-      return;
-    }
-    const selector: string =
-      target === 'invalid'
-        ? '[aria-invalid="true"]'
-        : `[data-focus="${target}"]`;
-    const element: HTMLElement | null =
-      root.current.querySelector<HTMLElement>(selector);
-    if (element !== null) {
-      pendingFocus.current = null;
-      element.focus();
-    }
-  });
+  const { rootRef, requestFocus } = usePendingFocus<FocusTarget>();
 
   function change(patch: Partial<IdeaForm>): void {
     setForm((current: IdeaForm): IdeaForm => ({ ...current, ...patch }));
@@ -76,6 +55,10 @@ export function IdeaScreen(): ReactElement {
       event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ): void => {
       change({ [key]: event.target.value });
+      setErrors((current: IdeaErrors): IdeaErrors => {
+        const { [key]: removed, ...rest } = current;
+        return removed === undefined ? current : rest;
+      });
     };
   }
 
@@ -87,10 +70,10 @@ export function IdeaScreen(): ReactElement {
         form,
         persona?.id ?? null,
       );
-      pendingFocus.current = 'heading';
+      requestFocus('heading');
       setSubmitted(result);
     } catch {
-      pendingFocus.current = 'submit';
+      requestFocus('submit');
       setFailed(true);
     } finally {
       setSending(false);
@@ -104,12 +87,12 @@ export function IdeaScreen(): ReactElement {
     if (Object.keys(found).length === 0) {
       void send();
     } else {
-      pendingFocus.current = 'invalid';
+      requestFocus('invalid');
     }
   }
 
   function reset(): void {
-    pendingFocus.current = 'first';
+    requestFocus('first');
     setForm(EXAMPLE_IDEA);
     setErrors({});
     setFailed(false);
@@ -126,41 +109,46 @@ export function IdeaScreen(): ReactElement {
   function invalidProps(key: IdeaField): {
     readonly 'aria-invalid': boolean;
     readonly 'aria-describedby': string | undefined;
+    readonly 'data-focus': FocusTarget | undefined;
   } {
     const bad: boolean = errors[key] !== undefined;
     return {
       'aria-invalid': bad,
       'aria-describedby': bad ? `idea-${key}-error` : undefined,
+      'data-focus': bad ? 'invalid' : undefined,
     };
   }
 
   if (submitted !== null) {
     return (
-      <main
-        ref={root}
-        role="status"
-        aria-live="polite"
-        className={styles['success']}
-      >
-        <span className={styles['check']} aria-hidden="true">
-          ✓
-        </span>
-        <h1
-          tabIndex={-1}
-          data-focus="heading"
-          className={styles['successTitle']}
+      <main ref={rootRef} className={styles['success']}>
+        <div
+          role="status"
+          aria-live="polite"
+          className={styles['successStatus']}
         >
-          Fiszka wysłana. Dziękujemy!
-        </h1>
-        <div className={styles['caseNumber']}>
-          <span className={styles['caseNumberLabel']}>Numer zgłoszenia</span>
-          <strong className={styles['caseNumberValue']}>{submitted.id}</strong>
+          <span className={styles['check']} aria-hidden="true">
+            ✓
+          </span>
+          <h1
+            tabIndex={-1}
+            data-focus="heading"
+            className={styles['successTitle']}
+          >
+            Fiszka wysłana. Dziękujemy!
+          </h1>
+          <div className={styles['caseNumber']}>
+            <span className={styles['caseNumberLabel']}>Numer zgłoszenia</span>
+            <strong className={styles['caseNumberValue']}>
+              {submitted.id}
+            </strong>
+          </div>
+          <p className={styles['successText']}>
+            Kurator ROPS przeczyta pomysł <strong>„{submitted.title}”</strong> i
+            odpowie do <strong>{submitted.replyBy}</strong>. Powiadomimy Cię w
+            aplikacji i e-mailem.
+          </p>
         </div>
-        <p className={styles['successText']}>
-          Kurator ROPS przeczyta pomysł <strong>„{submitted.title}”</strong> i
-          odpowie do <strong>{submitted.replyBy}</strong>. Powiadomimy Cię w
-          aplikacji i e-mailem.
-        </p>
         <div className={styles['successActions']}>
           <Link to="/moje-sprawy" className={buttonClass('primary', 'lg')}>
             Przejdź do Moich spraw
@@ -174,7 +162,7 @@ export function IdeaScreen(): ReactElement {
   }
 
   return (
-    <main ref={root} className={styles['main']}>
+    <main ref={rootRef} className={styles['main']}>
       <div className={styles['intro']}>
         <div className={styles['introText']}>
           <span className={styles['eyebrow']}>Kreator pomysłów</span>
@@ -196,10 +184,10 @@ export function IdeaScreen(): ReactElement {
             <label htmlFor="idea-name" className={styles['label']}>
               1. Nazwa robocza
             </label>
+            {error('name')}
             <input
               id="idea-name"
               type="text"
-              data-focus="first"
               className={cx(
                 styles['input'],
                 errors.name !== undefined && styles['invalid'],
@@ -207,15 +195,17 @@ export function IdeaScreen(): ReactElement {
               value={form.name}
               onChange={text('name')}
               {...invalidProps('name')}
+              data-focus={errors.name !== undefined ? 'invalid' : 'first'}
             />
-            {error('name')}
           </div>
           <div className={styles['field']}>
             <label htmlFor="idea-summary" className={styles['label']}>
               2. Istota pomysłu w jednym zdaniu
             </label>
+            {error('summary')}
             <textarea
               id="idea-summary"
+              data-focus={errors.summary !== undefined ? 'invalid' : undefined}
               className={cx(
                 styles['textarea'],
                 errors.summary !== undefined && styles['invalid'],
@@ -229,7 +219,6 @@ export function IdeaScreen(): ReactElement {
                   : 'idea-summary-count'
               }
             />
-            {error('summary')}
             <span id="idea-summary-count" className={styles['counter']}>
               {`${String(form.summary.length)} / ${String(SUMMARY_LIMIT)} znaków`}
             </span>
@@ -239,6 +228,7 @@ export function IdeaScreen(): ReactElement {
               <label htmlFor="idea-audience" className={styles['label']}>
                 3. Dla kogo
               </label>
+              {error('audience')}
               <input
                 id="idea-audience"
                 type="text"
@@ -250,12 +240,12 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('audience')}
                 {...invalidProps('audience')}
               />
-              {error('audience')}
             </div>
             <div className={styles['field']}>
               <label htmlFor="idea-problem" className={styles['label']}>
                 4. Jaki problem rozwiązuje
               </label>
+              {error('problem')}
               <input
                 id="idea-problem"
                 type="text"
@@ -267,7 +257,6 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('problem')}
                 {...invalidProps('problem')}
               />
-              {error('problem')}
             </div>
           </div>
           <div
@@ -310,6 +299,7 @@ export function IdeaScreen(): ReactElement {
                 E-mail do odpowiedzi{' '}
                 <span className={styles['optional']}>(opcjonalnie)</span>
               </label>
+              {error('email')}
               <input
                 id="idea-email"
                 type="email"
@@ -321,7 +311,6 @@ export function IdeaScreen(): ReactElement {
                 onChange={text('email')}
                 {...invalidProps('email')}
               />
-              {error('email')}
             </div>
           </div>
           {failed ? (

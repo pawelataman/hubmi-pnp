@@ -84,7 +84,7 @@ describe('A6 trends', (): void => {
 
 describe('idea to notification', (): void => {
   it('carries an idea to the curator and the reply back to the author', async (): Promise<void> => {
-    const { user } = renderApp('/zglos-pomysl', { persona: 'maria' });
+    const { user, router } = renderApp('/zglos-pomysl', { persona: 'maria' });
 
     // Step 4 of the demo: the author sends an idea.
     const name: HTMLElement = screen.getByRole('textbox', {
@@ -142,11 +142,16 @@ describe('idea to notification', (): void => {
         { name: /Maria N\./ },
       ),
     );
-    // The panel now asks for a curator; leaving it returns to the start page.
-    await user.click(screen.getByRole('button', { name: 'Anuluj' }));
-    expect(await screen.findByRole('status')).toHaveTextContent(
-      'ROPS odpowiedział na Twój pomysł »Klub filmowy«',
-    );
+    // Choosing a non-curator leaves the panel for the start page.
+    expect(
+      await screen.findByText(
+        'ROPS odpowiedział na Twój pomysł »Klub filmowy«',
+      ),
+    ).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/');
+    expect(
+      screen.queryByRole('dialog', { name: 'Wybierz osobę' }),
+    ).not.toBeInTheDocument();
     expect(
       await screen.findByRole('button', {
         name: 'Powiadomienia, 4 nieprzeczytane',

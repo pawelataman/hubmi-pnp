@@ -17,9 +17,15 @@ import { Button } from '../ui/Button';
 import { cx } from '../ui/cx';
 import { Switch } from '../ui/Switch';
 import styles from './HubTopBar.module.css';
-import { isNavActive, TOP_NAV, type NavItem } from './navigation';
+import {
+  isNavActive,
+  requiresPersona,
+  TOP_NAV,
+  type NavItem,
+} from './navigation';
 import { NotificationsPopover } from './NotificationsPopover';
 import { PersonaPicker } from './PersonaPicker';
+import { useLeaveThen } from './useLeaveThen';
 
 type Panel = 'none' | 'picker' | 'bell' | 'menu';
 
@@ -29,6 +35,7 @@ export function HubTopBar(): ReactElement {
   const { cycle } = useTextSize();
   const { stub } = useToast();
   const { unread } = useNotifications();
+  const leaveThen: (change: () => void) => void = useLeaveThen();
   // A panel is open only on the page it was opened on, so navigating closes it.
   const [opened, setOpened] = useState<{ panel: Panel; on: string }>({
     panel: 'none',
@@ -195,7 +202,12 @@ export function HubTopBar(): ReactElement {
                     className={styles['menuItem']}
                     onClick={(): void => {
                       close();
-                      signOut();
+                      if (requiresPersona(pathname)) {
+                        // Leave first, so the page's guard asks nothing.
+                        leaveThen(signOut);
+                      } else {
+                        signOut();
+                      }
                     }}
                   >
                     Wyloguj

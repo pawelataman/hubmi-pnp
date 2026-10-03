@@ -6,6 +6,7 @@ import {
   type ReactElement,
   type RefObject,
 } from 'react';
+import { createPortal } from 'react-dom';
 
 import { PERSONA_IDS, PERSONAS } from '../api/personas';
 import type { Persona, PersonaId, PersonaRole } from '../api/types';
@@ -17,11 +18,17 @@ interface PersonaPickerProps {
   /** `curator` limits the list to the curator. */
   readonly requiredRole: PersonaRole | null;
   readonly onDone: (chosen: boolean) => void;
+  /**
+   * Replaces the default "sign in and close" when a persona is chosen, for a
+   * caller that has to order the sign-in with a navigation.
+   */
+  readonly onChoose?: (persona: Persona) => void;
 }
 
 export function PersonaPicker({
   requiredRole,
   onDone,
+  onChoose,
 }: PersonaPickerProps): ReactElement {
   const { signIn } = useSession();
   const dialogRef: RefObject<HTMLDivElement | null> =
@@ -69,7 +76,9 @@ export function PersonaPicker({
       requiredRole !== 'curator' || persona.role === 'curator',
   );
 
-  return (
+  // The layout roots are size containers, which makes them the containing
+  // block of fixed descendants; the backdrop must cover the viewport instead.
+  return createPortal(
     <div
       className={styles['backdrop']}
       onKeyDown={onKeyDown}
@@ -95,8 +104,12 @@ export function PersonaPicker({
                 type="button"
                 className={styles['choice']}
                 onClick={(): void => {
-                  signIn(persona.id);
-                  onDone(true);
+                  if (onChoose === undefined) {
+                    signIn(persona.id);
+                    onDone(true);
+                  } else {
+                    onChoose(persona);
+                  }
                 }}
               >
                 <span className={styles['avatar']} aria-hidden="true">
@@ -118,6 +131,7 @@ export function PersonaPicker({
           Anuluj
         </Button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

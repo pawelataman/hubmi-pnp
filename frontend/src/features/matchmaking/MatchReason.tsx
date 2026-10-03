@@ -10,21 +10,35 @@ import styles from './ResultsScreen.module.css';
 
 interface MatchReasonProps {
   readonly innovationId: string;
+  /** Called once the reason has arrived or failed to arrive. */
+  readonly onSettled: (innovationId: string) => void;
 }
 
-export function MatchReason({ innovationId }: MatchReasonProps): ReactElement {
+export function MatchReason({
+  innovationId,
+  onSettled,
+}: MatchReasonProps): ReactElement {
   const api: HubApi = useApi();
   const { state }: AsyncResult<readonly ReasonSegment[]> = useAsync<
     readonly ReasonSegment[]
   >(
     `reason:${innovationId}`,
-    (signal: AbortSignal): Promise<readonly ReasonSegment[]> =>
-      api.getMatchReason(innovationId, signal),
+    async (signal: AbortSignal): Promise<readonly ReasonSegment[]> => {
+      try {
+        return await api.getMatchReason(innovationId, signal);
+      } finally {
+        // Reported from the request, not from an effect; an aborted request
+        // (unmount, or a superseded one) reports nothing.
+        if (!signal.aborted) {
+          onSettled(innovationId);
+        }
+      }
+    },
   );
 
   if (state.status !== 'ready') {
     return (
-      <div className={styles['reason']} role="status" aria-live="polite">
+      <div className={styles['reason']}>
         <span className={styles['reasonPending']}>
           {state.status === 'error'
             ? 'Nie udało się przygotować uzasadnienia.'

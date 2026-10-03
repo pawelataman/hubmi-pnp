@@ -168,6 +168,7 @@ export function TrendsScreen(): ReactElement {
                   (tile: DistrictTile): ReactElement => (
                     <div
                       key={tile.name}
+                      role="img"
                       title={`${tile.name}: ${String(tile.value)}`}
                       aria-label={`${tile.name}: ${String(tile.value)}`}
                       className={

@@ -2,9 +2,11 @@ import {
   useEffect,
   useEffectEvent,
   useMemo,
+  useRef,
   useState,
   type ReactElement,
   type ReactNode,
+  type RefObject,
 } from 'react';
 
 import {
@@ -38,7 +40,6 @@ import {
   type ToastMessage,
   type ToastValue,
 } from './contexts';
-import { useAsync, type AsyncResult } from './useAsync';
 
 interface ChildrenProps {
   readonly children: ReactNode;
@@ -159,22 +160,53 @@ function ToastProvider({ children }: ChildrenProps): ReactElement {
   return <ToastContext value={value}>{children}</ToastContext>;
 }
 
+/** The last list that loaded, kept for the persona it belongs to. */
+interface LoadedNotifications {
+  readonly personaId: PersonaId;
+  readonly items: readonly Notification[];
+}
+
+const MARK_FAILED_MESSAGE: string = 'Nie udało się oznaczyć powiadomień.';
+
 function NotificationsProvider({ children }: ChildrenProps): ReactElement {
   const api: HubApi = useApi();
   const { persona } = useSession();
   const { show } = useToast();
   const [version, setVersion] = useState<number>(0);
+  const [loaded, setLoaded] = useState<LoadedNotifications | null>(null);
+  // Counts "mark all read" requests, so that a list requested before one of
+  // them cannot overwrite the optimistic state with unread items.
+  const marks: RefObject<number> = useRef<number>(0);
   const personaId: PersonaId | null = persona?.id ?? null;
 
-  const { state }: AsyncResult<readonly Notification[]> = useAsync<
-    readonly Notification[]
-  >(
-    `notifications:${personaId ?? 'none'}:${String(version)}`,
-    (signal: AbortSignal): Promise<readonly Notification[]> =>
-      personaId === null
-        ? Promise.resolve([])
-        : api.listNotifications(personaId, signal),
-  );
+  useEffect((): (() => void) | undefined => {
+    if (personaId === null) {
+      return undefined;
+    }
+    const controller: AbortController = new AbortController();
+    const startedAt: number = marks.current;
+    api.listNotifications(personaId, controller.signal).then(
+      (items: readonly Notification[]): void => {
+        if (!controller.signal.aborted && marks.current === startedAt) {
+          setLoaded({ personaId, items });
+        }
+      },
+      (): void => {
+        if (controller.signal.aborted) {
+          return;
+        }
+        // Keep the list that is already shown; with none, stop "loading".
+        setLoaded((current: LoadedNotifications | null): LoadedNotifications =>
+          current !== null && current.personaId === personaId
+            ? current
+            : { personaId, items: [] },
+        );
+      },
+    );
+    return (): void => {
+      controller.abort();
+    };
+  }, [api, personaId, version]);
 
   const announce: (notification: Notification) => void = useEffectEvent(
     (notification: Notification): void => {
@@ -204,21 +236,41 @@ function NotificationsProvider({ children }: ChildrenProps): ReactElement {
   }, [api, personaId]);
 
   const value: NotificationsValue = useMemo((): NotificationsValue => {
-    const items: readonly Notification[] =
-      state.status === 'ready' ? state.data : [];
+    // Never another persona's list: it is shown only to its owner.
+    const current: readonly Notification[] | null =
+      loaded !== null && loaded.personaId === personaId ? loaded.items : null;
+    const items: readonly Notification[] = current ?? [];
+    function reload(): void {
+      setVersion((previous: number): number => previous + 1);
+    }
     return {
       items,
       unread: items.filter((item: Notification): boolean => item.unread).length,
+      loading: personaId !== null && current === null,
       markAllRead: (): void => {
         if (personaId === null) {
           return;
         }
-        void api.markAllRead(personaId).then((): void => {
-          setVersion((current: number): number => current + 1);
+        marks.current += 1;
+        setLoaded(
+          (previous: LoadedNotifications | null): LoadedNotifications | null =>
+            previous !== null && previous.personaId === personaId
+              ? {
+                  personaId,
+                  items: previous.items.map(
+                    (item: Notification): Notification =>
+                      item.unread ? { ...item, unread: false } : item,
+                  ),
+                }
+              : previous,
+        );
+        api.markAllRead(personaId).then(reload, (): void => {
+          show(MARK_FAILED_MESSAGE);
+          reload();
         });
       },
     };
-  }, [api, state, personaId]);
+  }, [api, loaded, personaId, show]);
   return <NotificationsContext value={value}>{children}</NotificationsContext>;
 }
 

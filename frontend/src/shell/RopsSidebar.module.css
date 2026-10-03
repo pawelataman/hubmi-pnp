@@ -191,3 +191,8 @@
 .sessionLink:hover {
   color: var(--c-white);
 }
+
+/* The default ring is the primary blue, invisible on this dark surface. */
+.sidebar :focus-visible {
+  outline-color: var(--c-white);
+}

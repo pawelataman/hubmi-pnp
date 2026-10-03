@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, ScrollRestoration } from 'react-router';
 
 import { ToastViewport } from './ToastViewport';
 
@@ -8,6 +8,7 @@ export function Root(): ReactElement {
     <>
       <Outlet />
       <ToastViewport />
+      <ScrollRestoration />
     </>
   );
 }

@@ -17,6 +17,7 @@ interface StepperProps {
 export function Stepper({ label, items }: StepperProps): ReactElement {
   return (
     <ol
+      role="list"
       aria-label={label}
       className={styles['stepper']}
       style={{

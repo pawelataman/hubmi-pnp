@@ -24,6 +24,17 @@ import styles from './ResultsScreen.module.css';
 
 type Feedback = 'useful' | 'useless';
 
+function innovationsNoun(count: number): string {
+  if (count === 1) {
+    return 'innowację';
+  }
+  const lastTwo: number = count % 100;
+  const last: number = count % 10;
+  return last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)
+    ? 'innowacje'
+    : 'innowacji';
+}
+
 const BANDS: Readonly<
   Record<MatchBand, { readonly label: string; readonly dots: string }>
 > = {
@@ -39,6 +50,8 @@ export function ResultsScreen(): ReactElement {
   const [feedback, setFeedback] = useState<Readonly<Record<string, Feedback>>>(
     {},
   );
+  // Ids of the cards whose "why it fits" text has arrived (or failed).
+  const [settled, setSettled] = useState<readonly string[]>([]);
   const card: ProblemCard | null = state.card;
   const { state: load, retry }: AsyncResult<MatchResults> =
     useAsync<MatchResults>(
@@ -55,6 +68,18 @@ export function ResultsScreen(): ReactElement {
   if (card === null) {
     return <Navigate to="/znajdz/doprecyzowanie" replace />;
   }
+
+  function reasonSettled(innovationId: string): void {
+    setSettled((current: readonly string[]): readonly string[] =>
+      current.includes(innovationId) ? current : [...current, innovationId],
+    );
+  }
+
+  const reasonsPending: boolean =
+    load.status === 'ready' &&
+    load.data.cards.some(
+      (match: MatchCard): boolean => !settled.includes(match.innovationId),
+    );
 
   function rate(innovationId: string, value: Feedback): void {
     setFeedback(
@@ -131,6 +156,15 @@ export function ResultsScreen(): ReactElement {
           {load.status === 'error' ? (
             <LoadError message={load.message} onRetry={retry} />
           ) : null}
+          {load.status === 'ready' && reasonsPending ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className={styles['loadingNote']}
+            >
+              {`Mamy ${String(load.data.cards.length)} ${innovationsNoun(load.data.cards.length)}. Uzasadnienia pojawiają się po kolei…`}
+            </div>
+          ) : null}
           {load.status === 'ready'
             ? load.data.cards.map((match: MatchCard): ReactElement => {
                 const band: { readonly label: string; readonly dots: string } =
@@ -169,7 +203,10 @@ export function ResultsScreen(): ReactElement {
                         </span>
                       ))}
                     </div>
-                    <MatchReason innovationId={match.innovationId} />
+                    <MatchReason
+                      innovationId={match.innovationId}
+                      onSettled={reasonSettled}
+                    />
                     <div className={styles['cardFoot']}>
                       <span className={styles['verified']}>
                         ✓ Zweryfikowano {match.verified}

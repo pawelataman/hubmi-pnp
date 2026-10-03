@@ -27,8 +27,12 @@ export function InnovationScreen(): ReactElement {
 
   if (load.status === 'loading') {
     return (
-      <main role="status" aria-live="polite" className={styles['loading']}>
-        <span className={styles['loadingTitle']}>
+      <main className={styles['loading']}>
+        <span
+          role="status"
+          aria-live="polite"
+          className={styles['loadingTitle']}
+        >
           Wczytujemy kartę innowacji…
         </span>
         <Skeleton width="10rem" height="1.375rem" />

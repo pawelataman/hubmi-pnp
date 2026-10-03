@@ -77,6 +77,17 @@ export function AuthorThreadScreen(): ReactElement {
   }
 
   const thread: CaseThread = state.data;
+
+  // A case is visible only to the persona who sent it.
+  if (persona === null || thread.authorId !== persona.id) {
+    return (
+      <main className={styles['main']}>
+        {back}
+        <LoadError message="Nie znaleziono zgłoszenia." onRetry={retry} />
+      </main>
+    );
+  }
+
   const view: (typeof STATUS_VIEW)[CaseThread['status']] =
     STATUS_VIEW[thread.status];
 
@@ -98,7 +109,7 @@ export function AuthorThreadScreen(): ReactElement {
         <Stepper label="Postęp sprawy" items={timelineSteps(thread)} />
       </header>
       {thread.messages.map((message: Message): ReactElement => {
-        const mine: boolean = persona !== null && message.from === persona.id;
+        const mine: boolean = message.from === persona.id;
         return (
           <article
             key={message.id}
@@ -119,9 +130,7 @@ export function AuthorThreadScreen(): ReactElement {
       <Composer
         label="Twoja odpowiedź"
         sendLabel="Wyślij"
-        onSend={(text: string): Promise<void> =>
-          persona === null ? Promise.resolve() : send(persona.id, text)
-        }
+        onSend={(text: string): Promise<void> => send(persona.id, text)}
       />
     </main>
   );

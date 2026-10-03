@@ -14,7 +14,7 @@ interface NotificationsPopoverProps {
 export function NotificationsPopover({
   onClose,
 }: NotificationsPopoverProps): ReactElement {
-  const { items, unread, markAllRead } = useNotifications();
+  const { items, unread, loading, markAllRead } = useNotifications();
   const { stub } = useToast();
 
   return (
@@ -38,7 +38,11 @@ export function NotificationsPopover({
             </>
           )}
         </div>
-        {items.length === 0 ? (
+        {loading ? (
+          <p role="status" className={styles['loading']}>
+            Wczytujemy powiadomienia…
+          </p>
+        ) : items.length === 0 ? (
           <div className={styles['empty']}>
             <strong className={styles['title']}>
               Nie masz jeszcze powiadomień

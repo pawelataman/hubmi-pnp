@@ -1,8 +1,11 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
 import { EXAMPLE_DESCRIPTION } from '../../api/examples';
+import type { HubApi } from '../../api/HubApi';
+import { createMockApi } from '../../api/mock/createMockApi';
+import type { ReasonSegment } from '../../api/types';
 import { renderApp } from '../../test/renderApp';
 
 const OWN_TEXT: string =
@@ -311,6 +314,54 @@ describe('M4 results', (): void => {
     expect(
       await screen.findByText('Osoby 65+ mieszkające samotnie'),
     ).toBeInTheDocument();
+  });
+
+  it('announces once that the reasons are still arriving', async (): Promise<void> => {
+    const base: HubApi = createMockApi({ delayMs: 0 });
+    const release: (() => void)[] = [];
+    const api: HubApi = {
+      ...base,
+      getMatchReason: async (
+        innovationId: string,
+        signal?: AbortSignal,
+      ): Promise<readonly ReasonSegment[]> => {
+        await new Promise<void>((resolve: () => void): void => {
+          release.push(resolve);
+        });
+        return base.getMatchReason(innovationId, signal);
+      },
+    };
+    const { user } = renderApp('/', { api });
+    await reachResults(user);
+    const pending: string =
+      'Mamy 3 innowacje. Uzasadnienia pojawiają się po kolei…';
+    const note: HTMLElement = screen.getByText(pending);
+    expect(note).toHaveAttribute('role', 'status');
+    // One announcement for the list, none per card.
+    for (const article of screen.getAllByRole('article')) {
+      expect(within(article).queryByRole('status')).not.toBeInTheDocument();
+    }
+    expect(
+      screen.getAllByText('Dlaczego pasuje — piszemy uzasadnienie…'),
+    ).toHaveLength(3);
+
+    release.slice(0, 2).forEach((resolve: () => void): void => {
+      resolve();
+    });
+    expect(
+      await screen.findByText(/Wolontariusze dzwonią codziennie/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(pending)).toBeInTheDocument();
+
+    release.slice(2).forEach((resolve: () => void): void => {
+      resolve();
+    });
+    await waitFor((): void => {
+      expect(screen.queryByText(pending)).not.toBeInTheDocument();
+    });
+    expect(
+      screen.queryByText('Dlaczego pasuje — piszemy uzasadnienie…'),
+    ).not.toBeInTheDocument();
   });
 
   it('keeps the feedback buttons mutually exclusive', async (): Promise<void> => {

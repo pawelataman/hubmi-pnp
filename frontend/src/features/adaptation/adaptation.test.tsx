@@ -164,6 +164,27 @@ describe('adaptation', (): void => {
     ).toBeInTheDocument();
   });
 
+  it('reports an unknown innovation instead of drafting for it', async (): Promise<void> => {
+    const { user, router } = renderApp('/innowacje/nie-ma-takiej/dostosuj', {
+      persona: 'ewa',
+    });
+    await user.click(
+      await screen.findByRole('button', { name: 'Przygotuj szkic usługi →' }),
+    );
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Nie znaleziono innowacji.',
+    );
+    expect(router.state.location.pathname).toBe(
+      '/innowacje/nie-ma-takiej/szkic',
+    );
+    expect(
+      screen.getByRole('link', { name: 'Wróć na stronę główną' }),
+    ).toHaveAttribute('href', '/');
+    expect(
+      screen.queryByText('Szkic AI do weryfikacji'),
+    ).not.toBeInTheDocument();
+  });
+
   it('sends a visitor without a profile back to the profile form', async (): Promise<void> => {
     const { router } = renderApp(`${CARD}/szkic`, { persona: 'ewa' });
     await screen.findByRole('heading', {

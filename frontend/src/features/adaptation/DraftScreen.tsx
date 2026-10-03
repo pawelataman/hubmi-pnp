@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type ReactElement,
-  type RefObject,
-} from 'react';
+import { useState, type ChangeEvent, type ReactElement } from 'react';
 import { Link, Navigate, useParams } from 'react-router';
 
 import type { HubApi } from '../../api/HubApi';
@@ -18,10 +11,12 @@ import type {
 } from '../../api/types';
 import { useAdaptation, useApi, useToast } from '../../app/contexts';
 import { useAsync, type AsyncResult } from '../../app/useAsync';
+import { usePendingFocus } from '../../app/usePendingFocus';
 import { AiBadge } from '../../ui/AiBadge';
 import { Button } from '../../ui/Button';
 import { cx } from '../../ui/cx';
 import { FieldError } from '../../ui/FieldError';
+import { LoadError } from '../../ui/LoadError';
 import { Skeleton } from '../../ui/Skeleton';
 import styles from './DraftScreen.module.css';
 import { parseProfile } from './profile';
@@ -58,41 +53,38 @@ export function DraftScreen(): ReactElement {
   const profile: InstitutionProfile | null = state.submitted
     ? parseProfile(state.draft)
     : null;
-  const draft: DraftState = useDraft(id, profile);
   const innovation: AsyncResult<Innovation> = useAsync<Innovation>(
     `innovation:${id}`,
     (signal: AbortSignal): Promise<Innovation> => api.getInnovation(id, signal),
+  );
+  // Without the innovation there is nothing to draft for.
+  const draft: DraftState = useDraft(
+    id,
+    innovation.state.status === 'error' ? null : profile,
   );
   const [edits, setEdits] = useState<Readonly<Record<string, string>>>({});
   const [editing, setEditing] = useState<{
     readonly id: string;
     readonly text: string;
   } | null>(null);
-  const root: RefObject<HTMLElement | null> = useRef<HTMLElement>(null);
-  const pendingFocus: RefObject<string | null> = useRef<string | null>(null);
-
-  // Runs after every render; moves focus to the control that replaced the one
-  // the user just activated. A request stays pending until its target exists,
-  // because a render that was already queued can run this effect before the
-  // render that the click caused.
-  useEffect((): void => {
-    const target: string | null = pendingFocus.current;
-    if (target === null || root.current === null) {
-      return;
-    }
-    for (const element of root.current.querySelectorAll<HTMLElement>(
-      '[data-focus]',
-    )) {
-      if (element.dataset['focus'] === target) {
-        pendingFocus.current = null;
-        element.focus();
-        return;
-      }
-    }
-  });
+  const { rootRef, requestFocus } = usePendingFocus<string>();
 
   if (profile === null) {
     return <Navigate to={`/innowacje/${id}/dostosuj`} replace />;
+  }
+
+  if (innovation.state.status === 'error') {
+    return (
+      <main className={styles['failed']}>
+        <LoadError
+          message={innovation.state.message}
+          onRetry={innovation.retry}
+        />
+        <Link to="/" className={styles['backLink']}>
+          Wróć na stronę główną
+        </Link>
+      </main>
+    );
   }
 
   const pending: readonly string[] = SECTION_HEADINGS.slice(
@@ -102,7 +94,7 @@ export function DraftScreen(): ReactElement {
   function save(): void {
     if (editing !== null) {
       const { id: sectionId, text }: { id: string; text: string } = editing;
-      pendingFocus.current = `edit:${sectionId}`;
+      requestFocus(`edit:${sectionId}`);
       setEdits(
         (
           current: Readonly<Record<string, string>>,
@@ -116,7 +108,7 @@ export function DraftScreen(): ReactElement {
   }
 
   function cancel(sectionId: string): void {
-    pendingFocus.current = `edit:${sectionId}`;
+    requestFocus(`edit:${sectionId}`);
     setEditing(null);
   }
 
@@ -191,7 +183,7 @@ export function DraftScreen(): ReactElement {
               data-focus={`edit:${section.id}`}
               className={styles['edit']}
               onClick={(): void => {
-                pendingFocus.current = `field:${section.id}`;
+                requestFocus(`field:${section.id}`);
                 setEditing({ id: section.id, text });
               }}
             >
@@ -230,7 +222,7 @@ export function DraftScreen(): ReactElement {
   }
 
   return (
-    <main ref={root} className={styles['main']}>
+    <main ref={rootRef} className={styles['main']}>
       <nav aria-label="Sekcje szkicu" className={styles['nav']}>
         <span className={styles['navTitle']}>Sekcje</span>
         {draft.sections.map((section: DraftSection): ReactElement => (
@@ -257,14 +249,13 @@ export function DraftScreen(): ReactElement {
             <span className={styles['version']}>
               Szkic usługi · wersja 1 · przykład
             </span>
-            <h1 className={styles['title']}>
-              {innovation.state.status === 'ready' ? (
-                innovation.state.data.name
-              ) : (
-                <Skeleton width="60%" height="2.25rem" />
-              )}{' '}
-              w gminie {profile.municipality}
-            </h1>
+            {innovation.state.status === 'ready' ? (
+              <h1 className={styles['title']}>
+                {innovation.state.data.name} w gminie {profile.municipality}
+              </h1>
+            ) : (
+              <Skeleton width="80%" height="2.7rem" />
+            )}
           </header>
           {draft.sections.map(renderSection)}
           {!draft.done && !draft.failed && pending.length > 0 ? (

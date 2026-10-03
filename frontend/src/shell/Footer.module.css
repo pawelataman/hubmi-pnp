@@ -18,3 +18,8 @@
 .note {
   margin-left: auto;
 }
+
+/* The default ring is the primary blue, invisible on this dark surface. */
+.footer :focus-visible {
+  outline-color: var(--c-white);
+}
