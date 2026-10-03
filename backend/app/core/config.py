@@ -48,4 +48,3 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Load and validate environment variables once per process."""
     return Settings()
-

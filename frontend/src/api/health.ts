@@ -19,7 +19,9 @@ function isHealthResponse(value: unknown): value is HealthResponse {
   );
 }
 
-export async function fetchHealth(signal: AbortSignal): Promise<HealthResponse> {
+export async function fetchHealth(
+  signal: AbortSignal,
+): Promise<HealthResponse> {
   const requestSignal: AbortSignal = AbortSignal.any([
     signal,
     AbortSignal.timeout(10_000),
@@ -41,4 +43,3 @@ export async function fetchHealth(signal: AbortSignal): Promise<HealthResponse> 
 
   return data;
 }
-

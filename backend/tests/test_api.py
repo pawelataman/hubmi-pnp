@@ -83,4 +83,3 @@ def test_settings_read_environment(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert settings.name == "Configured API"
     assert settings.cors_origins == ["https://app.example"]
-

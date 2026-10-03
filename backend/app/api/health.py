@@ -25,4 +25,3 @@ def create_health_router(settings: Settings) -> APIRouter:
         return HealthResponse(service=settings.name, version=settings.version)
 
     return router
-

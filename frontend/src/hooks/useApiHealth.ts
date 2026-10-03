@@ -21,7 +21,9 @@ function getErrorMessage(error: unknown): string {
     return 'Could not reach the API. Check the backend and try again.';
   }
 
-  return error instanceof Error ? error.message : 'An unexpected request error occurred.';
+  return error instanceof Error
+    ? error.message
+    : 'An unexpected request error occurred.';
 }
 
 export function useApiHealth(): ApiHealthResult {
@@ -45,7 +47,9 @@ export function useApiHealth(): ApiHealthResult {
     }
 
     void checkHealth();
-    return (): void => { controller.abort(); };
+    return (): void => {
+      controller.abort();
+    };
   }, [attempt]);
 
   function retry(): void {
@@ -55,4 +59,3 @@ export function useApiHealth(): ApiHealthResult {
 
   return { state, retry };
 }
-

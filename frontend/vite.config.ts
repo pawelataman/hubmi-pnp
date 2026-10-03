@@ -29,4 +29,3 @@ export default defineConfig(({ mode }: { mode: string }): UserConfig => {
     },
   };
 });
-
