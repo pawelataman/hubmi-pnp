@@ -1,0 +1,21 @@
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  color: var(--c-danger);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--c-danger);
+  color: var(--c-white);
+  font-size: 0.9375rem;
+}

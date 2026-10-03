@@ -1,0 +1,35 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.new {
+  background: var(--c-primary-tint);
+  color: var(--c-danger);
+}
+
+.progress {
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+}
+
+.done {
+  background: var(--c-success-tint);
+  color: var(--c-success);
+}
+
+.alert {
+  background: var(--c-danger);
+  color: var(--c-white);
+}
+
+.closed {
+  background: var(--c-surface);
+  color: var(--c-muted);
+}

@@ -1,0 +1,17 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 1rem;
+  border: 1px solid var(--c-line-strong);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  font-size: 1.0625rem;
+}
+
+.selected {
+  border: 2px solid var(--c-primary);
+  background: var(--c-primary);
+  color: var(--c-white);
+  font-weight: 600;
+}
